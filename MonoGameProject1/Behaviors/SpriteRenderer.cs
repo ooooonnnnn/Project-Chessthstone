@@ -25,15 +25,11 @@ public class SpriteRenderer : Behavior, IDrawable
 	
 	protected Transform _transform;
 
-	public SpriteRenderer(Texture2D texture)
+	public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle = default)
 	{
 		_texture = texture;
-		_sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-	}
-
-	public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle)
-	{
-		_texture = texture;
+		if (sourceRectangle == default)
+			sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 		_sourceRectangle = sourceRectangle;
 	}
 	
