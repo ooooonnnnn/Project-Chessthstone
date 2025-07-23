@@ -13,6 +13,7 @@ public static class MouseInput
 
 	public static void Update(GameTime gameTime)
 	{
+		_prevState = _currState; // FIX: This was missing!
 		_currState = Mouse.GetState();
 		if (_currState.LeftButton == ButtonState.Pressed && _prevState.LeftButton == ButtonState.Released)
 		{

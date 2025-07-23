@@ -18,9 +18,11 @@ public class SpriteRenderer : Behavior, IDrawable
 	/// </summary>
 	public int height => _sourceRectangle.Height;
 	public int width => _sourceRectangle.Width;
-	
+	public Texture2D Texture => _texture;
+	public Rectangle SourceRectangle => _sourceRectangle;
+
 	// texture
-	protected Texture2D _texture;
+	protected internal Texture2D _texture;
 	protected Rectangle _sourceRectangle;
 	
 	protected Transform _transform;
@@ -46,5 +48,10 @@ public class SpriteRenderer : Behavior, IDrawable
 	{
 		spriteBatch.Draw(_texture, _transform.position, _sourceRectangle, color, _transform.rotation,
 			_transform.origin, _transform.scale, effects, layerDepth);
+	}
+	public virtual void DrawAt(SpriteBatch spriteBatch, Vector2 position)
+	{
+		spriteBatch.Draw(_texture, position, _sourceRectangle, color, 0f,
+			Vector2.Zero, Vector2.One, effects, layerDepth);
 	}
 }
