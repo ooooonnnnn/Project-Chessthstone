@@ -38,6 +38,12 @@ public class Game1 : Game
 
 		// TODO: use this.Content to load your game content here
 		_roundedSquare = Content.Load<Texture2D>("Images/RoundedFilledSquare");
+		var lightSquareTexture = Content.Load<Texture2D>("Images/LightSquare");
+		var darkSquareTexture = Content.Load<Texture2D>("Images/DarkSquare");
+		var chessBoard = new ChessBoard("MainBoard", lightSquareTexture, darkSquareTexture, 64);
+		chessBoard.TryGetBehavior<Transform>().position = new Vector2(100, 100);
+
+
 		_nineSliced = new GameObject("NineSliced");
 		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58);
 		transform = new Transform();
@@ -47,6 +53,9 @@ public class Game1 : Game
 		
 		_drawables.Add(_nineSliced);
 		_updatables.Add(_nineSliced);
+		_drawables.Add(chessBoard);
+		_updatables.Add(chessBoard);
+
 	}
 	
 	protected override void Update(GameTime gameTime)
