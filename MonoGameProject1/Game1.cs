@@ -42,12 +42,14 @@ public class Game1 : Game
 		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58);
 		transform = new Transform();
 		_nineSliced.AddBehaviors([nineSlicedBehavior, transform]);
+		
 		transform.position = GraphicsDevice.Viewport.Bounds.Center.ToVector2();
-		transform.origin = new Vector2(50, 50);
-
-		Matrix2x3 mat1 = new Matrix2x3(1,2,3,4,5,6);
-		Vector2 vec1 = new Vector2(10,20);
-		Print($"{mat1}\n{vec1}\n{mat1 * vec1}");
+		transform.SetScale(2f);
+		Vector2 worldSpacePt = transform.position + 50 * Vector2.One;
+		
+		Print($"Transform position: {transform.position}\n" +
+		      $"World point: {worldSpacePt}\n" +
+		      $"Local vector: {transform.ToLocalSpace(worldSpacePt)})");
 		
 		_drawables.Add(_nineSliced);
 		_updatables.Add(_nineSliced);

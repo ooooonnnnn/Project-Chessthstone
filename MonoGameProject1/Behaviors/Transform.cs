@@ -70,16 +70,13 @@ public class Transform : Behavior
 		CalcCosAndSin(rot, out cos, out sin);
 		Vector2 org = origin;
 
-		Matrix3x2 invTrans = new Matrix3x2(
-			cos * invScX                               , -sin * invScY,
-			sin * invScY                               , cos * invScY,
-			invScX * (-cos * posX - sin * posY) + org.X, invScY * (sin * posX - cos * posY) + org.Y);
+		Matrix2x3 invTrans = new Matrix2x3(
+			cos * invScX,  sin * invScY, invScX * (-cos * posX - sin * posY) + org.X,
+			-sin * invScY, cos * invScY, invScY * (sin * posX - cos * posY) + org.Y
+			);
 		
 		//now inverse trasnform the query point, putting into sprite space
-		//change the point to the System.Numerics type TODO: this is a hacky solution
-		System.Numerics.Vector2 pt = new System.Numerics.Vector2(worldPos.X, worldPos.Y); 
-		pt = System.Numerics.Vector2.Transform(pt, invTrans);
-		return new Vector2(pt.X, pt.Y); //super hacky
+		return invTrans * worldPos;
 	}
 
 	private static void CalcCosAndSin(float rot, out float cos, out float sin)
