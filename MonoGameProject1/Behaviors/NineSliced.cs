@@ -38,7 +38,7 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	}
 
 	/// <summary>
-	/// Returns a 9-sliced renderer with the texture taken from the sourceRectangle with regions defined by the margins
+	/// Constructs a 9-sliced renderer with the texture taken from the sourceRectangle with regions defined by the margins
 	/// </summary>
 	/// <param name="texture"></param>
 	/// <param name="sourceRectangle"></param>
@@ -46,10 +46,12 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	/// <param name="rightMargin">distance of the right margin from the origin</param>
 	/// <param name="topMargin">distance of the top margin from the origin</param>
 	/// <param name="bottomMargin">distance of the bottom margin from the origin</param>
-	public NineSliced(Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin) : base(texture, sourceRectangle)
+	public NineSliced(
+		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin)
+		: base(texture, sourceRectangle)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
-		SetRectanglesFromContiguous(leftMargin, rightMargin, topMargin, bottomMargin);
+		SetRectsFromContiguousTexture(leftMargin, rightMargin, topMargin, bottomMargin);
 	}
 	
 	/// <summary>
@@ -58,7 +60,7 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	public NineSliced(Texture2D texture, int leftMargin, int rightMargin, int topMargin, int bottomMargin) : base(texture)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
-		SetRectanglesFromContiguous(leftMargin, rightMargin, topMargin, bottomMargin);
+		SetRectsFromContiguousTexture(leftMargin, rightMargin, topMargin, bottomMargin);
 	}
 
 	private void ValidateInput(int leftMargin, int rightMargin, int topMargin, int bottomMargin)
@@ -80,7 +82,7 @@ public class NineSliced : SpriteRenderer, IUpdateable
 			throw new ArgumentException("Margins must be less than the width and height of the source texture");
 	}
 	
-	private void SetRectanglesFromContiguous(int leftMargin, int rightMargin, int topMargin, int bottomMargin)
+	private void SetRectsFromContiguousTexture(int leftMargin, int rightMargin, int topMargin, int bottomMargin)
 	{
 		Point baseOrigin = new Point(_sourceRectangle.X, _sourceRectangle.Y);
 		int ctrOrgX = baseOrigin.X + leftMargin + 1;
@@ -112,7 +114,7 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	
 	public override void Draw(SpriteBatch spriteBatch)
 	{
-		Console.WriteLine($"My origin is {_transform.origin}");
+		//Console.WriteLine($"My origin is {_transform.origin}");
 		
 		//Draw corners
 		Vector2 scale = _transform.scale;

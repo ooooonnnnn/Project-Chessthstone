@@ -44,6 +44,10 @@ public class Game1 : Game
 		_nineSliced.AddBehaviors([nineSlicedBehavior, transform]);
 		transform.position = GraphicsDevice.Viewport.Bounds.Center.ToVector2();
 		transform.origin = new Vector2(50, 50);
+
+		Matrix2x3 mat1 = new Matrix2x3(1,2,3,4,5,6);
+		Vector2 vec1 = new Vector2(10,20);
+		Print($"{mat1}\n{vec1}\n{mat1 * vec1}");
 		
 		_drawables.Add(_nineSliced);
 		_updatables.Add(_nineSliced);

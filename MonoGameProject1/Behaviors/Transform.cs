@@ -34,7 +34,7 @@ public class Transform : Behavior
 		float scY = scale.Y;
 		float cos;
 		float sin;
-		CosAndSin(rotation, out cos, out sin);
+		CalcCosAndSin(rotation, out cos, out sin);
 		float orgX = origin.X;
 		float orgY = origin.Y;
 		
@@ -67,7 +67,7 @@ public class Transform : Behavior
 		float posY = position.Y;
 		float rot = rotation;
 		float cos, sin;
-		CosAndSin(rot, out cos, out sin);
+		CalcCosAndSin(rot, out cos, out sin);
 		Vector2 org = origin;
 
 		Matrix3x2 invTrans = new Matrix3x2(
@@ -82,7 +82,7 @@ public class Transform : Behavior
 		return new Vector2(pt.X, pt.Y); //super hacky
 	}
 
-	private static void CosAndSin(float rot, out float cos, out float sin)
+	private static void CalcCosAndSin(float rot, out float cos, out float sin)
 	{
 		switch (rot % (2*PI))
 		{
