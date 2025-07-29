@@ -36,6 +36,5 @@ public class ChangeTintWhenHover : Behavior, IUpdateable
 	{
 		_spriteRenderer.color = !_senseMouseHover.isHovering ? _originalTint:
 				Mouse.GetState().LeftButton == ButtonState.Pressed ? tintWhenMouseDown : tintWhenHover;
-		Console.WriteLine($"I changed the tint to {_spriteRenderer.color}");
 	}
 }

@@ -47,7 +47,13 @@ public class Transform : Behavior
 	}
 	
 	const float PI = Single.Pi;
-	public Vector2 ToLocalSpace(Vector2 worldPos)
+	/// <summary>
+	/// Transforms a vector from world space to the transform's local space.<br/>
+	/// If the scale is 0 on at least one of the axes, returns null. 
+	/// </summary>
+	/// <param name="worldPos"></param>
+	/// <returns></returns>
+	public Vector2? ToLocalSpace(Vector2 worldPos)
 	{
 		//apply the reverse transformations of the sprite to the point and the sprite, and check if the 
 		//point is inside the rectangle of the sprite.
@@ -55,7 +61,7 @@ public class Transform : Behavior
 		//first construct the inverse transformation matrix
 		if (scale.X == 0 || scale.Y == 0)
 		{
-			throw new DivideByZeroException("Can't transform to local space with a scale of 0");
+			return null;
 		}
 		//TODO: maybe using `scale.X == 1 ? 1 : 1/scale.X` is faster when the scale equals 1
 		float invScX = 1/scale.X;

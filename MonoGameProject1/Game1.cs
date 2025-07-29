@@ -37,10 +37,12 @@ public class Game1 : Game
 		// TODO: use this.Content to load your game content here
 		_roundedSquare = Content.Load<Texture2D>("Images/RoundedFilledSquare");
 		GameObject clickableSprite = new GameObject("Sprite");
-		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58);
+		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58, 2f);
 		Clickable clickable = new Clickable();
 		clickable.OnClick += Exit;
-		clickableSprite.AddBehaviors([nineSlicedBehavior, clickable, new Transform(), new SpriteRectCollider(), new ChangeTintWhenHover(), new SenseMouseHover()]);
+		Transform transform = new Transform();
+		clickableSprite.AddBehaviors([nineSlicedBehavior, clickable, transform, new SpriteRectCollider(), new ChangeTintWhenHover(), new SenseMouseHover()]);
+		transform.SetScale(3f);
 		
 		
 		_drawables.Add(clickableSprite);

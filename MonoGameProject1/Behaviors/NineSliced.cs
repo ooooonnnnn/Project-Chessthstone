@@ -12,6 +12,9 @@ namespace MonoGameProject1;
 /// </summary>
 public class NineSliced : SpriteRenderer
 {
+	//corner scale
+	public float cornerScale = 1;
+	
 	//base rectangles from which to take the texture
 	private Rectangle topLeft, topCtr, topRght, ctrLeft, ctrCtr, ctrRght, btmLeft, btmCtr, btmRght;
 	//scale of each part of the sprite
@@ -50,20 +53,22 @@ public class NineSliced : SpriteRenderer
 	/// <param name="bottomMargin">distance of the bottom margin from the origin</param>
 	/// <param name="baseScale">Scales the entire sprite</param>
 	public NineSliced(
-		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin)//, Vector2 baseScale)
+		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin, float cornerScale = 1)
 		: base(texture, sourceRectangle)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
+		this.cornerScale = cornerScale;
 		SetRectsFromContiguousTexture(leftMargin, rightMargin, topMargin, bottomMargin);
 	}
 	
 	/// <summary>
 	/// Assumes full texture is used
 	/// </summary>
-	public NineSliced(Texture2D texture, int leftMargin, int rightMargin, int topMargin, int bottomMargin)//, Vector2 baseScale)
+	public NineSliced(Texture2D texture, int leftMargin, int rightMargin, int topMargin, int bottomMargin, float cornerScale = 1)
                                                                                                        : base(texture)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
+		this.cornerScale = cornerScale;
 		SetRectsFromContiguousTexture(leftMargin, rightMargin, topMargin, bottomMargin);
 	}
 
@@ -115,7 +120,7 @@ public class NineSliced : SpriteRenderer
 		btmCtr = new Rectangle(ctrOrgX, btmOrgY, ctrWidth, btmHeight);
 		btmRght = new Rectangle(rghtOrgX, btmOrgY, rghtWidth, btmHeight);
 	}
-	
+
 	public override void Draw(SpriteBatch spriteBatch)
 	{
 		UpdateScales();
@@ -155,13 +160,24 @@ public class NineSliced : SpriteRenderer
 
 	private void UpdateScales()
 	{
-		float centerRowHeight = invCtrHeight * (height * _transform.scale.Y - topHeight - btmHeight);
-		float centerColumnWidth = invCtrWidth * (width * _transform.scale.X - leftWidth - rghtWidth); 
+		float centerColumnWidth = invCtrWidth * (width * _transform.scale.X - (leftWidth + rghtWidth)*cornerScale); 
+		float centerRowHeight = invCtrHeight * (height * _transform.scale.Y - (topHeight + btmHeight)*cornerScale);
+		//edge scaling
 		clScale.Y = centerRowHeight;
+		clScale.X = cornerScale;
 		tcScale.X = centerColumnWidth;
+		tcScale.Y = cornerScale;
 		crScale.Y = centerRowHeight;
+		crScale.X = cornerScale;
 		bcScale.X = centerColumnWidth;
+		bcScale.Y = cornerScale;
+		//center scaling
 		ccScale.X = centerColumnWidth;
 		ccScale.Y = centerRowHeight;
+		//corner scaling
+		tlScale = Vector2.One * cornerScale;
+		trScale = Vector2.One * cornerScale;
+		blScale = Vector2.One * cornerScale;
+		brScale = Vector2.One * cornerScale;
 	}
 }

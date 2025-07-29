@@ -16,8 +16,8 @@ public class SpriteRenderer : Behavior, IDrawable
 	/// <summary>
 	/// The height of the source rectangle
 	/// </summary>
-	public int height => _sourceRectangle.Height;
-	public int width => _sourceRectangle.Width;
+	public virtual int height => _sourceRectangle.Height;
+	public virtual int width => _sourceRectangle.Width;
 	
 	// texture
 	protected Texture2D _texture;

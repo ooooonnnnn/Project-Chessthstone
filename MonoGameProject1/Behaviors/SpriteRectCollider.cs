@@ -23,10 +23,11 @@ public class SpriteRectCollider : Collider
 		//apply the reverse transformations of the sprite to the point and the sprite, and check if the 
 		//point is inside the rectangle of the sprite.
 		
-		if (_transform.scale.X == 0 || _transform.scale.Y == 0) return false;
-		point = _transform.ToLocalSpace(point);
+		Vector2? localSpacePtNullable = _transform.ToLocalSpace(point);
+		if (localSpacePtNullable == null) return false;
+		Vector2 localSpacePt = localSpacePtNullable.Value;
 		
 		//now check that the point is within the bounds
-		return point.X >= 0 && point.Y >= 0 && point.X < _sprite.width && point.Y < _sprite.height;
+		return localSpacePt.X >= 0 && localSpacePt.Y >= 0 && localSpacePt.X < _sprite.width && localSpacePt.Y < _sprite.height;
 	}
 }
