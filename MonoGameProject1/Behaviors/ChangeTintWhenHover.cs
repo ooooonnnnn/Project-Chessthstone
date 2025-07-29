@@ -6,7 +6,7 @@ using IUpdateable = MonoGameProject1.Content.IUpdateable;
 namespace MonoGameProject1;
 
 /// <summary>
-/// Requires Sprite and SenseMouseHover. <br/>
+/// Requires SpriteRenderer and SenseMouseHover. <br/>
 /// </summary>
 public class ChangeTintWhenHover : Behavior, IUpdateable
 {
@@ -36,5 +36,6 @@ public class ChangeTintWhenHover : Behavior, IUpdateable
 	{
 		_spriteRenderer.color = !_senseMouseHover.isHovering ? _originalTint:
 				Mouse.GetState().LeftButton == ButtonState.Pressed ? tintWhenMouseDown : tintWhenHover;
+		Console.WriteLine($"I changed the tint to {_spriteRenderer.color}");
 	}
 }

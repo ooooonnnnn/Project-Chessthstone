@@ -120,7 +120,6 @@ public class NineSliced : SpriteRenderer
 	{
 		UpdateScales();
 		//Draw corners
-		Vector2 scale = _transform.scale;
 		DrawRegion(spriteBatch, topLeft, tlScale, _transform.ToWorldSpace(Vector2.Zero));
 		DrawRegion(spriteBatch, btmLeft, blScale, _transform.ToWorldSpace(height* Vector2.UnitY),
 			Vector2.UnitY * btmLeft.Height);

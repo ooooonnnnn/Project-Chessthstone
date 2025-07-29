@@ -16,8 +16,6 @@ public class Game1 : Game
 	private List<MonoGameProject1.Content.IDrawable> _drawables = new();
 
 	private Texture2D _logo, _roundedSquare;
-	private GameObject _logoSprite, _nineSliced;
-	private Transform transform;
 
 	public Game1()
 	{
@@ -38,14 +36,15 @@ public class Game1 : Game
 
 		// TODO: use this.Content to load your game content here
 		_roundedSquare = Content.Load<Texture2D>("Images/RoundedFilledSquare");
-		_nineSliced = new GameObject("NineSliced");
+		GameObject clickableSprite = new GameObject("Sprite");
 		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58);
-		transform = new Transform();
-		_nineSliced.AddBehaviors([nineSlicedBehavior, transform]);
+		Clickable clickable = new Clickable();
+		clickable.OnClick += Exit;
+		clickableSprite.AddBehaviors([nineSlicedBehavior, clickable, new Transform(), new SpriteRectCollider(), new ChangeTintWhenHover(), new SenseMouseHover()]);
 		
 		
-		_drawables.Add(_nineSliced);
-		_updatables.Add(_nineSliced);
+		_drawables.Add(clickableSprite);
+		_updatables.Add(clickableSprite);
 	}
 	
 	protected override void Update(GameTime gameTime)
@@ -60,65 +59,6 @@ public class Game1 : Game
 		{
 			updateable.Update(gameTime);
 		}
-		
-		//TEST
-		KeyboardState state = Keyboard.GetState();
-		if (state[Keys.Up] == KeyState.Down)
-		{
-			transform.scale.Y += 0.1f;
-		}
-		if (state[Keys.Down] == KeyState.Down)
-		{
-			transform.scale.Y -= 0.1f;
-		}
-		if (state[Keys.Right] == KeyState.Down)
-		{
-			transform.scale.X += 0.1f;
-		}
-		if (state[Keys.Left] == KeyState.Down)
-		{
-			transform.scale.X -= 0.1f;
-		}
-		if (state[Keys.Space] == KeyState.Down)
-		{
-			transform.rotation += 0.01f;
-		}
-		if (state[Keys.W] == KeyState.Down)
-		{
-			transform.position.Y -= 1f;
-		}
-		if (state[Keys.S] == KeyState.Down)
-		{
-			transform.position.Y += 1f;
-		}
-		if (state[Keys.A] == KeyState.Down)
-		{
-			transform.position.X -= 1f;
-		}
-		if (state[Keys.D] == KeyState.Down)
-		{
-			transform.position.X += 1f;
-		}
-		if (state[Keys.NumPad8] == KeyState.Down)
-		{
-			transform.origin.Y -= 0.5f;
-		}
-		if (state[Keys.NumPad2] == KeyState.Down)
-		{
-			transform.origin.Y += 0.5f;
-		}
-		if (state[Keys.NumPad4] == KeyState.Down)
-		{
-			transform.origin.X -= 0.5f;
-		}
-		if (state[Keys.NumPad6] == KeyState.Down)
-		{
-			transform.origin.X += 0.5f;
-		}
-		
-		
-		Print($"X scale: {transform.scale.X}");
-		Print($"Transformed position (x=1) :{transform.ToWorldSpace(Vector2.UnitX).X}");
 		
 		base.Update(gameTime);
 	}

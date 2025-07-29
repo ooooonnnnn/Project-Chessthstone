@@ -106,4 +106,18 @@ public class GameObject : IUpdateable, IDrawable
 			throw;
 		}
 	}
+
+	/// <summary>
+	/// Throws an error if the GamgeObject has a behavior of type T which isn't the requester
+	/// </summary>
+	/// <param name="requester"></param>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	public void DontAllowBehaviorBesidesThis<T>(Behavior requester) where T : Behavior
+	{
+		if (behaviors.Any(x => x is T && x != requester))
+		{
+			throw new ArgumentException($"{name} has a {typeof(T)} behavior while a {requester.GetType()} forbids it");
+		}
+	}
 }

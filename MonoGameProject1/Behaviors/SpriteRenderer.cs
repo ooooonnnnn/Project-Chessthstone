@@ -5,7 +5,7 @@ using IDrawable = MonoGameProject1.Content.IDrawable;
 namespace MonoGameProject1;
 
 /// <summary>
-/// Shows a texture2d. Requires a Transform
+/// Shows a texture2d. Requires a Transform. Can't have two of these in one GameObject
 /// </summary>
 public class SpriteRenderer : Behavior, IDrawable
 {
@@ -40,6 +40,7 @@ public class SpriteRenderer : Behavior, IDrawable
 	public override void Initialize()
 	{
 		_transform = gameObject.TryGetBehavior<Transform>();
+		gameObject.DontAllowBehaviorBesidesThis<SpriteRenderer>(this);
 	}
 
 	public virtual void Draw(SpriteBatch spriteBatch)
