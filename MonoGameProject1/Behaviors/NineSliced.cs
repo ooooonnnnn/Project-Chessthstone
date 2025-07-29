@@ -51,7 +51,7 @@ public class NineSliced : SpriteRenderer
 	/// <param name="rightMargin">distance of the right margin from the origin</param>
 	/// <param name="topMargin">distance of the top margin from the origin</param>
 	/// <param name="bottomMargin">distance of the bottom margin from the origin</param>
-	/// <param name="baseScale">Scales the entire sprite</param>
+	/// <param name="cornerScale">Scales the corners</param>
 	public NineSliced(
 		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin, float cornerScale = 1)
 		: base(texture, sourceRectangle)
