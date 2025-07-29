@@ -10,6 +10,7 @@ public static class MouseInput
 	private static MouseState _prevState;
 	private static MouseState _currState;
 	public static event Action OnLeftClick;
+	public static event Action OnRightClick;
 
 	public static void Update(GameTime gameTime)
 	{
@@ -17,6 +18,11 @@ public static class MouseInput
 		if (_currState.LeftButton == ButtonState.Pressed && _prevState.LeftButton == ButtonState.Released)
 		{
 			OnLeftClick?.Invoke();
+		}
+		
+		if (_currState.RightButton == ButtonState.Pressed && _prevState.RightButton == ButtonState.Released)
+		{
+			OnRightClick?.Invoke();
 		}
 	}
 }

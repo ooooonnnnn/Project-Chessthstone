@@ -9,7 +9,8 @@ namespace MonoGameProject1;
 /// </summary>>
 public class Clickable : Behavior
 {
-	public event Action OnClick;
+	public event Action OnLeftClick;
+	public event Action OnRightClick;
 	
 	private SenseMouseHover senseMouseHover;
 
@@ -17,10 +18,16 @@ public class Clickable : Behavior
 	{
 		senseMouseHover = gameObject.TryGetBehavior<SenseMouseHover>();
 		MouseInput.OnLeftClick += AttemptClick;
+		MouseInput.OnRightClick += AttemptRightClick;
 	}
 
 	private void AttemptClick()
 	{
-		if (senseMouseHover.isHovering) OnClick?.Invoke();
+		if (senseMouseHover.isHovering) OnLeftClick?.Invoke();
+	}
+	
+	private void AttemptRightClick()
+	{
+		if (senseMouseHover.isHovering) OnRightClick?.Invoke();
 	}
 }

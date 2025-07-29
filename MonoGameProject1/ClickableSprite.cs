@@ -8,13 +8,8 @@ namespace MonoGameProject1;
 public class ClickableSprite : Sprite, ICallback
 {
 	private Clickable _clickable;
-	
-	public ClickableSprite(string name, Texture2D texture) : base(name, texture)
-	{
-		AddClickBehaviors();
-	}
 
-	public ClickableSprite(string name, Texture2D texture, Rectangle sourceRectangle) : base(name, texture, sourceRectangle)
+	public ClickableSprite(string name, Texture2D texture, Rectangle sourceRectangle = default) : base(name, texture, sourceRectangle)
 	{
 		AddClickBehaviors();
 	}
@@ -31,13 +26,23 @@ public class ClickableSprite : Sprite, ICallback
 		_clickable = TryGetBehavior<Clickable>();
 	}
 	
-	public void AddListener(Action listener)
+	public void AddLeftClickListener(Action listener)
 	{
-		_clickable.OnClick += listener;
+		_clickable.OnLeftClick += listener;
+	}
+	
+	public void AddRightClickListener(Action listener)
+	{
+		_clickable.OnRightClick += listener;
 	}
 
-	public void RemoveListener(Action listener)
+	public void RemoveLeftClickListener(Action listener)
 	{
-		_clickable.OnClick -= listener;
+		_clickable.OnLeftClick -= listener;
+	}
+	
+	public void RemoveRightClickListener(Action listener)
+	{
+		_clickable.OnRightClick -= listener;
 	}
 }

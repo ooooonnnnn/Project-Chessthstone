@@ -7,6 +7,6 @@ namespace MonoGameProject1;
 /// </summary>
 public interface ICallback
 {
-	public void AddListener(Action listener);
-	public void RemoveListener(Action listener);
+	public void AddLeftClickListener(Action listener);
+	public void RemoveLeftClickListener(Action listener);
 }
