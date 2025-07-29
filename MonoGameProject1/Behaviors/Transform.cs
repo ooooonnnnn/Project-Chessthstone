@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Microsoft.Xna.Framework.Graphics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace MonoGameProject1;
@@ -37,18 +38,14 @@ public class Transform : Behavior
 		CalcCosAndSin(rotation, out cos, out sin);
 		float orgX = origin.X;
 		float orgY = origin.Y;
-		
-		Matrix3x2 trans = new Matrix3x2(
-			scX * cos, scX * sin,
-			-scY * sin, scY * cos,
-			-scX * orgX * cos + scY*orgY*sin + position.X, -scX * orgX * sin - scY*orgY*cos + position.Y);
-		
-		//change the point to the System.Numerics type TODO: this is a hacky solution
-		System.Numerics.Vector2 pt = new System.Numerics.Vector2(localPos.X, localPos.Y); 
-		pt = System.Numerics.Vector2.Transform(pt, trans);
-		return new Vector2(pt.X, pt.Y); //super hacky
-	}
 
+		Matrix2x3 trans = new Matrix2x3(
+			scX * cos, -scY * sin, -scX * orgX * cos + scY * orgY * sin + position.X,
+			scX * sin, scY * cos, -scX * orgX * sin - scY * orgY * cos + position.Y);
+		
+		return trans * localPos;
+	}
+	
 	const float PI = Single.Pi;
 	public Vector2 ToLocalSpace(Vector2 worldPos)
 	{

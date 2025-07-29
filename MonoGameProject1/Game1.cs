@@ -43,13 +43,6 @@ public class Game1 : Game
 		transform = new Transform();
 		_nineSliced.AddBehaviors([nineSlicedBehavior, transform]);
 		
-		transform.position = GraphicsDevice.Viewport.Bounds.Center.ToVector2();
-		transform.SetScale(2f);
-		Vector2 worldSpacePt = transform.position + 50 * Vector2.One;
-		
-		Print($"Transform position: {transform.position}\n" +
-		      $"World point: {worldSpacePt}\n" +
-		      $"Local vector: {transform.ToLocalSpace(worldSpacePt)})");
 		
 		_drawables.Add(_nineSliced);
 		_updatables.Add(_nineSliced);
@@ -72,19 +65,19 @@ public class Game1 : Game
 		KeyboardState state = Keyboard.GetState();
 		if (state[Keys.Up] == KeyState.Down)
 		{
-			transform.scale.Y += 0.01f;
+			transform.scale.Y += 0.1f;
 		}
 		if (state[Keys.Down] == KeyState.Down)
 		{
-			transform.scale.Y -= 0.01f;
+			transform.scale.Y -= 0.1f;
 		}
 		if (state[Keys.Right] == KeyState.Down)
 		{
-			transform.scale.X += 0.01f;
+			transform.scale.X += 0.1f;
 		}
 		if (state[Keys.Left] == KeyState.Down)
 		{
-			transform.scale.X -= 0.01f;
+			transform.scale.X -= 0.1f;
 		}
 		if (state[Keys.Space] == KeyState.Down)
 		{
@@ -123,6 +116,9 @@ public class Game1 : Game
 			transform.origin.X += 0.5f;
 		}
 		
+		
+		Print($"X scale: {transform.scale.X}");
+		Print($"Transformed position (x=1) :{transform.ToWorldSpace(Vector2.UnitX).X}");
 		
 		base.Update(gameTime);
 	}

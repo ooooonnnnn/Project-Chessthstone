@@ -6,9 +6,11 @@ using IUpdateable = MonoGameProject1.Content.IUpdateable;
 namespace MonoGameProject1;
 
 /// <summary>
-/// A sprite renderer that scales like a 9-sliced: the corners don't scale, the edges scale on one axis, the center scales fully. Requires a Transform
+/// A sprite renderer that scales like a 9-sliced: the corners don't scale, the edges scale on one axis, the center scales fully. Requires a Transform <br/>
+/// Doesn't support tiling <br/>
+/// Doesn't support corner shrinking for small scales
 /// </summary>
-public class NineSliced : SpriteRenderer, IUpdateable
+public class NineSliced : SpriteRenderer
 {
 	//base rectangles from which to take the texture
 	private Rectangle topLeft, topCtr, topRght, ctrLeft, ctrCtr, ctrRght, btmLeft, btmCtr, btmRght;
@@ -46,8 +48,9 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	/// <param name="rightMargin">distance of the right margin from the origin</param>
 	/// <param name="topMargin">distance of the top margin from the origin</param>
 	/// <param name="bottomMargin">distance of the bottom margin from the origin</param>
+	/// <param name="baseScale">Scales the entire sprite</param>
 	public NineSliced(
-		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin)
+		Texture2D texture, Rectangle sourceRectangle, int leftMargin, int rightMargin, int topMargin, int bottomMargin)//, Vector2 baseScale)
 		: base(texture, sourceRectangle)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
@@ -57,7 +60,8 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	/// <summary>
 	/// Assumes full texture is used
 	/// </summary>
-	public NineSliced(Texture2D texture, int leftMargin, int rightMargin, int topMargin, int bottomMargin) : base(texture)
+	public NineSliced(Texture2D texture, int leftMargin, int rightMargin, int topMargin, int bottomMargin)//, Vector2 baseScale)
+                                                                                                       : base(texture)
 	{
 		ValidateInput(leftMargin, rightMargin, topMargin, bottomMargin);
 		SetRectsFromContiguousTexture(leftMargin, rightMargin, topMargin, bottomMargin);
@@ -114,29 +118,51 @@ public class NineSliced : SpriteRenderer, IUpdateable
 	
 	public override void Draw(SpriteBatch spriteBatch)
 	{
-		//Console.WriteLine($"My origin is {_transform.origin}");
-		
+		UpdateScales();
 		//Draw corners
 		Vector2 scale = _transform.scale;
-		DrawRegion(spriteBatch, topLeft, tlScale, _transform.position);
-		DrawRegion(spriteBatch, btmRght, brScale,
-			_transform.ToWorldSpace((height * scale.Y - btmHeight) * Vector2.UnitY));
-
+		DrawRegion(spriteBatch, topLeft, tlScale, _transform.ToWorldSpace(Vector2.Zero));
+		DrawRegion(spriteBatch, btmLeft, blScale, _transform.ToWorldSpace(height* Vector2.UnitY),
+			Vector2.UnitY * btmLeft.Height);
+		DrawRegion(spriteBatch, topRght, trScale, _transform.ToWorldSpace(width * Vector2.UnitX),
+			Vector2.UnitX * topRght.Width);
+		DrawRegion(spriteBatch, btmRght, brScale, _transform.ToWorldSpace(new Vector2(width, height)),
+			new Vector2(btmRght.Width, btmRght.Height));
+		
 		//Draw edges
+		DrawRegion(spriteBatch, topCtr, tcScale, _transform.ToWorldSpace((width*0.5f)*Vector2.UnitX),
+			new Vector2(topCtr.Width*0.5f,0));
+		DrawRegion(spriteBatch, ctrLeft, clScale, _transform.ToWorldSpace(height*0.5f*Vector2.UnitY),
+			new Vector2(0,ctrLeft.Height*0.5f));
+		DrawRegion(spriteBatch, btmCtr, bcScale, _transform.ToWorldSpace(new Vector2(width*0.5f, height)), 
+			new Vector2(btmCtr.Width*0.5f, btmCtr.Height));
+		DrawRegion(spriteBatch, ctrRght, crScale, _transform.ToWorldSpace(new Vector2(width, height*0.5f)),
+			new Vector2(ctrRght.Width, ctrRght.Height*0.5f));
+		
+		//Draw center
+		DrawRegion(spriteBatch, ctrCtr, ccScale, _transform.ToWorldSpace(new Vector2(width*0.5f, height*0.5f)),
+			new Vector2(ctrCtr.Width*0.5f, ctrCtr.Height*0.5f));
 	}
 
 	private void DrawRegion(SpriteBatch spriteBatch, Rectangle region, Vector2 scale, Vector2 position)
 	{
-		spriteBatch.Draw(_texture, position, region, color, _transform.rotation, Vector2.Zero, scale, effects, layerDepth);
+		DrawRegion(spriteBatch, region, scale, position, Vector2.Zero);
 	}
-
-	public void Update(GameTime gameTime)
+	
+	private void DrawRegion(SpriteBatch spriteBatch, Rectangle region, Vector2 scale, Vector2 position, Vector2 origin)
 	{
-		UpdateScales();
+		spriteBatch.Draw(_texture, position, region, color, _transform.rotation, origin, scale, effects, layerDepth);
 	}
 
 	private void UpdateScales()
 	{
-		clScale.Y = invCtrHeight * (height * _transform.scale.Y - topHeight - btmHeight);
+		float centerRowHeight = invCtrHeight * (height * _transform.scale.Y - topHeight - btmHeight);
+		float centerColumnWidth = invCtrWidth * (width * _transform.scale.X - leftWidth - rghtWidth); 
+		clScale.Y = centerRowHeight;
+		tcScale.X = centerColumnWidth;
+		crScale.Y = centerRowHeight;
+		bcScale.X = centerColumnWidth;
+		ccScale.X = centerColumnWidth;
+		ccScale.Y = centerRowHeight;
 	}
 }
