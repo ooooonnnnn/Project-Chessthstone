@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGameProject1.Behaviors;
 using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1;

@@ -9,11 +9,14 @@ namespace MonoGameProject1;
 /// reports when the mouse starts and stops hovering over this object's collider. <br/>
 /// requires the collider behavior
 /// </summary>
-public class SenseMouseHover : Behavior, IUpdateable
+public class SenseMouseHover : Behavior, IUpdateable, IDisposable
 {
 	public event Action OnStartHover;
 	public event Action OnEndHover;
-	public bool isHovering { get; private set; }
+	
+	public bool isHovering => _collider.PointOnCollider(Mouse.GetState().Position.ToVector2()); //hovering query
+
+	private bool _currentlyHovering; //hovering in this frame
 	
 	private Collider _collider;
 	
@@ -27,15 +30,21 @@ public class SenseMouseHover : Behavior, IUpdateable
 	{
 		//check mouse position and trigger events accordingly
 		bool newHovering = _collider.PointOnCollider(Mouse.GetState().Position.ToVector2());
-		if (newHovering && !isHovering)
+		if (newHovering && !_currentlyHovering)
 		{
 			OnStartHover?.Invoke();
 		}
-		else if (!newHovering && isHovering)
+		else if (!newHovering && _currentlyHovering)
 		{
 			OnEndHover?.Invoke();
 		}
 		
-		isHovering = newHovering;
+		_currentlyHovering = newHovering;
+	}
+
+	public void Dispose()
+	{
+		OnStartHover = null;
+		OnEndHover = null;
 	}
 }

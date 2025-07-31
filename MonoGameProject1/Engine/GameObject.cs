@@ -8,7 +8,7 @@ using IDrawable = MonoGameProject1.Content.IDrawable;
 
 namespace MonoGameProject1;
 
-public class GameObject : IUpdateable, IDrawable
+public class GameObject : IUpdateable, IDrawable, IDisposable
 {
 	//has a set of behaviors.
 
@@ -77,7 +77,7 @@ public class GameObject : IUpdateable, IDrawable
 	{
 		foreach (var behavior in _drawables)
 		{
-			(behavior as IDrawable).Draw(spriteBatch);
+			behavior.Draw(spriteBatch);
 		}
 	}
 
@@ -118,6 +118,17 @@ public class GameObject : IUpdateable, IDrawable
 		if (behaviors.Any(x => x is T && x != requester))
 		{
 			throw new ArgumentException($"{name} has a {typeof(T)} behavior while a {requester.GetType()} forbids it");
+		}
+	}
+
+	/// <summary>
+	/// Disposes disposable behaviors
+	/// </summary>
+	public virtual void Dispose()
+	{
+		foreach (var behavior in behaviors)
+		{
+			if (behavior is IDisposable disposable) disposable.Dispose();
 		}
 	}
 }

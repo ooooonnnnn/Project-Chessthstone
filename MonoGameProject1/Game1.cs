@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameProject1.Engine;
+using MonoGameProject1.Scenes;
 
 namespace MonoGameProject1;
 
@@ -11,11 +13,6 @@ public class Game1 : Game
 {
 	private GraphicsDeviceManager _graphics;
 	private SpriteBatch _spriteBatch;
-	
-	private List<MonoGameProject1.Content.IUpdateable> _updatables = new();
-	private List<MonoGameProject1.Content.IDrawable> _drawables = new();
-
-	private Texture2D _logo, _roundedSquare;
 
 	public Game1()
 	{
@@ -27,6 +24,9 @@ public class Game1 : Game
 	protected override void Initialize()
 	{
 		// TODO: Add your initialization logic here
+		TextureManager.game = this;
+		GameManager.game = this;
+		FontManager.game = this;
 		base.Initialize();
 	}
 
@@ -35,18 +35,11 @@ public class Game1 : Game
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 		// TODO: use this.Content to load your game content here
-		_roundedSquare = Content.Load<Texture2D>("Images/RoundedFilledSquare");
-		GameObject clickableSprite = new GameObject("Sprite");
-		NineSliced nineSlicedBehavior = new NineSliced(_roundedSquare, 40, 58, 40, 58, 2f);
-		Clickable clickable = new Clickable();
-		clickable.OnClick += Exit;
-		Transform transform = new Transform();
-		clickableSprite.AddBehaviors([nineSlicedBehavior, clickable, transform, new SpriteRectCollider(), new ChangeTintWhenHover(), new SenseMouseHover()]);
-		transform.SetScale(3f);
+		TextureManager.LoadTextures();
+		FontManager.LoadFonts();
+		// End loading here
 		
-		
-		_drawables.Add(clickableSprite);
-		_updatables.Add(clickableSprite);
+		SceneManager.ChangeScene(new TestMenuScene());
 	}
 	
 	protected override void Update(GameTime gameTime)
@@ -57,10 +50,7 @@ public class Game1 : Game
 
 		// TODO: Add your update logic here
 		MouseInput.Update(gameTime);
-		foreach (var updateable in _updatables)
-		{
-			updateable.Update(gameTime);
-		}
+		SceneManager.Update(gameTime);
 		
 		base.Update(gameTime);
 	}
@@ -71,10 +61,7 @@ public class Game1 : Game
 
 		// TODO: Add your drawing code here
 		_spriteBatch.Begin();
-		foreach (var drawable in _drawables)
-		{
-			drawable.Draw(_spriteBatch);
-		}
+		SceneManager.Draw(_spriteBatch);
 		_spriteBatch.End();
 		base.Draw(gameTime);
 	}

@@ -1,13 +1,11 @@
 using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
-namespace MonoGameProject1;
+namespace MonoGameProject1.Behaviors;
 
 /// <summary>
 /// calls a callback when clicked. requires the SenseMouseHover behavior
 /// </summary>>
-public class Clickable : Behavior
+public class Clickable : Behavior, IDisposable
 {
 	public event Action OnClick;
 	
@@ -22,5 +20,11 @@ public class Clickable : Behavior
 	private void AttemptClick()
 	{
 		if (senseMouseHover.isHovering) OnClick?.Invoke();
+	}
+
+	public void Dispose()
+	{
+		OnClick = null;
+		MouseInput.OnLeftClick -= AttemptClick;
 	}
 }
