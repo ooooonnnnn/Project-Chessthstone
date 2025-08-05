@@ -11,28 +11,28 @@ public class SpriteRenderer : Renderer
 	/// <summary>
 	/// The height of the source rectangle
 	/// </summary>
-	public int height => _sourceRectangle.Height;
-	public int width => _sourceRectangle.Width;
+	public int height => sourceRectangle.Height;
+	public int width => sourceRectangle.Width;
 	
 	// texture
-	protected Texture2D _texture;
-	protected Rectangle _sourceRectangle;
+	public Texture2D texture;
+	public Rectangle sourceRectangle;
 	
 	public SpriteRenderer(Texture2D texture)
 	{
-		_texture = texture;
-		_sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+		this.texture = texture;
+		sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 	}
 
 	public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle)
 	{
-		_texture = texture;
-		_sourceRectangle = sourceRectangle;
+		this.texture = texture;
+		this.sourceRectangle = sourceRectangle;
 	}
 	
 	public override void Draw(SpriteBatch spriteBatch)
 	{
-		spriteBatch.Draw(_texture, _transform.worldSpacePos, _sourceRectangle, color, _transform.rotation,
+		spriteBatch.Draw(texture, _transform.worldSpacePos, sourceRectangle, color, _transform.rotation,
 			_transform.origin, _transform.scale, effects, layerDepth);
 	}
 }

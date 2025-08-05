@@ -62,7 +62,8 @@ public class TestMenuScene : Scene
 		]);
 		
 		button.transform.AddChild(textChild);
-		textTransform.parentSpacePos = new Vector2(button.spriteRenderer.width*0.5f, button.spriteRenderer.height*0.5f);
+		textTransform.parentSpacePos = new Vector2(
+			button.spriteRenderer.width*0.5f, button.spriteRenderer.height*0.5f);
 		
 		return textChild;
 	}

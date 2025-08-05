@@ -94,7 +94,7 @@ public class NineSliced : SpriteRenderer
 	
 	private void SetRectsFromContiguousTexture(int leftMargin, int rightMargin, int topMargin, int bottomMargin)
 	{
-		Point baseOrigin = new Point(_sourceRectangle.X, _sourceRectangle.Y);
+		Point baseOrigin = new Point(sourceRectangle.X, sourceRectangle.Y);
 		int ctrOrgX = baseOrigin.X + leftMargin + 1;
 		int rghtOrgX = baseOrigin.X + rightMargin + 1;
 		int ctrOrgY = baseOrigin.Y + topMargin + 1;
@@ -156,7 +156,7 @@ public class NineSliced : SpriteRenderer
 	
 	private void DrawRegion(SpriteBatch spriteBatch, Rectangle region, Vector2 scale, Vector2 position, Vector2 origin)
 	{
-		spriteBatch.Draw(_texture, position, region, color, _transform.rotation, origin, scale, effects, layerDepth);
+		spriteBatch.Draw(texture, position, region, color, _transform.rotation, origin, scale, effects, layerDepth);
 	}
 
 	private void UpdateScales()
