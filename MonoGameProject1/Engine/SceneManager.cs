@@ -31,6 +31,7 @@ public static class SceneManager
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
 			_gameObjects.Add(gameObject);
+			gameObject.Start();
 		}
 		
 		_currentOpenScenes.Add(scene);

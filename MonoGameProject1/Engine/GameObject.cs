@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameProject1.Engine;
 using IUpdateable = MonoGameProject1.Content.IUpdateable;
 using IDrawable = MonoGameProject1.Content.IDrawable;
 
 namespace MonoGameProject1;
 
-public class GameObject : IUpdateable, IDrawable, IDisposable
+public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 {
 	//has a set of behaviors.
 
@@ -129,6 +130,18 @@ public class GameObject : IUpdateable, IDrawable, IDisposable
 		foreach (var behavior in behaviors)
 		{
 			if (behavior is IDisposable disposable) disposable.Dispose();
+		}
+	}
+
+	/// <summary>
+	/// Calls Start on IStart behaviors
+	/// </summary>
+	/// <exception cref="NotImplementedException"></exception>
+	public void Start()
+	{
+		foreach (var behavior in behaviors)
+		{
+			if (behavior is IStart start) start.Start();
 		}
 	}
 }

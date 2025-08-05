@@ -39,7 +39,7 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		// End loading here
 		
-		SceneManager.ChangeScene(new TestMenuScene());
+		SceneManager.ChangeScene(new TestStartScene());
 	}
 	
 	protected override void Update(GameTime gameTime)
