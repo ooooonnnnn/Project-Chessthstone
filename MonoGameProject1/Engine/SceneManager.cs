@@ -30,11 +30,45 @@ public static class SceneManager
 		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
-			_gameObjects.Add(gameObject);
-			gameObject.Start();
+			AddAllChildrenOfGameObject(gameObject);
 		}
 		
 		_currentOpenScenes.Add(scene);
+	}
+
+	/// <summary>
+	/// recursively add all gameobject children from the hierarchical behaviors of a gameobject
+	/// </summary>
+	/// <param name="parent">The base GameObject</param>
+	private static void AddAllChildrenOfGameObject(GameObject parent)
+	{
+		IReadOnlyList<IHierarchy> hierarchicals = parent.hierarchicalBehaviors;
+		int numberOfHierarchicalBehaviors = hierarchicals.Count;
+		if (numberOfHierarchicalBehaviors == 0)
+		{
+			AddGameObjectNoDuplicates(parent);
+			return;
+		}
+		
+		foreach (var behavior in hierarchicals)
+		{
+			foreach (GameObject child in behavior.children)
+			{
+				AddGameObjectNoDuplicates(child);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Adds the gameObject if it's not in _gameObjects
+	/// </summary>
+	private static void AddGameObjectNoDuplicates(GameObject gameObject)
+	{
+		if (!_gameObjects.Contains(gameObject))
+		{
+			_gameObjects.Add(gameObject);
+			gameObject.Start();
+		}
 	}
 
 	/// <summary>

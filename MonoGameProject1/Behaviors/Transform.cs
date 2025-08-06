@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MonoGameProject1.Engine;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
@@ -9,11 +10,16 @@ namespace MonoGameProject1.Behaviors;
 /// </summary>
 public class Transform : Behavior, IHierarchy<Transform>
 {
+	//TODO: rotation and scale should be split to world space and parent space
+	public float rotation = 0;
+	public Vector2 origin = Vector2.Zero;
+	public Vector2 scale = Vector2.One;
+	// Hierarchy
+	public IReadOnlyList<GameObject> children => _children.Select(c => c.gameObject).ToList();
 	/// <summary>
 	/// The position used for the transformation to world space.<br/>
 	/// Changing this value moves the children
 	/// </summary>
-	private Vector2 _worldSpacePos = Vector2.Zero;
 	public Vector2 worldSpacePos { 
 		get => _worldSpacePos;
 		set
@@ -29,17 +35,9 @@ public class Transform : Behavior, IHierarchy<Transform>
 			
 			UpdateParentSpacePosition(value);
 		} }
-
-	private void UpdateParentSpacePosition(Vector2 worldSpacePosition)
-	{
-		//Update this parentSpacePos
-		_parentSpacePos = parent?.ToLocalSpace(worldSpacePosition) ?? worldSpacePosition;
-	}
-
 	/// <summary>
 	/// Position of this transform's origin in parent space (or world space if there's no parent)
 	/// </summary>
-	private Vector2 _parentSpacePos = Vector2.Zero;
 	public Vector2 parentSpacePos
 	{
 		get => _parentSpacePos;
@@ -49,16 +47,24 @@ public class Transform : Behavior, IHierarchy<Transform>
 			worldSpacePos = parent?.ToWorldSpace(value) ?? value;
 		}
 	}
-	//TODO: rotation and scale should be split to world space and parent space
-	public float rotation = 0;
-	public Vector2 origin = Vector2.Zero;
-	public Vector2 scale = Vector2.One;
+	
+	/// <summary>
+	/// world space and parent space position
+	/// </summary>
+	private Vector2 _worldSpacePos = Vector2.Zero;
+	private Vector2 _parentSpacePos = Vector2.Zero;
+
+	private void UpdateParentSpacePosition(Vector2 worldSpacePosition)
+	{
+		//Update this parentSpacePos
+		_parentSpacePos = parent?.ToLocalSpace(worldSpacePosition) ?? worldSpacePosition;
+	}
 	public void SetScaleFromFloat(float scaleFloat)
 	{
 		scale = new Vector2(scaleFloat, scaleFloat);
 	}
 
-	//Hierarchy
+	//--------------------------Hierarchy---------------------------------------
 	private Transform _parent;
 	public Transform parent
 	{
@@ -74,7 +80,6 @@ public class Transform : Behavior, IHierarchy<Transform>
 	}
 	
 	private List<Transform> _children = new List<Transform>();
-	public IReadOnlyList<Transform> children => _children;
 	
 	public override void Initialize() { }
 

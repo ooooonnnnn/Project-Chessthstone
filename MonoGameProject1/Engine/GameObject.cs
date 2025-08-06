@@ -9,12 +9,20 @@ using IDrawable = MonoGameProject1.Content.IDrawable;
 
 namespace MonoGameProject1;
 
+/// <summary>
+/// Any dynamic object in the game. It has a list of behaviors that do stuff.
+/// </summary>
 public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 {
-	//has a set of behaviors.
-
 	public List<Behavior> behaviors { get; protected set; } = new();
 	public string name { get; init; }
+
+	/// <summary>
+	/// Some behaviors are hierarchical, which means they have children of the same type.
+	/// SceneManager needs to know about those children 
+	/// </summary>
+	private List<IHierarchy> _hierarchicalBehaviors = new();
+	public IReadOnlyList<IHierarchy> hierarchicalBehaviors => _hierarchicalBehaviors;
 	
 	private List<IUpdateable> _updatables = new();
 	private List<IDrawable> _drawables = new();
@@ -40,6 +48,7 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 			behavior.Initialize();
 			if (behavior is IUpdateable updateable) _updatables.Add(updateable);
 			if (behavior is IDrawable drawable) _drawables.Add(drawable);
+			if (behavior is IHierarchy hierarchy) _hierarchicalBehaviors.Add(hierarchy);
 		}
 	}
 
