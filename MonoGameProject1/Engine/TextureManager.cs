@@ -27,4 +27,14 @@ public static class TextureManager
 	{
 		return _logoTexture;
 	}
+
+	public static Texture2D GetChessSquareTexture(bool isWhite)
+	{
+		
+	}
+
+	public static Texture2D GetChessPieceTexture(bool isWhite, PieceType type)
+	{
+		
+	}
 }

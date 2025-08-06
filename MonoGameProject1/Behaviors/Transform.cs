@@ -138,8 +138,13 @@ public class Transform : Behavior, IHierarchy
 	public void AddChild(GameObject child)
 	{
 		Transform transform = child.TryGetBehavior<Transform>();
-		_children.Add(transform);
-		transform.parent = this;
+		AddChild(transform);
+	}
+
+	public void AddChild(Transform childTransform)
+	{
+		_children.Add(childTransform);
+		childTransform.parent = this;
 	}
 	
 	public void RemoveChild(GameObject child)
