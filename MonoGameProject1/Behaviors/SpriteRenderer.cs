@@ -33,6 +33,6 @@ public class SpriteRenderer : Renderer
 	public override void Draw(SpriteBatch spriteBatch)
 	{
 		spriteBatch.Draw(texture, _transform.worldSpacePos, sourceRectangle, color, _transform.rotation,
-			_transform.origin, _transform.scale, effects, layerDepth);
+			_transform.origin, _transform.worldSpaceScale, effects, layerDepth);
 	}
 }

@@ -28,6 +28,6 @@ public class TextRenderer : Renderer
 	public override void Draw(SpriteBatch spriteBatch)
 	{
 		spriteBatch.DrawString(font, text, _transform.worldSpacePos, color, _transform.rotation,
-			_transform.origin, _transform.scale, effects, layerDepth, rightToLeft);
+			_transform.origin, _transform.worldSpaceScale, effects, layerDepth, rightToLeft);
 	}
 }

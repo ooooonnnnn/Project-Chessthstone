@@ -8,12 +8,10 @@ public class TestTransformParentScene : Scene
 	{
 		Sprite character = new Sprite("Test", TextureManager.GetLogoTexture());
 		character.AddBehaviors([new WasdMove()]);
-		Sprite child = new Sprite("Test", TextureManager.GetDefaultButtonTexture());
-		child.AddBehaviors([new WasdMove()]);
-		
+		Button child = new Button("nothing", "TEXT");
 		
 		character.transform.AddChild(child);
 		
-		gameObjects = [character, child];
+		gameObjects = [character];
 	}
 }

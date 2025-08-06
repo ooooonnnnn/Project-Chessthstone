@@ -145,7 +145,6 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	/// <summary>
 	/// Calls Start on IStart behaviors
 	/// </summary>
-	/// <exception cref="NotImplementedException"></exception>
 	public void Start()
 	{
 		foreach (var behavior in behaviors)

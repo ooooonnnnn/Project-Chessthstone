@@ -30,9 +30,9 @@ public class TestMenuScene : Scene
 		settingsButton.transform.worldSpacePos = center;
 		startButton.transform.worldSpacePos = center + new Vector2(0, -120);
 		
-		exitButton.transform.scale = new Vector2(3f, 1f);
-		settingsButton.transform.scale = new Vector2(3f, 1f);
-		startButton.transform.scale = new Vector2(3f, 1f);
+		exitButton.transform.parentSpaceScale = new Vector2(3f, 1f);
+		settingsButton.transform.parentSpaceScale = new Vector2(3f, 1f);
+		startButton.transform.parentSpaceScale = new Vector2(3f, 1f);
 		
 		(exitButton.spriteRenderer as NineSliced).cornerScale = .5f;
 		(settingsButton.spriteRenderer as NineSliced).cornerScale = .5f;

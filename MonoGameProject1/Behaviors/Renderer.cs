@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +10,7 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// Base class for renderer behaviors. Has parent and children to support groups of sprites sharing the same color etc.
 /// </summary>
-public abstract class Renderer : Behavior, IHierarchy, IDrawable
+public abstract class Renderer : Behavior, IDrawable
 {
 	public Color color = Color.White;
 	public SpriteEffects effects = SpriteEffects.None;
@@ -21,16 +22,6 @@ public abstract class Renderer : Behavior, IHierarchy, IDrawable
 		_transform = gameObject.TryGetBehavior<Transform>();
 		//Can't have two renderers on one object TODO: Why?
 		gameObject.DontAllowBehaviorBesidesThis<SpriteRenderer>(this);
-	}
-	
-	public void AddChild(GameObject gameObject)
-	{
-		throw new System.NotImplementedException();
-	}
-
-	public void RemoveChild(GameObject gameObject)
-	{
-		throw new System.NotImplementedException();
 	}
 
 	public abstract void Draw(SpriteBatch spriteBatch);

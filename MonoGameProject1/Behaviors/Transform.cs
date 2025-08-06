@@ -13,9 +13,28 @@ public class Transform : Behavior, IHierarchy<Transform>
 	//TODO: rotation and scale should be split to world space and parent space
 	public float rotation = 0;
 	public Vector2 origin = Vector2.Zero;
-	public Vector2 scale = Vector2.One;
 	// Hierarchy
 	public IReadOnlyList<GameObject> children => _children.Select(c => c.gameObject).ToList();
+
+	public Vector2 worldSpaceScale { get; private set; }
+	public Vector2 parentSpaceScale
+	{
+		get => _parentSpaceScale;
+		set
+		{
+			_parentSpaceScale = value;
+			UpdateWorldSpaceScale();
+			
+			//Update children scale
+			foreach (var child in _children)
+			{
+				child.UpdateWorldSpaceScale();
+			}
+		}
+	}
+
+	private Vector2 _parentSpaceScale = Vector2.One;
+
 	/// <summary>
 	/// The position used for the transformation to world space.<br/>
 	/// Changing this value moves the children
@@ -59,9 +78,17 @@ public class Transform : Behavior, IHierarchy<Transform>
 		//Update this parentSpacePos
 		_parentSpacePos = parent?.ToLocalSpace(worldSpacePosition) ?? worldSpacePosition;
 	}
+	/// <summary>
+	/// Updates the world space scale according to the parent-space scale and parent transform 
+	/// </summary>
+	public void UpdateWorldSpaceScale()
+	{
+		worldSpaceScale = parent == null ? _parentSpaceScale : parent.worldSpacePos * _parentSpaceScale;
+	}
+	
 	public void SetScaleFromFloat(float scaleFloat)
 	{
-		scale = new Vector2(scaleFloat, scaleFloat);
+		parentSpaceScale = new Vector2(scaleFloat, scaleFloat);
 	}
 
 	//--------------------------Hierarchy---------------------------------------
@@ -90,8 +117,8 @@ public class Transform : Behavior, IHierarchy<Transform>
 	/// <returns></returns>
 	public Vector2 ToWorldSpace(Vector2 localPos)
 	{
-		float scX = scale.X;
-		float scY = scale.Y;
+		float scX = worldSpaceScale.X;
+		float scY = worldSpaceScale.Y;
 		float cos;
 		float sin;
 		MyMathHelper.CalcCosAndSin(rotation, out cos, out sin);
@@ -117,13 +144,13 @@ public class Transform : Behavior, IHierarchy<Transform>
 		//point is inside the rectangle of the sprite.
 		
 		//first construct the inverse transformation matrix
-		if (scale.X == 0 || scale.Y == 0)
+		if (worldSpaceScale.X == 0 || worldSpaceScale.Y == 0)
 		{
 			return null;
 		}
 		//TODO: maybe using `scale.X == 1 ? 1 : 1/scale.X` is faster when the scale equals 1
-		float invScX = 1/scale.X;
-		float invScY = 1/scale.Y;
+		float invScX = 1/worldSpaceScale.X;
+		float invScY = 1/worldSpaceScale.Y;
 		float posX = worldSpacePos.X;
 		float posY = worldSpacePos.Y;
 		float rot = rotation;
