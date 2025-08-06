@@ -7,7 +7,7 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// Includes data to transform from object space to screen space
 /// </summary>
-public class Transform : Behavior, IHierarchy
+public class Transform : Behavior, IHierarchy<Transform>
 {
 	/// <summary>
 	/// The position used for the transformation to world space.<br/>
@@ -150,6 +150,11 @@ public class Transform : Behavior, IHierarchy
 	public void RemoveChild(GameObject child)
 	{
 		Transform transform = child.TryGetBehavior<Transform>();
+		RemoveChild(transform);
+	}
+
+	public void RemoveChild(Transform transform)
+	{
 		_children.Remove(transform);
 		transform.parent = null;
 	}

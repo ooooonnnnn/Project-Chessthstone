@@ -47,8 +47,8 @@ public class ChessBoard : GameObject
 	/// <param name="row">Square row</param>
 	/// <param name="column">Square column</param>
 	/// <returns>True if succesful, false otherwise</returns>
-	public bool TryPlacePiece(int row, int column, ChessPiece piece)
-	{
-		
-	}
+	// public bool TryPlacePiece(int row, int column, ChessPiece piece)
+	// {
+	// 	
+	// }
 }
