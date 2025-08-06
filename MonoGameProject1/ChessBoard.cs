@@ -27,7 +27,7 @@ public class ChessBoard : GameObject, IChessBoard
     public ChessBoard(string name, Texture2D lightSquareTexture, Texture2D darkSquareTexture, 
                      int squareSize = 64) : base(name, new List<Behavior> { new Transform() })
     {
-        _squares = new ChessSquare[ChessConstants.BOARD_SIZE, ChessConstants.BOARD_SIZE];
+        _squares = new ChessSquare[ChessProperties.boardSize, ChessProperties.boardSize];
         _pieces = new List<IChessPiece>();
         _squareSize = squareSize;
         _transform = TryGetBehavior<Transform>();
@@ -38,11 +38,11 @@ public class ChessBoard : GameObject, IChessBoard
 
     private void InitializeBoard(Texture2D lightTexture, Texture2D darkTexture)
     {
-        for (int row = 0; row < ChessConstants.BOARD_SIZE; row++)
+        for (int row = 0; row < ChessProperties.boardSize; row++)
         {
-            for (int col = 0; col < ChessConstants.BOARD_SIZE; col++)
+            for (int col = 0; col < ChessProperties.boardSize; col++)
             {
-                bool isLightSquare = ChessConstants.IsLightSquare(row, col);
+                bool isLightSquare = ChessProperties.IsLightSquare(row, col);
                 Texture2D texture = isLightSquare ? lightTexture : darkTexture;
                 
                 var square = new ChessSquare($"Square_{row}_{col}", texture, row, col);
@@ -56,9 +56,9 @@ public class ChessBoard : GameObject, IChessBoard
     private void SetupSquareCallbacks()
     {
         // Use boxing with Action delegates for event handling
-        for (int row = 0; row < ChessConstants.BOARD_SIZE; row++)
+        for (int row = 0; row < ChessProperties.boardSize; row++)
         {
-            for (int col = 0; col < ChessConstants.BOARD_SIZE; col++)
+            for (int col = 0; col < ChessProperties.boardSize; col++)
             {
                 var square = _squares[row, col];
                 
@@ -162,9 +162,9 @@ public class ChessBoard : GameObject, IChessBoard
     public IEnumerable<ChessSquare> GetAllSquares()
     {
         // Iterator pattern with yield return
-        for (int row = 0; row < ChessConstants.BOARD_SIZE; row++)
+        for (int row = 0; row < ChessProperties.boardSize; row++)
         {
-            for (int col = 0; col < ChessConstants.BOARD_SIZE; col++)
+            for (int col = 0; col < ChessProperties.boardSize; col++)
             {
                 yield return _squares[row, col];
             }
@@ -195,8 +195,8 @@ public class ChessBoard : GameObject, IChessBoard
 
     public bool IsValidPosition(int row, int col)
     {
-        return row >= 0 && row < ChessConstants.BOARD_SIZE && 
-               col >= 0 && col < ChessConstants.BOARD_SIZE;
+        return row >= 0 && row < ChessProperties.boardSize && 
+               col >= 0 && col < ChessProperties.boardSize;
     }
 
     // GameObject overrides
@@ -216,7 +216,7 @@ public class ChessBoard : GameObject, IChessBoard
         foreach (ChessSquare square in GetAllSquares().Cast<IDrawable>())
         {
             var worldPosition = _transform.position + 
-                               new Vector2(square.Column * _squareSize, square.Row * _squareSize);
+                               new Vector2(square.column * _squareSize, square.row * _squareSize);
             
             // Custom draw method that respects world position
             DrawSquareAt(spriteBatch, square, worldPosition);

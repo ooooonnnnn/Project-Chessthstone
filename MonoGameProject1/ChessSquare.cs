@@ -10,90 +10,84 @@ namespace MonoGameProject1;
 /// <summary>
 /// Represents a single square on the chess board
 /// </summary>
-public class ChessSquare : ClickableSprite, IChessPosition, IChessOccupiable, IChessHighlightable
+public class ChessSquare : ClickableSprite
 {
-    // IChessPosition implementation
-    public int Row { get; private set; }
-    public int Column { get; private set; }
-    public Vector2 BoardPosition => new Vector2(Column, Row);
-    public string AlgebraicNotation => ChessConstants.ToAlgebraicNotation(Row, Column);
+    public int row { get; }
+    public int column { get; }
     
-    // IChessOccupiable implementation
-    public IChessPiece OccupyingPiece { get; private set; }
+    public ChessPiece OccupyingPiece { get; private set; }
     public bool IsOccupied => OccupyingPiece != null;
     
     // IChessHighlightable implementation
     public bool IsHighlighted { get; private set; }
     
     // Additional properties
-    public bool IsLightSquare { get; private set; }
+    public bool IsLightSquare { get;}
     public ChessHighlightedType CurrentHighlightType { get; private set; }
     
     private readonly SpriteRenderer _spriteRenderer;
     private readonly Color _originalColor;
     private readonly Dictionary<ChessHighlightedType, Color> _highlightColors;
 
-    public ChessSquare(string name, Texture2D texture, int row, int column) 
+    //TODO: get texture from texture manager according to ChessProperties.IsLightSquare 
+    public ChessSquare(string name, int row, int column) 
         : base(name, texture)
     {
-        Row = row;
-        Column = column;
-        IsLightSquare = ChessConstants.IsLightSquare(row, column);
+        this.row = row;
+        this.column = column;
+        IsLightSquare = ChessProperties.IsLightSquare(row, column);
         
         _spriteRenderer = TryGetBehavior<SpriteRenderer>();
-        _originalColor = IsLightSquare ? ChessConstants.LightSquareColor : ChessConstants.DarkSquareColor;
+        _originalColor = IsLightSquare ? ChessProperties.LightSquareColor : ChessProperties.DarkSquareColor;
         _spriteRenderer.color = _originalColor;
         
         // Initialize highlight colors using boxing for enum keys
         _highlightColors = new Dictionary<ChessHighlightedType, Color>
         {
-            { ChessHighlightedType.Selected, ChessConstants.SelectedHighlight },
-            { ChessHighlightedType.ValidMove, ChessConstants.ValidMoveHighlight },
-            { ChessHighlightedType.Capture, ChessConstants.CaptureHighlight },
-            { ChessHighlightedType.Check, ChessConstants.CheckHighlight }
+            { ChessHighlightedType.Selected, ChessProperties.SelectedHighlight },
+            { ChessHighlightedType.ValidMove, ChessProperties.ValidMoveHighlight },
+            { ChessHighlightedType.Capture, ChessProperties.CaptureHighlight },
+            { ChessHighlightedType.Check, ChessProperties.CheckHighlight }
         };
         
         CurrentHighlightType = ChessHighlightedType.None;
     }
 
-    // IChessOccupiable implementation
-    public void PlacePiece(IChessPiece piece)
+    /// <summary>
+    /// Sets the occupying piece of the square
+    /// </summary>
+    /// <param name="piece">The piece to set on it</param>
+    /// <exception cref="InvalidOperationException">If the square was occupied</exception>
+    public void SetPiece(ChessPiece piece)
     {
-        // Remove piece from previous position if it exists
-        if (OccupyingPiece != null)
+        if (IsOccupied)
         {
-            OccupyingPiece.CurrentPosition = null;
+            throw new InvalidOperationException(
+                $"Can't place {piece.name} on square {row},{column} because it's already occupied");
         }
         
         OccupyingPiece = piece;
-        if (piece != null)
-        {
-            piece.CurrentPosition = this; // Boxing the ChessSquare as IChessPosition
-            
-            // Update piece visual position if it's a GameObject
-            if (piece is GameObject pieceObject)
-            {
-                var pieceTransform = pieceObject.TryGetBehavior<Transform>();
-                if (pieceTransform != null)
-                {
-                    pieceTransform.position = transform.position;
-                }
-            }
-        }
     }
 
-    public IChessPiece RemovePiece()
+    /// <summary>
+    /// Removes and returns the occupying piece
+    /// </summary>
+    /// <returns>The removed occupying piece</returns>
+    /// <exception cref="InvalidOperationException">If the quare was not occupied</exception>
+    public ChessPiece RemovePiece()
     {
-        var piece = OccupyingPiece;
-        if (piece != null)
+        if (!IsOccupied)
         {
-            piece.CurrentPosition = null;
-            OccupyingPiece = null;
+            throw new InvalidOperationException(
+                $"Can't remove piece from square {row},{column} because it's not occupied");
         }
-        return piece; // Returns interface reference (polymorphism)
+        
+        var piece = OccupyingPiece;
+        OccupyingPiece = null;
+        
+        return piece;
     }
 
-    // IChessHighlightable implementation
     public void SetHighlight(bool highlighted, Color? highlightColor = null)
     {
         IsHighlighted = highlighted;
