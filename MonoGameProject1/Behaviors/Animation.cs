@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,7 @@ using MonoGameProject1.Engine;
 using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1.Behaviors;
+
 /// <summary>
 /// Handles animations. Requires SpriteRenderer behavior.
 /// The constructor takes a dictionary of animations, where the key is the animation name and the value is a SpriteSheet.
@@ -13,33 +15,50 @@ namespace MonoGameProject1.Behaviors;
 public class Animation : Behavior, IUpdateable, IStart
 {
     private Texture2D originalSprite;
+
     /// <summary>
     /// A dictionary of all animations for this GameObject.
     /// </summary>
     public Dictionary<string, SpriteSheet> Animations;
-    
+
     private double frameTimer = 0.0;
     public int fps = 10;
     private int currentFrame = 0;
-    
+
     public bool isAnimating { get; private set; } = false;
     public bool isLooping;
     private bool playOnStart = false;
-    
+
     private SpriteSheet ActiveAnimationSheet;
-    
+
     private string _activeAnimation;
+
     public string ActiveAnimation
     {
         get => _activeAnimation;
         set
         {
-            _activeAnimation = Animations.ContainsKey(value) ? value : "default";
+            if (value == _activeAnimation) return;
+            if (Animations.ContainsKey(value))
+            {
+                _activeAnimation = value;
+            }
+            else
+            {
+                throw new ArgumentException($"Animation {value} not found");
+            }
+            currentFrame = 0;
             ActiveAnimationSheet = Animations[ActiveAnimation];
         }
     }
-    
-    private SpriteRenderer spriteRenderer;
+
+    /// <summary>
+    /// Event that is triggered when the animation ends.
+    /// </summary>
+    public event Action OnAnimationEnd;
+
+    private SpriteRenderer _spriteRenderer;
+
     /// <summary>
     /// Handles animations. Requires SpriteRenderer behavior.
     /// </summary>
@@ -47,10 +66,11 @@ public class Animation : Behavior, IUpdateable, IStart
     /// <param name="isLooping">false = animation plays once.</param>
     /// <param name="playOnStart">true = Animation automatically plays when the game starts.</param>
     /// <param name="fps">Frames per second.</param>
-    public Animation(Dictionary<string, SpriteSheet> animations, bool isLooping = false, bool playOnStart = false, int fps = 10)
+    public Animation(Dictionary<string, SpriteSheet> animations, bool isLooping = false, bool playOnStart = false,
+        int fps = 10)
     {
         Animations = animations;
-        
+
         this.playOnStart = playOnStart;
         this.isLooping = isLooping;
         this.fps = fps;
@@ -58,9 +78,9 @@ public class Animation : Behavior, IUpdateable, IStart
 
     public override void Initialize()
     {
-        spriteRenderer = gameObject.TryGetBehavior<SpriteRenderer>();
-        originalSprite = spriteRenderer.texture;
-        
+        _spriteRenderer = gameObject.TryGetBehavior<SpriteRenderer>();
+        originalSprite = _spriteRenderer.texture;
+
         if (!Animations.ContainsKey("default"))
             Animations.Add("default", new SpriteSheet(originalSprite, 1, 1));
         ActiveAnimation = "default";
@@ -78,7 +98,7 @@ public class Animation : Behavior, IUpdateable, IStart
     {
         isAnimating = false;
     }
-    
+
     public void StopAnimation()
     {
         currentFrame = 0;
@@ -94,17 +114,17 @@ public class Animation : Behavior, IUpdateable, IStart
             frameTimer = 0.0;
             return true;
         }
-        
+
         return false;
     }
-    
+
     public void Update(GameTime gameTime)
     {
         if (!isAnimating) return;
-        
-        if (spriteRenderer.texture != ActiveAnimationSheet.SourceTexture)
-            spriteRenderer.texture = ActiveAnimationSheet.SourceTexture;
-        
+
+        if (_spriteRenderer.texture != ActiveAnimationSheet.SourceTexture)
+            _spriteRenderer.texture = ActiveAnimationSheet.SourceTexture;
+
         if (ShouldGetNextFrame(gameTime))
         {
             currentFrame++;
@@ -115,10 +135,13 @@ public class Animation : Behavior, IUpdateable, IStart
                 {
                     isAnimating = false;
                     currentFrame = ActiveAnimationSheet.Rectangles.Length - 1; // Stay on the last frame
+                    if (ActiveAnimationSheet.Rectangles.Length > 1) //don't invoke if only one frame
+                        OnAnimationEnd?.Invoke();
                 }
             }
         }
-        spriteRenderer.sourceRectangle = ActiveAnimationSheet.Rectangles[currentFrame];
+
+        _spriteRenderer.sourceRectangle = ActiveAnimationSheet.Rectangles[currentFrame];
     }
 
     public void Start()
