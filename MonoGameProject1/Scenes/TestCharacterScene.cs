@@ -6,6 +6,6 @@ public class TestCharacterScene : Scene
 	{
 		GameObject character = new Sprite("Test", TextureManager.GetLogoTexture());
 		character.AddBehaviors([new WasdMove()]);
-		gameObjects = [character];
+		AddGameObjects([character]);
 	}
 }

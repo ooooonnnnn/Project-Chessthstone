@@ -38,8 +38,8 @@ public class TestMenuScene : Scene
 		(settingsButton.spriteRenderer as NineSliced).cornerScale = .5f;
 		(startButton.spriteRenderer as NineSliced).cornerScale = .5f;
 		
-		gameObjects = [exitButton, settingsButton, startButton, AddTextChild(exitButton.transform),
-		AddTextChild(settingsButton.transform), AddTextChild(startButton.transform)];
+		AddGameObjects([exitButton, settingsButton, startButton, AddTextChild(exitButton.transform),
+		AddTextChild(settingsButton.transform), AddTextChild(startButton.transform)]);
 	}
 	
 	/// <summary>

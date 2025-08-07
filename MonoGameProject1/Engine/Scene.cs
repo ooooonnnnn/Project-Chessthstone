@@ -25,9 +25,13 @@ public abstract class Scene : IDisposable
 	public List<GameObject> gameObjects
 	{
 		get => _gameObjects;
-		protected set
+		private set
 		{
 			_gameObjects = value;
+			if (value == null)
+			{
+				return;
+			}
 			foreach (var gameObject in _gameObjects)
 			{
 				gameObject.parentScene = this;
@@ -35,15 +39,32 @@ public abstract class Scene : IDisposable
 		}
 	}
 
-	public GameObject AddGameObject(GameObject gameObject)
+	/// <summary>
+	/// Adds the gameobjects in the list and all of their children to the scene
+	/// </summary>
+	/// <param name="gameObject"></param>
+	/// <returns></returns>
+	public void AddGameObjects(List<GameObject> gameObjects)
+	{
+		foreach (GameObject gameObject in gameObjects)
+		{
+			DoAddGameObject(gameObject);
+			foreach (var child in gameObject.GetAllChildren())
+			{
+				DoAddGameObject(child);
+			}
+		}
+	}
+
+	private void DoAddGameObject(GameObject gameObject)
 	{
 		gameObject.parentScene = this;
+		if (_gameObjects == null) _gameObjects = new();
 		_gameObjects.Add(gameObject);
 		if (isLoaded)
 		{
 			SceneManager.AddGameObject(gameObject);
 		}
-		return gameObject;
 	}
 
 	public void Dispose()

@@ -14,7 +14,7 @@ public class TestTransformParentScene : Scene
 		character.transform.AddChild(child);
 		child.transform.parentSpacePos = Vector2.UnitX * 100;
 		character.transform.SetScaleFromFloat(1f);
-		
-		gameObjects = [character];
+
+		AddGameObjects([character]);
 	}
 }

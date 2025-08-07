@@ -23,6 +23,6 @@ public class TestStartScene : Scene
         testBird.AddBehaviors([testBirdAnimations]);
         testBirdAnimations.ActiveAnimation = "fly";
         
-        gameObjects = [testBird];
+        AddGameObjects([testBird]);
     }
 }

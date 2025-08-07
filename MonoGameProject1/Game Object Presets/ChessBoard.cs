@@ -59,7 +59,11 @@ public class ChessBoard : GameObject
 		if (_selectedPiece == null) //no piece selected => create or select
 		{
 			if (square.occupyingPiece == null)
-				square.SetPiece(parentScene.AddGameObject(new TestPiece()) as ChessPiece);
+			{
+				TestPiece newPiece = new TestPiece();
+				parentScene.AddGameObjects([newPiece]);
+				square.SetPiece(newPiece);;
+			}
 			else
 			{
 				_selectedPiece = square.occupyingPiece;

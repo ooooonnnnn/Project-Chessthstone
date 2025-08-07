@@ -29,7 +29,6 @@ public static class SceneManager
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
 			AddGameObjectNoDuplicates(gameObject);
-			AddAllChildrenOfGameObject(gameObject);
 		}
 		
 		_currentOpenScenes.Add(scene);
@@ -48,26 +47,7 @@ public static class SceneManager
 			                    $"(make sure to use Scene.AddGameObject to add a new GameObject");
 		}
 		
-		_gameObjects.Add(gameObject);
-	}
-
-	/// <summary>
-	/// recursively add all gameobject children from the hierarchical behaviors of a gameobject
-	/// </summary>
-	/// <param name="gameObject">The base GameObject</param>
-	//TODO: Make a GetAllChildren extension function for IHierarchy 
-	private static void AddAllChildrenOfGameObject(GameObject gameObject)
-	{
-		//TODO: got wrong number of hierarchycals
-		IReadOnlyList<IHierarchy> hierarchicals = gameObject.hierarchicalBehaviors;
-
-		foreach (var behavior in hierarchicals)
-		{
-			foreach (GameObject child in behavior.children)
-			{
-				AddGameObjectNoDuplicates(child);
-			}
-		}
+		AddGameObjectNoDuplicates(gameObject);
 	}
 
 	/// <summary>
@@ -82,7 +62,6 @@ public static class SceneManager
 		}
 	}
 
-//TODO: Remove all children of a gameobject when removing it. 
 	/// <summary>
 	/// Removes a specific scene. Disposes of all GameObjects in the scene
 	/// </summary>

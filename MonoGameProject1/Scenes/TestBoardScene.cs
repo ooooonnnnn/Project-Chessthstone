@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Scenes;
@@ -11,6 +12,12 @@ public class TestBoardScene : Scene
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 		
-		gameObjects = [board];
+		board.squares[0,0].AddListener(() =>
+		{
+			Console.WriteLine("Closing Scene");
+			SceneManager.RemoveScene(this);
+		});
+		
+		AddGameObjects([board]);
 	}
 }
