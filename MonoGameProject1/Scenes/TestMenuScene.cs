@@ -26,9 +26,9 @@ public class TestMenuScene : Scene
 		
 		
 		Vector2 center = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
-		exitButton.transform.worldSpacePos = center + new Vector2(0, 120);
-		settingsButton.transform.worldSpacePos = center;
-		startButton.transform.worldSpacePos = center + new Vector2(0, -120);
+		exitButton.transform.parentSpacePos = center + new Vector2(0, 120);
+		settingsButton.transform.parentSpacePos = center;
+		startButton.transform.parentSpacePos = center + new Vector2(0, -120);
 		
 		exitButton.transform.parentSpaceScale = new Vector2(3f, 1f);
 		settingsButton.transform.parentSpaceScale = new Vector2(3f, 1f);

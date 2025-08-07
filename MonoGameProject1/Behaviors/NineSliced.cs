@@ -162,8 +162,8 @@ public class NineSliced : SpriteRenderer
 	private void UpdateScales()
 	{
 		//TODO: test 9-sliced after transform refactor
-		float centerColumnWidth = invCtrWidth * (width * _transform.parentSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
-		float centerRowHeight = invCtrHeight * (height * _transform.parentSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
+		float centerColumnWidth = invCtrWidth * (width * _transform.worldSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
+		float centerRowHeight = invCtrHeight * (height * _transform.worldSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
 		//edge scaling
 		clScale.Y = centerRowHeight;
 		clScale.X = cornerScale;

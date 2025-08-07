@@ -16,7 +16,7 @@ public class Transform : Behavior, IHierarchy<Transform>
 	// Hierarchy
 	public IReadOnlyList<GameObject> children => _children.Select(c => c.gameObject).ToList();
 
-	public Vector2 worldSpaceScale { get; private set; }
+	public Vector2 worldSpaceScale { get; private set; } = Vector2.One;
 	public Vector2 parentSpaceScale
 	{
 		get => _parentSpaceScale;
@@ -29,6 +29,7 @@ public class Transform : Behavior, IHierarchy<Transform>
 			foreach (var child in _children)
 			{
 				child.UpdateWorldSpaceScale();
+				child.UpdateWorldSpacePosition();
 			}
 		}
 	}
@@ -39,21 +40,19 @@ public class Transform : Behavior, IHierarchy<Transform>
 	/// The position used for the transformation to world space.<br/>
 	/// Changing this value moves the children
 	/// </summary>
-	public Vector2 worldSpacePos { 
+	public Vector2 worldSpacePos
+	{
 		get => _worldSpacePos;
-		set
+		private set
 		{
-			//Move this
 			_worldSpacePos = value;
-			
-			//Move the children
-			foreach (Transform child in _children)
+			foreach (var child in _children)
 			{
-				child.worldSpacePos = ToWorldSpace(child._parentSpacePos);
+				child.UpdateWorldSpacePosition();
 			}
-			
-			UpdateParentSpacePosition(value);
-		} }
+		}
+		
+	}
 	/// <summary>
 	/// Position of this transform's origin in parent space (or world space if there's no parent)
 	/// </summary>
@@ -63,12 +62,17 @@ public class Transform : Behavior, IHierarchy<Transform>
 		set
 		{
 			_parentSpacePos = value;
-			worldSpacePos = parent?.ToWorldSpace(value) ?? value;
+			UpdateWorldSpacePosition();
+			//Update children position
+			foreach (var child in _children)
+			{
+				child.UpdateWorldSpacePosition();
+			}
 		}
 	}
 	
 	/// <summary>
-	/// world space and parent space position
+	/// World and parent space positions
 	/// </summary>
 	private Vector2 _worldSpacePos = Vector2.Zero;
 	private Vector2 _parentSpacePos = Vector2.Zero;
@@ -83,7 +87,12 @@ public class Transform : Behavior, IHierarchy<Transform>
 	/// </summary>
 	public void UpdateWorldSpaceScale()
 	{
-		worldSpaceScale = parent == null ? _parentSpaceScale : parent.worldSpacePos * _parentSpaceScale;
+		worldSpaceScale = parent == null ? _parentSpaceScale : parent.worldSpaceScale * _parentSpaceScale;
+	}
+
+	public void UpdateWorldSpacePosition()
+	{
+		worldSpacePos = parent?.ToWorldSpace(_parentSpacePos) ?? _parentSpacePos;
 	}
 	
 	public void SetScaleFromFloat(float scaleFloat)

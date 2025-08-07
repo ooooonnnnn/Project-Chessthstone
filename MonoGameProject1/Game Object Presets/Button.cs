@@ -16,6 +16,9 @@ public class Button : GameObject, ICallback
 	public Texture2D texture;
 	public Transform transform;
 	
+	/// <summary>
+	/// Can be either a SpriteRenderer or a NineSliced, depending on the constructor used
+	/// </summary>
 	public SpriteRenderer spriteRenderer { get; private set; }
 	public ChangeTintWhenHover hoverTinting;
 	

@@ -9,7 +9,6 @@ namespace MonoGameProject1;
 /// <summary>
 /// Handles scene creation and destruction
 /// </summary>
-//TODO: Add support for gameobjects that come with their own children. 
 public static class SceneManager
 {
 	private static List<Scene> _currentOpenScenes = new();
@@ -30,6 +29,7 @@ public static class SceneManager
 		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
+			AddGameObjectNoDuplicates(gameObject);
 			AddAllChildrenOfGameObject(gameObject);
 		}
 		
@@ -39,17 +39,12 @@ public static class SceneManager
 	/// <summary>
 	/// recursively add all gameobject children from the hierarchical behaviors of a gameobject
 	/// </summary>
-	/// <param name="parent">The base GameObject</param>
-	private static void AddAllChildrenOfGameObject(GameObject parent)
+	/// <param name="gameObject">The base GameObject</param>
+	private static void AddAllChildrenOfGameObject(GameObject gameObject)
 	{
-		IReadOnlyList<IHierarchy> hierarchicals = parent.hierarchicalBehaviors;
-		int numberOfHierarchicalBehaviors = hierarchicals.Count;
-		if (numberOfHierarchicalBehaviors == 0)
-		{
-			AddGameObjectNoDuplicates(parent);
-			return;
-		}
-		
+		//TODO: got wrong number of hierarchycals
+		IReadOnlyList<IHierarchy> hierarchicals = gameObject.hierarchicalBehaviors;
+
 		foreach (var behavior in hierarchicals)
 		{
 			foreach (GameObject child in behavior.children)
@@ -68,9 +63,11 @@ public static class SceneManager
 		{
 			_gameObjects.Add(gameObject);
 			gameObject.Start();
+			Console.WriteLine($"Added {gameObject.name}");
 		}
 	}
 
+//TODO: Remove all children of a gameobject when removing it. 
 	/// <summary>
 	/// Removes a specific scene. Disposes of all GameObjects in the scene
 	/// </summary>

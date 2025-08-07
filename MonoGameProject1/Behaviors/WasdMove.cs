@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Behaviors;
@@ -26,19 +27,21 @@ public class WasdMove : Behavior, IUpdateable
 		float moveAmount = speed * deltaTime;
 		if (keyboardState.IsKeyDown(Keys.W))
 		{
-			_transform.worldSpacePos += -moveAmount * Vector2.UnitY;
+			_transform.parentSpacePos += -moveAmount * Vector2.UnitY;
 		}
 		if (keyboardState.IsKeyDown(Keys.A))
 		{
-			_transform.worldSpacePos += -moveAmount * Vector2.UnitX;
+			_transform.parentSpacePos += -moveAmount * Vector2.UnitX;
 		}
 		if (keyboardState.IsKeyDown(Keys.S))
 		{
-			_transform.worldSpacePos += moveAmount * Vector2.UnitY;
+			_transform.parentSpacePos += moveAmount * Vector2.UnitY;
 		}
 		if (keyboardState.IsKeyDown(Keys.D))
 		{
-			_transform.worldSpacePos += moveAmount * Vector2.UnitX;
+			_transform.parentSpacePos += moveAmount * Vector2.UnitX;
 		}
+		
+		Console.WriteLine(_transform.worldSpacePos);
 	}
 }
