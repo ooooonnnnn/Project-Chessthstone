@@ -27,26 +27,37 @@ public class Button : GameObject, ICallback
 	/// <summary>
 	/// A button with the default texture of a rounded square. 9-sliced scaling.
 	/// </summary>
-	/// <param name="name"></param>
+	/// <param name="text">Text on the button</param>
 	public Button(string name, string text = ""): base(name)
 	{
 		this.text = text;
 		texture = TextureManager.GetDefaultButtonTexture();
 		spriteRenderer = new NineSliced(texture, 40, 58, 40, 58, 2f);
-		AddMyBehaviors();
+		AddButtonBehaviors();
 	}
 
+	/// <summary>
+	/// Button with custom texture and normal scaling
+	/// </summary>
 	public Button(string name, Texture2D texture, string text = "") : base(name)
 	{
 		this.text = text;
 		this.texture = texture;
 		spriteRenderer = new SpriteRenderer(texture);
-		AddMyBehaviors();
+		AddButtonBehaviors();
+	}
+
+	/// <summary>
+	/// Button with custom 9-sliced texture
+	/// </summary>
+	public Button(string name, NineSliced nineSliced, string text = "") : base(name)
+	{
+		this.text = text;
+		spriteRenderer = nineSliced;
+		AddButtonBehaviors();
 	}
 	
-	//TODO: add constructor with manual ninesliced 
-
-	private void AddMyBehaviors()
+	private void AddButtonBehaviors()
 	{
 		transform = new Transform();
 		hoverTinting = new ChangeTintWhenHover();
