@@ -185,7 +185,7 @@ public class Transform : Behavior, IHierarchy<Transform>
 	public void AddChild(Transform childTransform)
 	{
 		_children.Add(childTransform);
-		childTransform.parent = this;
+		childTransform._parent = this;
 	}
 	
 	public void RemoveChild(GameObject child)

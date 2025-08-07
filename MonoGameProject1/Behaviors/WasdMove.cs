@@ -41,7 +41,5 @@ public class WasdMove : Behavior, IUpdateable
 		{
 			_transform.parentSpacePos += moveAmount * Vector2.UnitX;
 		}
-		
-		Console.WriteLine(_transform.worldSpacePos);
 	}
 }

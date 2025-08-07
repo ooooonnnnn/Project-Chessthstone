@@ -20,7 +20,7 @@ public abstract class Renderer : Behavior, IDrawable
 	public override void Initialize()
 	{
 		_transform = gameObject.TryGetBehavior<Transform>();
-		//Can't have two renderers on one object TODO: Why?
+		//Can't have two renderers on one object
 		gameObject.DontAllowBehaviorBesidesThis<SpriteRenderer>(this);
 	}
 

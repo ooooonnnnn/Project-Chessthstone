@@ -35,14 +35,17 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	public GameObject(string name, List<Behavior> behaviors) : this(name)
 	{
 		this.behaviors = behaviors;
-		InitializeBehaviors();
+		InitializeBehaviors(behaviors);
 	}
 
-	private void InitializeBehaviors()
+	/// <summary>
+	/// Initializes the newly added behaviors
+	/// </summary>
+	private void InitializeBehaviors(List<Behavior> newBehaviors)
 	{
-		if (behaviors.Count == 0) return;
+		if (newBehaviors.Count == 0) return;
 
-		foreach (var behavior in behaviors)
+		foreach (var behavior in newBehaviors)
 		{
 			behavior.gameObject = this;
 			behavior.Initialize();
@@ -93,12 +96,18 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 
 	public void AddBehaviors(List<Behavior> newBehaviors)
 	{
+		List<Behavior> behaviorsToInitialize = new(newBehaviors);
+		
 		foreach (var behavior in newBehaviors)
 		{
+			if (behaviors.Contains(behavior))
+			{
+				behaviorsToInitialize.Remove(behavior);
+			}
 			behaviors.Add(behavior);
 		}
 		
-		InitializeBehaviors();
+		InitializeBehaviors(behaviorsToInitialize);
 	}
 	/// <summary>
 	///given a behavior type T, assigns the first corresponding behavior in gameObject to behavior.<br/>
