@@ -1,4 +1,5 @@
 using System;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -18,9 +19,10 @@ public abstract class Behavior
 	{
 		gameObject.ActivateBehavior(active, this);
 	}
-	
+
 	/// <summary>
 	/// for validation and stuff. if you're inheriting from a behavior that isn't Behavior, call Initialize on the base first
 	/// </summary>
+	/// <param name="text"></param>
 	public abstract void Initialize(); 
 }

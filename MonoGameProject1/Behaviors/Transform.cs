@@ -169,7 +169,6 @@ public class Transform : Behavior, IHierarchy<Transform>
 		{
 			return null;
 		}
-		//TODO: maybe using `scale.X == 1 ? 1 : 1/scale.X` is faster when the scale equals 1
 		float invScX = 1/worldSpaceScale.X;
 		float invScY = 1/worldSpaceScale.Y;
 		float posX = worldSpacePos.X;
