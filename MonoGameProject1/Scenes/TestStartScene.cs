@@ -9,20 +9,36 @@ public class TestStartScene : Scene
 {
     public TestStartScene()
     {
-        GameObject testBird = new Sprite("TestBird", TextureManager.GetLogoTexture());
+        GameObject kingBlack = new Sprite("kingBlack", TextureManager.KingBlack);
 
-        var birdAnimations = new Dictionary<string, SpriteSheet>
+        var kingBlackAnimSheets = new Dictionary<string, SpriteSheet>
         {
             {
-                "fly", new SpriteSheet(
-                    TextureManager.TestSpriteSheetTexture, 4, 4)
+                "death", new SpriteSheet(
+                    TextureManager.KingBlackDeathSheet, 1, 5)
             }
         };
 
-        var testBirdAnimations = new Animation(birdAnimations, true, true, 60);
-        testBird.AddBehaviors([testBirdAnimations]);
-        testBirdAnimations.ActiveAnimation = "fly";
+        var kingBlackAnimDic = new Animation(kingBlackAnimSheets);
         
-        gameObjects = [testBird];
+        kingBlack.AddBehaviors([
+            kingBlackAnimDic,
+            new SpriteRectCollider(),
+            new SenseMouseHover(),
+            new Clickable()
+        ]);
+        kingBlack.TryGetBehavior<Clickable>().OnClick += () =>
+        {
+            kingBlackAnimDic.ActiveAnimation = "death";
+            kingBlackAnimDic.StartAnimation();
+        };
+        kingBlack.TryGetBehavior<Animation>().OnAnimationEnd += () =>
+        {
+            Console.WriteLine("Animation ended");
+            kingBlackAnimDic.ActiveAnimation = "default";
+            kingBlackAnimDic.StartAnimation();
+        };
+
+        gameObjects = [kingBlack];
     }
 }
