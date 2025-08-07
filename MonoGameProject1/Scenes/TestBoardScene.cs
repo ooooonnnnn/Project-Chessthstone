@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 namespace MonoGameProject1.Scenes;
 
 public class TestBoardScene : Scene
@@ -6,6 +8,7 @@ public class TestBoardScene : Scene
 	{
 		ChessBoard board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.2f);
+		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		
 		gameObjects = [board];
 	}

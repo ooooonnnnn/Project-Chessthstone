@@ -11,6 +11,7 @@ public class ChessBoard : GameObject
 {
 	public ChessSquare[,] squares { get; init; }
 	public Transform transform;
+	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.width;
 	
 	public ChessBoard(string name) : base(name, [new Transform()])
 	{

@@ -10,12 +10,24 @@ namespace MonoGameProject1.Behaviors;
 /// </summary>
 public class Transform : Behavior, IHierarchy<Transform>
 {
-	//TODO: rotation and scale should be split to world space and parent space
+	//TODO: rotation should be split to world space and parent space
 	public float rotation = 0;
-	public Vector2 origin = Vector2.Zero;
 	// Hierarchy
 	public IReadOnlyList<GameObject> children => _children.Select(c => c.gameObject).ToList();
 
+	public Vector2 origin
+	{
+		get => _origin;
+		set
+		{
+			_origin = value;
+			foreach (var child in _children)
+			{
+				child.UpdateWorldSpacePosition();
+			}
+		}
+	}
+	private Vector2 _origin = Vector2.Zero;
 	public Vector2 worldSpaceScale { get; private set; } = Vector2.One;
 	public Vector2 parentSpaceScale
 	{
