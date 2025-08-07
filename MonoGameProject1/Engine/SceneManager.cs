@@ -15,7 +15,6 @@ public static class SceneManager
 
 	private static List<GameObject> _gameObjects = new();
 	
-
 	/// <summary>
 	/// Adds all objects in a scene without destroying the current one
 	/// </summary>
@@ -34,12 +33,29 @@ public static class SceneManager
 		}
 		
 		_currentOpenScenes.Add(scene);
+		scene.isLoaded = true;
+	}
+
+	/// <summary>
+	/// Adds a GameObject to be drawn and updated
+	/// </summary>
+	/// <param name="gameObject"></param>
+	public static void AddGameObject(GameObject gameObject)
+	{
+		if (gameObject.parentScene == null || !_currentOpenScenes.Contains(gameObject.parentScene))
+		{
+			throw new Exception($"{gameObject.name} is not part of an active scene " +
+			                    $"(make sure to use Scene.AddGameObject to add a new GameObject");
+		}
+		
+		_gameObjects.Add(gameObject);
 	}
 
 	/// <summary>
 	/// recursively add all gameobject children from the hierarchical behaviors of a gameobject
 	/// </summary>
 	/// <param name="gameObject">The base GameObject</param>
+	//TODO: Make a GetAllChildren extension function for IHierarchy 
 	private static void AddAllChildrenOfGameObject(GameObject gameObject)
 	{
 		//TODO: got wrong number of hierarchycals
@@ -63,7 +79,6 @@ public static class SceneManager
 		{
 			_gameObjects.Add(gameObject);
 			gameObject.Start();
-			Console.WriteLine($"Added {gameObject.name}");
 		}
 	}
 
@@ -82,6 +97,7 @@ public static class SceneManager
 		scene.Dispose();
 		
 		_currentOpenScenes.Remove(scene);
+		scene.isLoaded = false;
 	}
 
 	/// <summary>

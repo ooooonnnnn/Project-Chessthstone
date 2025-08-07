@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
@@ -12,6 +13,9 @@ public class ChessBoard : GameObject
 	public ChessSquare[,] squares { get; init; }
 	public Transform transform;
 	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.width;
+	
+	private ChessPiece _selectedPiece;
+	private ChessSquare _selectedSquare;
 	
 	public ChessBoard(string name) : base(name, [new Transform()])
 	{
@@ -28,6 +32,7 @@ public class ChessBoard : GameObject
 				//Construct ChessSquare
 				bool isWhite = ChessProperties.IsWhiteSquare(i, j);
 				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", isWhite);
+				newSquare.board = this;
 				squares[i, j] = newSquare;
 				
 				//Set as child and position it
@@ -40,6 +45,49 @@ public class ChessBoard : GameObject
 				squareTransform.parentSpacePos = positioningMatrix * squareSize; 
 			}
 		}
+	}
+
+	/// <summary>
+	/// Handles what happens when a square is clicked: <br/>
+	/// Nothing selected & empty square => Spawn new piece <br/>
+	/// </summary>
+	public void HandleSquareClicked(ChessSquare square)
+	{
+		if (_selectedPiece == null) //no piece selected => create or select
+		{
+			if (square.occupyingPiece == null)
+				square.SetPiece(parentScene.AddGameObject(new TestPiece()) as ChessPiece);
+			else
+			{
+				_selectedPiece = square.occupyingPiece;
+				_selectedSquare = square;
+			}
+		}
+		else //piece selected => move or deselect
+		{
+			if (square == _selectedSquare)
+			{
+				DeselectAll();
+			}
+			else if (square.occupyingPiece == null)
+			{
+				_selectedSquare.occupyingPiece = null;
+				_selectedPiece.GoToSquare(square);
+				square.occupyingPiece = _selectedPiece;
+				DeselectAll();
+			}
+			else
+			{
+				Console.WriteLine("Can't move to occupied square, try again");
+			}
+		}
+		
+	}
+
+	private void DeselectAll()
+	{
+		_selectedSquare = null;
+		_selectedPiece = null;
 	}
 
 	/// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using IDrawable = MonoGameProject1.Content.IDrawable;
@@ -12,8 +13,39 @@ namespace MonoGameProject1;
 /// </summary>
 public abstract class Scene : IDisposable
 {
-	public GameObject[] gameObjects { get; protected set; }
+	/// <summary>
+	/// The scene and it's gameobjects are loaded and active
+	/// </summary>
+	public bool isLoaded;
 	
+	private List<GameObject> _gameObjects;
+	/// <summary>
+	/// When setting this, the gameobjects are automatically linked to this scene (GameObject.parentScene field)
+	/// </summary>
+	public List<GameObject> gameObjects
+	{
+		get => _gameObjects;
+		protected set
+		{
+			_gameObjects = value;
+			foreach (var gameObject in _gameObjects)
+			{
+				gameObject.parentScene = this;
+			}
+		}
+	}
+
+	public GameObject AddGameObject(GameObject gameObject)
+	{
+		gameObject.parentScene = this;
+		_gameObjects.Add(gameObject);
+		if (isLoaded)
+		{
+			SceneManager.AddGameObject(gameObject);
+		}
+		return gameObject;
+	}
+
 	public void Dispose()
 	{
 		foreach (GameObject gameObject in gameObjects)

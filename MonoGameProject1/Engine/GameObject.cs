@@ -16,6 +16,7 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 {
 	public List<Behavior> behaviors { get; protected set; } = new();
 	public string name { get; init; }
+	public Scene parentScene;
 
 	/// <summary>
 	/// Some behaviors are hierarchical, which means they have children of the same type.
