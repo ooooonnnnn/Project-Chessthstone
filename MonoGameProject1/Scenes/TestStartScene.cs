@@ -9,7 +9,7 @@ public class TestStartScene : Scene
 {
     public TestStartScene()
     {
-        GameObject kingBlack = new Sprite("kingBlack", TextureManager.KingBlack);
+        GameObject kingBlack = new Sprite("kingBlack", TextureManager.GetChessPieceTexture(false, PieceType.King));
 
         var kingBlackAnimSheets = new Dictionary<string, SpriteSheet>
         {
