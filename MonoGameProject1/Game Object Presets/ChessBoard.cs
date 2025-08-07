@@ -45,6 +45,9 @@ public class ChessBoard : GameObject
 				squareTransform.parentSpacePos = positioningMatrix * squareSize; 
 			}
 		}
+		
+		//Test GetAllChildren
+		HashSet<GameObject> allChildren = this.GetAllChildren();
 	}
 
 	/// <summary>
