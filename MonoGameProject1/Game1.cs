@@ -19,11 +19,18 @@ public class Game1 : Game
 		_graphics = new GraphicsDeviceManager(this);
 		Content.RootDirectory = "Content";
 		IsMouseVisible = true;
+		//Full screen
+		_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+		_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+		_graphics.IsFullScreen = false;  // Set to false for borderless
+		Window.IsBorderless = true;
+		_graphics.ApplyChanges();
 	}
 
 	protected override void Initialize()
 	{
 		// TODO: Add your initialization logic here
+		//Setup managers
 		TextureManager.game = this;
 		GameManager.game = this;
 		FontManager.game = this;
