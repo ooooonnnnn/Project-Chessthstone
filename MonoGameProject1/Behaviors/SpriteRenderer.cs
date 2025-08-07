@@ -8,31 +8,25 @@ namespace MonoGameProject1.Behaviors;
 /// </summary>
 public class SpriteRenderer : Renderer
 {
-	/// <summary>
-	/// The height of the source rectangle
-	/// </summary>
-	public int height => sourceRectangle.Height;
-	public int width => sourceRectangle.Width;
-	
-	// texture
-	public Texture2D texture;
-	public Rectangle sourceRectangle;
-	
-	public SpriteRenderer(Texture2D texture)
-	{
-		this.texture = texture;
-		sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-	}
+    /// <summary>
+    /// The height of the source rectangle
+    /// </summary>
+    public int height => sourceRectangle.Height;
+    public int width => sourceRectangle.Width;
 
-	public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle)
-	{
-		this.texture = texture;
-		this.sourceRectangle = sourceRectangle;
-	}
-	
-	public override void Draw(SpriteBatch spriteBatch)
-	{
-		spriteBatch.Draw(texture, _transform.worldSpacePos, sourceRectangle, color, _transform.rotation,
-			_transform.origin, _transform.worldSpaceScale, effects, layerDepth);
-	}
+    // texture
+    public Texture2D texture;
+    public Rectangle sourceRectangle;
+
+    public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle = default)
+    {
+        this.texture = texture;
+        this.sourceRectangle = sourceRectangle == default ? new Rectangle(0, 0, texture.Width, texture.Height) : sourceRectangle;
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(texture, _transform.worldSpacePos, sourceRectangle, color, _transform.rotation,
+            _transform.origin, _transform.worldSpaceScale, effects, layerDepth);
+    }
 }

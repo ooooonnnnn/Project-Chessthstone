@@ -26,7 +26,7 @@ public class Sprite : GameObject
 		GetBehaviorReferences();
 	}
 
-	public Sprite(string name, Texture2D texture, Rectangle sourceRectangle) : base(name,
+	public Sprite(string name, Texture2D texture, Rectangle sourceRectangle = default) : base(name,
 		new List<Behavior>
 		{
 			new Transform(),

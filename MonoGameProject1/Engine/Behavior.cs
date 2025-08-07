@@ -14,7 +14,7 @@ public abstract class Behavior
 	/// <summary>
 	/// When set with false, the behavior will no longer be updated. It starts as active by default
 	/// </summary>
-	public void SetActive(bool active)
+	public virtual void SetActive(bool active)
 	{
 		gameObject.ActivateBehavior(active, this);
 	}

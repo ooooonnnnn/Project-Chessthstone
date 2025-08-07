@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +12,7 @@ public static class TextureManager
 	public static Game game;
 	private static Texture2D _defaultButtonTexture;
 	private static Texture2D _logoTexture;
+	public static Texture2D TestSpriteSheetTexture{ get; private set; }
 	private static Texture2D[] _chessSquareTextures;
 	private static Texture2D[,] _chessPieceTextures;
 
@@ -18,6 +20,7 @@ public static class TextureManager
 	{
 		_defaultButtonTexture = game.Content.Load<Texture2D>("Images/RoundedFilledSquare");
 		_logoTexture = game.Content.Load<Texture2D>("Images/Logo");
+		TestSpriteSheetTexture = game.Content.Load<Texture2D>("Images/SpriteSheets/TestSpriteSheet");
 		_chessSquareTextures = new Texture2D[2];
 		_chessSquareTextures[0] = game.Content.Load<Texture2D>("Images/tile1BlackWithCorners");
 		_chessSquareTextures[1] = game.Content.Load<Texture2D>("Images/tile1WhiteWithCorners");
