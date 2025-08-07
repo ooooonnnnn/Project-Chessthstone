@@ -46,7 +46,7 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		// End loading here
 		
-		SceneManager.ChangeScene(new TestSpeedScene());
+		SceneManager.ChangeScene(new TestBoardScene());
 	}
 	
 	protected override void Update(GameTime gameTime)
