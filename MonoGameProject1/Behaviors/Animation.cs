@@ -39,7 +39,14 @@ public class Animation : Behavior, IUpdateable, IStart
         set
         {
             if (value == _activeAnimation) return;
-            _activeAnimation = Animations.ContainsKey(value) ? value : "default";
+            if (Animations.ContainsKey(value))
+            {
+                _activeAnimation = value;
+            }
+            else
+            {
+                throw new ArgumentException($"Animation {value} not found");
+            }
             currentFrame = 0;
             ActiveAnimationSheet = Animations[ActiveAnimation];
         }
