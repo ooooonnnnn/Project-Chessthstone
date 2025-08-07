@@ -27,7 +27,18 @@ public static class TextureManager
 		_chessSquareTextures[0] = game.Content.Load<Texture2D>("Images/tile1BlackWithCorners");
 		_chessSquareTextures[1] = game.Content.Load<Texture2D>("Images/tile1WhiteWithCorners");
 		
+		_chessPieceTextures[0, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnBlack");
+		_chessPieceTextures[1, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnWhite");
+		_chessPieceTextures[0, (int)PieceType.Knight] = game.Content.Load<Texture2D>("Images/knightBlack");
+		_chessPieceTextures[1, (int)PieceType.Knight] = game.Content.Load<Texture2D>("Images/knightWhite");
+		_chessPieceTextures[0, (int)PieceType.Bishop] = game.Content.Load<Texture2D>("Images/bishopBlack");
+		_chessPieceTextures[1, (int)PieceType.Bishop] = game.Content.Load<Texture2D>("Images/bishopWhite");
+		_chessPieceTextures[0, (int)PieceType.Rook] = game.Content.Load<Texture2D>("Images/rookBlack");
+		_chessPieceTextures[1, (int)PieceType.Rook] = game.Content.Load<Texture2D>("Images/rookWhite");
+		_chessPieceTextures[0, (int)PieceType.Queen] = game.Content.Load<Texture2D>("Images/queenBlack");
+		_chessPieceTextures[1, (int)PieceType.Queen] = game.Content.Load<Texture2D>("Images/queenWhite");
 		_chessPieceTextures[0, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingBlack");
+		_chessPieceTextures[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhite");
 	}
 
 	public static Texture2D GetDefaultButtonTexture()
