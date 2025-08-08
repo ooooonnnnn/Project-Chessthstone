@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+
 namespace MonoGameProject1;
 
 /// <summary>
@@ -7,7 +10,7 @@ public abstract class ChessPiece : Sprite
 {
 	public PieceType type { get; init; }
 	public bool isWhite { get; init; }
-	private int row, column;
+	protected int row, column;
 
 	public ChessPiece(bool isWhite, PieceType type) : 
 		base(ChessPieceName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
@@ -21,8 +24,16 @@ public abstract class ChessPiece : Sprite
 	/// </summary>
 	public void GoToSquare(ChessSquare square)
 	{
+		row = square.row;
+		column = square.column;
 		transform.parentSpacePos = square.transform.worldSpacePos;
 	}
+	
+	/// <summary>
+	/// List of int coordinates of the squares this piece can move to
+	/// </summary>
+	/// <returns></returns>
+	public abstract List<Point> GetPossibleMoves();	
 
 	private static string ChessPieceName(bool isWhite, PieceType type)
 	{

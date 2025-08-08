@@ -31,7 +31,7 @@ public class ChessBoard : GameObject
 			{
 				//Construct ChessSquare
 				bool isWhite = ChessProperties.IsWhiteSquare(i, j);
-				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", isWhite);
+				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", i, j, isWhite);
 				newSquare.board = this;
 				squares[i, j] = newSquare;
 				
@@ -40,14 +40,11 @@ public class ChessBoard : GameObject
 				transform.AddChild(squareTransform);
 				Vector2 squareSize = new Vector2(
 					newSquare.spriteRenderer.width, newSquare.spriteRenderer.height);
-				Matrix2x3 positioningMatrix = new Matrix2x3(j, 0, 0, //j - column - x
-															0, i, 0);//i - row - y
-				squareTransform.parentSpacePos = positioningMatrix * squareSize; 
+				
+				squareTransform.parentSpacePos = new Vector2(
+					squareSize.X * j, squareSize.Y * i); //j - column - x | i - row - y
 			}
 		}
-		
-		//Test GetAllChildren
-		HashSet<GameObject> allChildren = this.GetAllChildren();
 	}
 
 	/// <summary>
@@ -60,7 +57,8 @@ public class ChessBoard : GameObject
 		{
 			if (square.occupyingPiece == null)
 			{
-				TestPiece newPiece = new TestPiece();
+				ChessPiece newPiece = new Pawn(true);
+				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
 				square.SetPiece(newPiece);;
 			}
@@ -78,10 +76,18 @@ public class ChessBoard : GameObject
 			}
 			else if (square.occupyingPiece == null)
 			{
-				_selectedSquare.occupyingPiece = null;
-				_selectedPiece.GoToSquare(square);
-				square.occupyingPiece = _selectedPiece;
-				DeselectAll();
+				Point squareCoords = new Point(square.column, square.row);
+				if(_selectedPiece.GetPossibleMoves().Contains(squareCoords))
+				{
+					_selectedSquare.occupyingPiece = null;
+					_selectedPiece.GoToSquare(square);
+					square.occupyingPiece = _selectedPiece;
+					DeselectAll();
+				}
+				else
+				{
+					Console.WriteLine("Square not in possible moves, try again");
+				}
 			}
 			else
 			{
