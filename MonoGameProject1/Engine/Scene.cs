@@ -42,8 +42,6 @@ public abstract class Scene : IDisposable
 	/// <summary>
 	/// Adds the gameobjects in the list and all of their children to the scene
 	/// </summary>
-	/// <param name="gameObject"></param>
-	/// <returns></returns>
 	public void AddGameObjects(List<GameObject> gameObjects)
 	{
 		foreach (GameObject gameObject in gameObjects)
