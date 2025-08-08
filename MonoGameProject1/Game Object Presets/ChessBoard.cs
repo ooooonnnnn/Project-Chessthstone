@@ -42,7 +42,7 @@ public class ChessBoard : GameObject
 					newSquare.spriteRenderer.width, newSquare.spriteRenderer.height);
 				
 				squareTransform.parentSpacePos = new Vector2(
-					squareSize.X * j, squareSize.Y * i); //j - column - x | i - row - y
+					squareSize.X * i, squareSize.Y * j); //i - column - x | j - row - y
 			}
 		}
 	}
@@ -66,6 +66,11 @@ public class ChessBoard : GameObject
 			{
 				_selectedPiece = square.occupyingPiece;
 				_selectedSquare = square;
+				//Test: show all possible moves
+				foreach (Point move in _selectedPiece.GetPossibleMoves())
+				{
+					squares[move.X, move.Y].spriteRenderer.color = Color.Red;
+				}
 			}
 		}
 		else //piece selected => move or deselect
@@ -101,6 +106,10 @@ public class ChessBoard : GameObject
 	{
 		_selectedSquare = null;
 		_selectedPiece = null;
+		foreach (ChessSquare square in squares)
+		{
+			square.spriteRenderer.color = Color.White;
+		}
 	}
 
 	/// <summary>

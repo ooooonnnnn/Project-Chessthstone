@@ -5,21 +5,39 @@ namespace MonoGameProject1;
 
 public class Queen(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, PieceType.Queen)
 {
-	public override List<Point> GetPossibleMoves()
-	{
-		List<Point> moves = new();
-		for (int i = 1; i < ChessProperties.boardSize; i++)
-		{
-			moves.Add(new Point(column + i, row + i));
-			moves.Add(new Point(column - i, row + i));
-			moves.Add(new Point(column + i, row - i));
-			moves.Add(new Point(column - i, row - i));
-			moves.Add(new Point(column + i, row));
-			moves.Add(new Point(column - i, row));
-			moves.Add(new Point(column, row + i));
-			moves.Add(new Point(column, row - i));
-			
-		}
-		return moves;
-	}
+    public override List<Point> GetPossibleMoves()
+    {
+        List<Point> moves = new();
+        bool dir1 = true, dir2 = true, dir3 = true, dir4 = true;
+        bool dir5 = true, dir6 = true, dir7 = true, dir8 = true;
+
+        for (int i = 1; i < ChessProperties.boardSize && (dir1 || dir2 || dir3 || dir4 || dir5 || dir6 || dir7 || dir8); i++)
+        {
+            Point nextCoord = new Point(column + i, row + i);
+            if (ValidatePossibleMove(nextCoord, ref dir1)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column - i, row + i);
+            if (ValidatePossibleMove(nextCoord, ref dir2)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column + i, row - i);
+            if (ValidatePossibleMove(nextCoord, ref dir3)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column - i, row - i);
+            if (ValidatePossibleMove(nextCoord, ref dir4)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column + i, row);
+            if (ValidatePossibleMove(nextCoord, ref dir5)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column - i, row);
+            if (ValidatePossibleMove(nextCoord, ref dir6)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column, row + i);
+            if (ValidatePossibleMove(nextCoord, ref dir7)) moves.Add(nextCoord);
+
+            nextCoord = new Point(column, row - i);
+            if (ValidatePossibleMove(nextCoord, ref dir8)) moves.Add(nextCoord);
+        }
+
+        return moves;
+    }
 }

@@ -10,7 +10,7 @@ public class ChessSquare : ClickableSprite
 	public int row { get; init; }
 	public int column { get; init; }
 	
-	public ChessSquare(string name, int row, int column, bool isWhite) : base(name, TextureManager.GetChessSquareTexture(isWhite))
+	public ChessSquare(string name, int column, int row, bool isWhite) : base(name, TextureManager.GetChessSquareTexture(isWhite))
 	{
 		this.row = row;
 		this.column = column;

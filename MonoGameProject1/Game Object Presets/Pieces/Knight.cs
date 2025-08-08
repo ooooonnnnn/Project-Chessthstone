@@ -15,7 +15,9 @@ public class Knight(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite,
 			{
 				if ((Math.Abs(i) == 2 && Math.Abs(j) == 1) || (Math.Abs(i) == 1 && Math.Abs(j) == 2))
 				{
-					moves.Add(new Point(column + i, row + j));
+					Point nextCoord = new Point(column + i, row + j);
+					bool alwaysTrue = true;
+					if (ValidatePossibleMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
 				}
 			}
 		}

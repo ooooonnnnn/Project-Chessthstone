@@ -13,7 +13,9 @@ public class King(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, P
 			for (int j = -1; j <= 1; j++)
 			{
 				if (i == 0 && j == 0) continue;
-				moves.Add(new Point(column + i, row + j));
+				bool alwaysTrue = true;
+				Point nextCoord = new Point(column + i, row + j);
+				if (ValidatePossibleMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
 			}
 		}
 		return moves;

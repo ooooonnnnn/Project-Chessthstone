@@ -33,9 +33,33 @@ public abstract class ChessPiece : Sprite
 	
 	/// <summary>
 	/// List of int coordinates of the squares this piece can move to. <br/>
-	/// Doesn't trim moves outside of the board. This is handled by the board
+	/// Takes the board size and existing pieces into account
 	/// </summary>
 	public abstract List<Point> GetPossibleMoves();	
+	
+	/// <summary>
+	/// Used for constructing the possible moves of a piece. Given a possible move and a true bool that signifies this
+	/// move is part of a valid direction, this function will check if the direction is still valid, update the bool, and
+	/// add the move accordingly.
+	/// </summary>
+	/// <param name="nextCoord">The move to consider</param>
+	/// <param name="directionValid">If the move is part of a direction, true means the direction is not blocked and
+	/// within the board. The function checks and updates its value</param>
+	protected bool ValidatePossibleMove(Point nextCoord, ref bool directionValid)
+	{
+		if (directionValid)
+		{
+			if (!ChessProperties.IsPointInBoard(nextCoord))
+			{
+				directionValid = false;
+			}
+			else if (board.squares[nextCoord.X, nextCoord.Y].occupyingPiece != null)
+			{
+				directionValid = false;
+			}
+		}
+		return directionValid;
+	}
 
 	private static string ChessPieceName(bool isWhite, PieceType type)
 	{

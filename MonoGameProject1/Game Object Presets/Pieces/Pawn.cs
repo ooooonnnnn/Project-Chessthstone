@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -11,10 +12,18 @@ public class Pawn(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, P
 	public override List<Point> GetPossibleMoves()
 	{
 		List<Point> moves = new();
-		moves.Add(new Point(column - 1, row));
-		moves.Add(new Point(column + 1, row));
-		moves.Add(new Point(column, row - 1));
-		moves.Add(new Point(column, row + 1));
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				if ((Math.Abs(i) == 1 && j == 0) || Math.Abs(j) == 1 && i == 0)
+				{
+					Point nextCoord = new Point(column + i, row + j);
+					bool alwaysTrue = true;
+					if (ValidatePossibleMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
+				}
+			}
+		}
 		return moves;
 	}
 }

@@ -40,7 +40,7 @@ public abstract class Scene : IDisposable
 	}
 
 	/// <summary>
-	/// Adds the gameobjects in the list and all of their children to the scene
+	/// Adds the gameobjects and all of their children to the scene
 	/// </summary>
 	public void AddGameObjects(List<GameObject> gameObjects)
 	{
