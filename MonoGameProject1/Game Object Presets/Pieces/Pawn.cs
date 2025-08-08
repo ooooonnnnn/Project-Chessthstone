@@ -3,23 +3,18 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1;
 
-public class Pawn : ChessPiece
+/// <summary>
+/// Base class for pawns. Check HLD to see how they move
+/// </summary>
+public class Pawn(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, PieceType.Pawn)
 {
-	public Pawn(bool isWhite) : base(isWhite, PieceType.Pawn)
-	{
-	}
-
 	public override List<Point> GetPossibleMoves()
 	{
 		List<Point> moves = new();
-		if (column > 0)
-			moves.Add(new Point(column - 1, row));
-		if (column < ChessProperties.boardSize - 1) 
-			moves.Add(new Point(column + 1, row));
-		if (row > 0)
-			moves.Add(new Point(column, row - 1));
-		if(row < ChessProperties.boardSize - 1)
-			moves.Add(new Point(column, row + 1));
+		moves.Add(new Point(column - 1, row));
+		moves.Add(new Point(column + 1, row));
+		moves.Add(new Point(column, row - 1));
+		moves.Add(new Point(column, row + 1));
 		return moves;
 	}
 }
