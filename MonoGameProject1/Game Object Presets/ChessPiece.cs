@@ -51,11 +51,13 @@ public abstract class ChessPiece(ChessBoard board, bool isWhite, PieceType type,
 	public void EnableTeleportOnce() => canTeleport = true;
 
 	/// <summary>
-	/// Tries to move. Checks valid movement before moving. 
+	/// Tries to move. Checks valid movement before moving. Requires an action point 
 	/// </summary>
 	/// <returns>True if move was succesful</returns>
 	public bool MoveToSquare(ChessSquare square)
 	{
+		if (!PayActionPoint()) return false;
+		
 		Point nextCoord = new Point(square.column, square.row);
 		if (!GetMoveCoordList().Contains(nextCoord)) return false;
 		
@@ -73,6 +75,8 @@ public abstract class ChessPiece(ChessBoard board, bool isWhite, PieceType type,
 	/// <returns>True if successful</returns>
 	public bool AttackPieceOnSquare(ChessSquare square)
 	{
+		if (!PayActionPoint()) return false;
+		
 		Point nextCoord = new Point(square.column, square.row);
 		if(!GetAttackCoordList().Contains(nextCoord)) return false;
 		
@@ -85,6 +89,22 @@ public abstract class ChessPiece(ChessBoard board, bool isWhite, PieceType type,
 		return true;
 	}
 
+	/// <summary>
+	/// Tries to pay one action point. 
+	/// </summary>
+	/// <returns>True if there was an action point to pay</returns>
+	private bool PayActionPoint()
+	{
+		if (actionPoints <= 0)
+		{
+			Console.WriteLine($"{name} has no available action points");
+			return false;
+		}
+		actionPoints--;
+		Console.WriteLine($"{name} has {actionPoints} action points left");
+		return true;
+	}
+	
 	/// <summary>
 	/// Takes damage and dies if necessary
 	/// </summary>
