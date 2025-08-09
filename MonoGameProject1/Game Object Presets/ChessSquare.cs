@@ -16,10 +16,4 @@ public class ChessSquare : ClickableSprite
 		this.column = column;
 		AddListener(() => board.HandleSquareClicked(this));
 	}
-
-	public void SetPiece(ChessPiece piece)
-	{
-		occupyingPiece = piece;
-		piece.GoToSquare(this);
-	}
 }

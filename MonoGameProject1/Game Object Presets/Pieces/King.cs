@@ -32,7 +32,7 @@ public class King(ChessBoard board, bool isWhite, int baseHealth, int baseDamage
 				if (i == 0 && j == 0) continue;
 				bool alwaysTrue = true;
 				Point nextCoord = new Point(column + i, row + j);
-				if (ValidateAttack(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
+				if (ValidateAttackCoord(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
 			}
 		}
 		return attacks;

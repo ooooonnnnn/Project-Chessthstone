@@ -37,16 +37,16 @@ public class Bishop(ChessBoard board, bool isWhite, int baseHealth, int baseDama
 		for (int i = 1; i < boardSize && (dir1 || dir2 || dir3 || dir4); i++)
 		{
 			Point nextCoord = new Point(column + i, row + i); //potential coordinate to add
-			if(ValidateAttack(nextCoord, ref dir1))
+			if(ValidateAttackCoord(nextCoord, ref dir1))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column - i, row + i);
-			if(ValidateAttack(nextCoord, ref dir2))
+			if(ValidateAttackCoord(nextCoord, ref dir2))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column + i, row - i);
-			if(ValidateAttack(nextCoord, ref dir3))
+			if(ValidateAttackCoord(nextCoord, ref dir3))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column - i, row - i);
-			if(ValidateAttack(nextCoord, ref dir4))
+			if(ValidateAttackCoord(nextCoord, ref dir4))
 				attacks.Add(nextCoord);
 		}
 		return attacks;

@@ -36,7 +36,7 @@ public class Knight(ChessBoard board, bool isWhite, int baseHealth, int baseDama
 				{
 					Point nextCoord = new Point(column + i, row + j);
 					bool alwaysTrue = true;
-					if (ValidateAttack(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
+					if (ValidateAttackCoord(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
 				}
 			}
 		}

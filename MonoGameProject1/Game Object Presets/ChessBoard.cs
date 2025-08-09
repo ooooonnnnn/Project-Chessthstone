@@ -15,7 +15,6 @@ public class ChessBoard : GameObject
 	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.sourceWidth;
 	
 	private ChessPiece _selectedPiece;
-	private ChessSquare _selectedSquare;
 	
 	public ChessBoard(string name) : base(name, [new Transform()])
 	{
@@ -63,77 +62,57 @@ public class ChessBoard : GameObject
 				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
-				square.SetPiece(newPiece);;
+				newPiece.TeleportToSquare(square);
 			}
 			else
 			{
 				_selectedPiece = square.occupyingPiece;
-				_selectedSquare = square;
 				//Test: show all possible attacks
 				foreach (Point move in _selectedPiece.GetAttackCoordList())
 				{
 					squares[move.X, move.Y].spriteRenderer.color = Color.Red;
 				}
+				//Test: show all possible moves
+				foreach (Point move in _selectedPiece.GetMoveCoordList())
+				{
+					squares[move.X, move.Y].spriteRenderer.color = Color.Green;
+				}
 			}
 		}
 		else //piece selected => move or attack or deselect
 		{
-			if (square == _selectedSquare)
+			if (square.occupyingPiece == _selectedPiece)
 			{
 				DeselectAll();
-			}
-			Point squareCoords = new Point(square.column, square.row);
-			if(_selectedPiece.GetMoveCoordList().Contains(squareCoords))
-			{
-				MovePieceToSquare(square);
-				DeselectAll();
-			}
-			else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
-			{
-				if (_selectedPiece.AttackPieceOnSquare(square)) //true if defender died
-				{
-					MovePieceToSquare(square);
-					DeselectAll();
-				}
-				else
-				{
-					DeselectAll();
-				}
 			}
 			else
 			{
-				Console.WriteLine("Square not in possible moves, try again");
+				Point squareCoords = new Point(square.column, square.row);
+				if (_selectedPiece.GetMoveCoordList().Contains(squareCoords))
+				{
+					if (_selectedPiece.MoveToSquare(square))
+						DeselectAll();
+				}
+				else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
+				{
+					if (_selectedPiece.AttackPieceOnSquare(square)) //true if successful attack
+						DeselectAll();
+				}
+				else
+				{
+					Console.WriteLine("Square not in possible moves, try again");
+				}
 			}
 		}
 		
 	}
 
-	private void MovePieceToSquare(ChessSquare square)
-	{
-		//TODO: this will called by a MovePiece method in a player class
-		_selectedSquare.occupyingPiece = null;
-		_selectedPiece.GoToSquare(square);
-		square.occupyingPiece = _selectedPiece;
-	}
-
 	private void DeselectAll()
 	{
-		_selectedSquare = null;
 		_selectedPiece = null;
 		foreach (ChessSquare square in squares)
 		{
 			square.spriteRenderer.color = Color.White;
 		}
 	}
-
-	/// <summary>
-	/// Attempts to place a chesspiece on a square with a certain row and column
-	/// </summary>
-	/// <param name="row">Square row</param>
-	/// <param name="column">Square column</param>
-	/// <returns>True if succesful, false otherwise</returns>
-	// public bool TryPlacePiece(int row, int column, ChessPiece piece)
-	// {
-	// 	
-	// }
 }

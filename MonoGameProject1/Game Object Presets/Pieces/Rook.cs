@@ -35,16 +35,16 @@ public class Rook(ChessBoard board, bool isWhite, int baseHealth, int baseDamage
 		for (int i = 1; i < ChessProperties.boardSize && (dir1 || dir2 || dir3 || dir4); i++)
 		{
 			Point nextCoord = new Point(column + i, row);
-			if(ValidateAttack(nextCoord,ref dir1))
+			if(ValidateAttackCoord(nextCoord,ref dir1))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column - i, row);
-			if(ValidateAttack(nextCoord,ref dir2))
+			if(ValidateAttackCoord(nextCoord,ref dir2))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column, row + i);
-			if(ValidateAttack(nextCoord,ref dir3))
+			if(ValidateAttackCoord(nextCoord,ref dir3))
 				attacks.Add(nextCoord);
 			nextCoord = new Point(column, row - i);
-			if(ValidateAttack(nextCoord,ref dir4))
+			if(ValidateAttackCoord(nextCoord,ref dir4))
 				attacks.Add(nextCoord);
 		}
 		return attacks;

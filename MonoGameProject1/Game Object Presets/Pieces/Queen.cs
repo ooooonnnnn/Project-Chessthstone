@@ -51,28 +51,28 @@ public class Queen(ChessBoard board, bool isWhite, int baseHealth, int baseDamag
         for (int i = 1; i < ChessProperties.boardSize && (dir1 || dir2 || dir3 || dir4 || dir5 || dir6 || dir7 || dir8); i++)
         {
             Point nextCoord = new Point(column + i, row + i);
-            if (ValidateAttack(nextCoord, ref dir1)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir1)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column - i, row + i);
-            if (ValidateAttack(nextCoord, ref dir2)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir2)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column + i, row - i);
-            if (ValidateAttack(nextCoord, ref dir3)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir3)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column - i, row - i);
-            if (ValidateAttack(nextCoord, ref dir4)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir4)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column + i, row);
-            if (ValidateAttack(nextCoord, ref dir5)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir5)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column - i, row);
-            if (ValidateAttack(nextCoord, ref dir6)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir6)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column, row + i);
-            if (ValidateAttack(nextCoord, ref dir7)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir7)) attacks.Add(nextCoord);
 
             nextCoord = new Point(column, row - i);
-            if (ValidateAttack(nextCoord, ref dir8)) attacks.Add(nextCoord);
+            if (ValidateAttackCoord(nextCoord, ref dir8)) attacks.Add(nextCoord);
         }
 
         return attacks;
