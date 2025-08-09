@@ -7,20 +7,18 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for chess pieces
 /// </summary>
-public abstract class ChessPiece : Sprite
+public abstract class ChessPiece(ChessBoard board, bool isWhite, PieceType type, int baseHealth, int baseDamage)
+	: Sprite(ChessPieceName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
 {
-	public PieceType type { get; init; }
-	public bool isWhite { get; init; }
-	public ChessBoard board { get; init; }
-	protected int row, column;
+	public PieceType type { get; init; } = type;
+	public bool isWhite { get; init; } = isWhite;
+	public ChessBoard board { get; init; } = board;
 
-	public ChessPiece(ChessBoard board, bool isWhite, PieceType type) : 
-		base(ChessPieceName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
-	{
-		this.type = type;
-		this.isWhite = isWhite;
-		this.board = board;
-	}
+	/// <summary>
+	/// Current position
+	/// </summary>
+	protected int row, column;
+	protected int baseHealth = baseHealth, baseDamage = baseDamage, health = baseHealth;
 
 	/// <summary>
 	/// Moves the piece to the target square
@@ -39,7 +37,7 @@ public abstract class ChessPiece : Sprite
 	public bool AttackPieceOnSquare(ChessSquare square)
 	{
 		ChessPiece attackedPiece = square.occupyingPiece;
-		return attackedPiece.TakeDamage(0); //TODO: use actual dammage
+		return attackedPiece.TakeDamage(baseDamage);
 	}
 
 	/// <summary>
@@ -50,7 +48,14 @@ public abstract class ChessPiece : Sprite
 	public bool TakeDamage(int damage)
 	{
 		Console.WriteLine($"{name} took {damage} damage");
-		bool die = false; //TODO: add health and damage behavior
+		bool die = false;
+		health -= damage;
+		if (health <= 0)
+		{
+			die = true;
+			health = 0;
+		}
+		Console.WriteLine($"{name} has {health}/{baseHealth} health");
 
 		if (die)
 			Die();

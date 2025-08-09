@@ -11,17 +11,17 @@ public static class PieceFactory
 		switch (type)
 		{
 			case PieceType.Pawn:
-				return new Pawn(board, isWhite);
+				return new Pawn(board, isWhite, 20, 5);
 			case PieceType.Knight:
-				return new Knight(board, isWhite);
+				return new Knight(board, isWhite, 20, 5);
 			case PieceType.Bishop:
-				return new Bishop(board, isWhite);
+				return new Bishop(board, isWhite, 20, 5);
 			case PieceType.Rook:
-				return new Rook(board, isWhite);
+				return new Rook(board, isWhite, 20, 5);
 			case PieceType.Queen:
-				return new Queen(board, isWhite);
+				return new Queen(board, isWhite, 20, 5);
 			case PieceType.King:
-				return new King(board, isWhite);
+				return new King(board, isWhite, 20, 5);
 			default:
 				return null;
 		}
