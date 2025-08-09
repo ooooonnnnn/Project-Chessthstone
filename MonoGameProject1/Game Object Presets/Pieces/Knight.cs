@@ -6,7 +6,7 @@ namespace MonoGameProject1;
 
 public class Knight(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, PieceType.Knight)
 {
-	public override List<Point> GetPossibleMoves()
+	public override List<Point> GetMoveCoordList()
 	{
 		List<Point> moves = new();
 		for (int i = -2; i <= 2; i++)
@@ -17,10 +17,15 @@ public class Knight(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite,
 				{
 					Point nextCoord = new Point(column + i, row + j);
 					bool alwaysTrue = true;
-					if (ValidatePossibleMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
+					if (ValidateMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
 				}
 			}
 		}
 		return moves;
+	}
+
+	public override List<Point> GetAttackCoordList()
+	{
+		throw new NotImplementedException();
 	}
 }

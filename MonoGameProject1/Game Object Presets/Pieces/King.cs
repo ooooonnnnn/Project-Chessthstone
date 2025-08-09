@@ -5,7 +5,7 @@ namespace MonoGameProject1;
 
 public class King(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, PieceType.King)
 {
-	public override List<Point> GetPossibleMoves()
+	public override List<Point> GetMoveCoordList()
 	{
 		List<Point> moves = new();
 		for (int i = -1; i <= 1; i++)
@@ -15,9 +15,14 @@ public class King(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, P
 				if (i == 0 && j == 0) continue;
 				bool alwaysTrue = true;
 				Point nextCoord = new Point(column + i, row + j);
-				if (ValidatePossibleMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
+				if (ValidateMove(nextCoord, ref alwaysTrue)) moves.Add(nextCoord);
 			}
 		}
 		return moves;
+	}
+
+	public override List<Point> GetAttackCoordList()
+	{
+		throw new System.NotImplementedException();
 	}
 }

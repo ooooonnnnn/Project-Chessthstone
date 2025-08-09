@@ -5,25 +5,30 @@ namespace MonoGameProject1;
 
 public class Rook(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, PieceType.Rook)
 {
-	public override List<Point> GetPossibleMoves()
+	public override List<Point> GetMoveCoordList()
 	{
 		List<Point> moves = new();
 		bool dir1 = true, dir2 = true, dir3 = true, dir4 = true; //Free directions
 		for (int i = 1; i < ChessProperties.boardSize && (dir1 || dir2 || dir3 || dir4); i++)
 		{
 			Point nextCoord = new Point(column + i, row);
-			if(ValidatePossibleMove(nextCoord,ref dir1))
+			if(ValidateMove(nextCoord,ref dir1))
 				moves.Add(nextCoord);
 			nextCoord = new Point(column - i, row);
-			if(ValidatePossibleMove(nextCoord,ref dir2))
+			if(ValidateMove(nextCoord,ref dir2))
 				moves.Add(nextCoord);
 			nextCoord = new Point(column, row + i);
-			if(ValidatePossibleMove(nextCoord,ref dir3))
+			if(ValidateMove(nextCoord,ref dir3))
 				moves.Add(nextCoord);
 			nextCoord = new Point(column, row - i);
-			if(ValidatePossibleMove(nextCoord,ref dir4))
+			if(ValidateMove(nextCoord,ref dir4))
 				moves.Add(nextCoord);
 		}
 		return moves;
+	}
+
+	public override List<Point> GetAttackCoordList()
+	{
+		throw new System.NotImplementedException();
 	}
 }

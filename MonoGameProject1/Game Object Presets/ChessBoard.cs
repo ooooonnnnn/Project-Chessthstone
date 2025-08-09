@@ -57,7 +57,8 @@ public class ChessBoard : GameObject
 		{
 			if (square.occupyingPiece == null)
 			{
-				ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
+				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
+				ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
 				square.SetPiece(newPiece);;
@@ -66,8 +67,8 @@ public class ChessBoard : GameObject
 			{
 				_selectedPiece = square.occupyingPiece;
 				_selectedSquare = square;
-				//Test: show all possible moves
-				foreach (Point move in _selectedPiece.GetPossibleMoves())
+				//Test: show all possible attacks
+				foreach (Point move in _selectedPiece.GetAttackCoordList())
 				{
 					squares[move.X, move.Y].spriteRenderer.color = Color.Red;
 				}
@@ -82,7 +83,7 @@ public class ChessBoard : GameObject
 			else if (square.occupyingPiece == null)
 			{
 				Point squareCoords = new Point(square.column, square.row);
-				if(_selectedPiece.GetPossibleMoves().Contains(squareCoords))
+				if(_selectedPiece.GetMoveCoordList().Contains(squareCoords))
 				{
 					_selectedSquare.occupyingPiece = null;
 					_selectedPiece.GoToSquare(square);
