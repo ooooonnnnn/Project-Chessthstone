@@ -50,6 +50,8 @@ public class ChessBoard : GameObject
 	/// <summary>
 	/// Handles what happens when a square is clicked: <br/>
 	/// Nothing selected & empty square => Spawn new piece <br/>
+	/// Piece selected & square is valid move => move <br/>
+	/// Piece selected & square is valid attack => attack
 	/// </summary>
 	public void HandleSquareClicked(ChessSquare square)
 	{
@@ -80,24 +82,22 @@ public class ChessBoard : GameObject
 			{
 				DeselectAll();
 			}
-			else if (square.occupyingPiece == null)
+			Point squareCoords = new Point(square.column, square.row);
+			if(_selectedPiece.GetMoveCoordList().Contains(squareCoords))
 			{
-				Point squareCoords = new Point(square.column, square.row);
-				if(_selectedPiece.GetMoveCoordList().Contains(squareCoords))
-				{
-					_selectedSquare.occupyingPiece = null;
-					_selectedPiece.GoToSquare(square);
-					square.occupyingPiece = _selectedPiece;
-					DeselectAll();
-				}
-				else
-				{
-					Console.WriteLine("Square not in possible moves, try again");
-				}
+				//TODO: this will be a MovePiece method in a player class
+				_selectedSquare.occupyingPiece = null;
+				_selectedPiece.GoToSquare(square);
+				square.occupyingPiece = _selectedPiece;
+				DeselectAll();
+			}
+			else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
+			{
+				
 			}
 			else
 			{
-				Console.WriteLine("Can't move to occupied square, try again");
+				Console.WriteLine("Square not in possible moves, try again");
 			}
 		}
 		

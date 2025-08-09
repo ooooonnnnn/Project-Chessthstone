@@ -74,4 +74,9 @@ public abstract class Scene : IDisposable
 		
 		gameObjects = null;
 	}
+
+	public void RemoveGameObject(ChessPiece chessPiece)
+	{
+		throw new NotImplementedException();
+	}
 }

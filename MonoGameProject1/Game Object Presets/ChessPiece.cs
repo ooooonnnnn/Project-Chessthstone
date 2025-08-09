@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -29,6 +30,44 @@ public abstract class ChessPiece : Sprite
 		row = square.row;
 		column = square.column;
 		transform.parentSpacePos = square.transform.worldSpacePos;
+	}
+
+	/// <summary>
+	/// Attacks the piece that's on the square. Takes its place if it dies.
+	/// Assumes occupied square 
+	/// </summary>
+	public void AttackSquare(ChessSquare square)
+	{
+		if (square.occupyingPiece.TakeDamage(0))
+		{
+			GoToSquare(square);
+		}
+	}
+
+	/// <summary>
+	/// Takes damage and dies if necessary
+	/// </summary>
+	/// <param name="damage">amount of damage</param>
+	/// <returns>true of this piece died</returns>
+	public bool TakeDamage(int damage)
+	{
+		Console.WriteLine($"{name} took {damage} damage");
+		bool die = true; //TODO: add health and damage behavior
+
+		if (die)
+			Die();
+
+		return die;
+	}
+
+	/// <summary>
+	/// Plays death animation and removes the piece from the scene
+	/// </summary>
+	private void Die()
+	{
+		//TODO: add death animation
+		Console.WriteLine($"{name} is dead!");
+		parentScene.RemoveGameObject(this);
 	}
 	
 	/// <summary>
