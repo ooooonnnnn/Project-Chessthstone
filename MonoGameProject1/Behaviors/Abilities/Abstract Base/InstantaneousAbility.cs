@@ -11,6 +11,4 @@ public abstract class InstantaneousAbility : Ability
 	/// <param name="objects"></param>
 	//TODO: this will be a OneShotEffect class
 	protected abstract void OneShotEffect(GameObjectReferences objects); 
-	
-	public abstract override string ToString();
 }

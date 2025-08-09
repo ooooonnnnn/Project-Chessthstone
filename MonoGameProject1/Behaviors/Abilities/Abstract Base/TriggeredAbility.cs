@@ -24,9 +24,4 @@ public abstract class TriggeredAbility : InstantaneousAbility
 			OneShotEffect(objects);
 		}
 	}
-	
-	public override string ToString()
-	{
-		throw new System.NotImplementedException();
-	}
 }

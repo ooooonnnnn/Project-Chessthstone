@@ -28,9 +28,4 @@ public abstract class StaticAbility : Ability
 	{
 		if(Condition(currentState)) Effect(objects);
 	}
-	
-	public override string ToString()
-	{
-		throw new System.NotImplementedException();
-	}
 }

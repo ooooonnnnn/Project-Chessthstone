@@ -13,8 +13,7 @@ public class ChessBoard : GameObject
 	public ChessSquare[,] squares { get; init; }
 	public Transform transform;
 	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.sourceWidth;
-	
-	private ChessPiece _selectedPiece;
+	public event Action<ChessSquare> OnSquareClicked;
 	
 	public ChessBoard(string name) : base(name, [new Transform()])
 	{
@@ -30,7 +29,7 @@ public class ChessBoard : GameObject
 			{
 				//Construct ChessSquare
 				bool isWhite = ChessProperties.IsWhiteSquare(i, j);
-				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", i, j, isWhite);
+				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", this, i, j, isWhite);
 				newSquare.board = this;
 				squares[i, j] = newSquare;
 				
@@ -46,73 +45,8 @@ public class ChessBoard : GameObject
 		}
 	}
 
-	/// <summary>
-	/// Handles what happens when a square is clicked: <br/>
-	/// Nothing selected & empty square => Spawn new piece <br/>
-	/// Piece selected & square is valid move => move <br/>
-	/// Piece selected & square is valid attack => attack
-	/// </summary>
-	public void HandleSquareClicked(ChessSquare square)
+	public void SquareClicked(ChessSquare square)
 	{
-		if (_selectedPiece == null) //no piece selected => create or select
-		{
-			if (square.occupyingPiece == null)
-			{
-				ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
-				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
-				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
-				parentScene.AddGameObjects([newPiece]);
-				newPiece.TeleportToSquare(square);
-			}
-			else
-			{
-				_selectedPiece = square.occupyingPiece;
-				//Test: show all possible attacks
-				foreach (Point move in _selectedPiece.GetAttackCoordList())
-				{
-					squares[move.X, move.Y].spriteRenderer.color = Color.Red;
-				}
-				//Test: show all possible moves
-				foreach (Point move in _selectedPiece.GetMoveCoordList())
-				{
-					squares[move.X, move.Y].spriteRenderer.color = Color.Green;
-				}
-			}
-		}
-		else //piece selected => move or attack or deselect
-		{
-			if (square.occupyingPiece == _selectedPiece)
-			{
-				DeselectAll();
-			}
-			else
-			{
-				Point squareCoords = new Point(square.column, square.row);
-				if (_selectedPiece.GetMoveCoordList().Contains(squareCoords))
-				{
-					if (_selectedPiece.MoveToSquare(square))
-						DeselectAll();
-				}
-				else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
-				{
-					if (_selectedPiece.AttackPieceOnSquare(square)) //true if successful attack
-						DeselectAll();
-				}
-				else
-				{
-					Console.WriteLine("Square not in possible moves, try again");
-				}
-			}
-		}
-		
-	}
-
-	private void DeselectAll()
-	{
-		_selectedPiece = null;
-		foreach (ChessSquare square in squares)
-		{
-			square.spriteRenderer.color = Color.White;
-		}
+		OnSquareClicked?.Invoke(square);
 	}
 }

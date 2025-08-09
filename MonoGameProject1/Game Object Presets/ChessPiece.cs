@@ -8,7 +8,7 @@ namespace MonoGameProject1;
 /// Base class for chess pieces
 /// </summary>
 public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType type, int baseHealth, int baseDamage)
-	: Sprite(ChessPieceName(ownerPlayer.isWhite, type), TextureManager.GetChessPieceTexture(ownerPlayer.isWhite, type))
+	: Sprite(CreateName(ownerPlayer.isWhite, type), TextureManager.GetChessPieceTexture(ownerPlayer.isWhite, type))
 {
 	public PieceType type { get; init; } = type;
 	public Player ownerPlayer { get; init; } = ownerPlayer;
@@ -18,7 +18,7 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	/// <summary>
 	/// Attacking, moving, and activating abilities costs 1 action point.
 	/// </summary>
-	public int actionPoints { get; private set; } = 1;
+	public int actionPoints { get; set; } = 1;
 
 	/// <summary>
 	/// Current position
@@ -214,7 +214,7 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		return false;
 	}
 
-	private static string ChessPieceName(bool isWhite, PieceType type)
+	private static string CreateName(bool isWhite, PieceType type)
 	{
 		string color = isWhite ? "White" : "Black";
 		return $"{color} {type}";

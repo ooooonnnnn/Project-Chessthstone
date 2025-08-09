@@ -15,9 +15,4 @@ public abstract class ActivatedAbility : InstantaneousAbility
 	{
 		OneShotEffect(objects);
 	} 
-	
-	public override string ToString()
-	{
-		throw new System.NotImplementedException();
-	}
 }
