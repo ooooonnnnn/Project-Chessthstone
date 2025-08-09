@@ -51,6 +51,16 @@ public static class SceneManager
 	}
 
 	/// <summary>
+	/// Removes a gameobject from the game. Don't call this directly, because Scene calls this. <br/>Instead, do
+	/// gameObject.parentScene.RemoveGameObject(gameObject)
+	/// </summary>
+	/// <param name="gameObject">The object to remove</param>
+	public static void RemoveGameObject(GameObject gameObject)
+	{
+		_gameObjects.Remove(gameObject);
+	}
+
+	/// <summary>
 	/// Adds the gameObject if it's not in _gameObjects
 	/// </summary>
 	private static void AddGameObjectNoDuplicates(GameObject gameObject)

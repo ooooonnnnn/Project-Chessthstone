@@ -33,15 +33,13 @@ public abstract class ChessPiece : Sprite
 	}
 
 	/// <summary>
-	/// Attacks the piece that's on the square. Takes its place if it dies.
+	/// Attacks the piece that's on the square.
 	/// Assumes occupied square 
 	/// </summary>
-	public void AttackSquare(ChessSquare square)
+	public bool AttackPieceOnSquare(ChessSquare square)
 	{
-		if (square.occupyingPiece.TakeDamage(0))
-		{
-			GoToSquare(square);
-		}
+		ChessPiece attackedPiece = square.occupyingPiece;
+		return attackedPiece.TakeDamage(0); //TODO: use actual dammage
 	}
 
 	/// <summary>
@@ -52,7 +50,7 @@ public abstract class ChessPiece : Sprite
 	public bool TakeDamage(int damage)
 	{
 		Console.WriteLine($"{name} took {damage} damage");
-		bool die = true; //TODO: add health and damage behavior
+		bool die = false; //TODO: add health and damage behavior
 
 		if (die)
 			Die();

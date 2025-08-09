@@ -76,7 +76,7 @@ public class ChessBoard : GameObject
 				}
 			}
 		}
-		else //piece selected => move or deselect
+		else //piece selected => move or attack or deselect
 		{
 			if (square == _selectedSquare)
 			{
@@ -85,15 +85,20 @@ public class ChessBoard : GameObject
 			Point squareCoords = new Point(square.column, square.row);
 			if(_selectedPiece.GetMoveCoordList().Contains(squareCoords))
 			{
-				//TODO: this will be a MovePiece method in a player class
-				_selectedSquare.occupyingPiece = null;
-				_selectedPiece.GoToSquare(square);
-				square.occupyingPiece = _selectedPiece;
+				MovePieceToSquare(square);
 				DeselectAll();
 			}
 			else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
 			{
-				
+				if (_selectedPiece.AttackPieceOnSquare(square)) //true if defender died
+				{
+					MovePieceToSquare(square);
+					DeselectAll();
+				}
+				else
+				{
+					DeselectAll();
+				}
 			}
 			else
 			{
@@ -101,6 +106,14 @@ public class ChessBoard : GameObject
 			}
 		}
 		
+	}
+
+	private void MovePieceToSquare(ChessSquare square)
+	{
+		//TODO: this will called by a MovePiece method in a player class
+		_selectedSquare.occupyingPiece = null;
+		_selectedPiece.GoToSquare(square);
+		square.occupyingPiece = _selectedPiece;
 	}
 
 	private void DeselectAll()
