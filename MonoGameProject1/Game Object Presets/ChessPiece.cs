@@ -7,11 +7,12 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for chess pieces
 /// </summary>
-public abstract class ChessPiece(ChessBoard board, bool isWhite, PieceType type, int baseHealth, int baseDamage)
-	: Sprite(ChessPieceName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
+public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType type, int baseHealth, int baseDamage)
+	: Sprite(ChessPieceName(ownerPlayer.isWhite, type), TextureManager.GetChessPieceTexture(ownerPlayer.isWhite, type))
 {
 	public PieceType type { get; init; } = type;
-	public bool isWhite { get; init; } = isWhite;
+	public Player ownerPlayer { get; init; } = ownerPlayer;
+	public bool isWhite { get; init; } = ownerPlayer.isWhite;
 	public ChessBoard board { get; init; } = board;
 
 	/// <summary>
