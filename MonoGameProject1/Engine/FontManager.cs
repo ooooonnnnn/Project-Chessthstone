@@ -10,9 +10,11 @@ public static class FontManager
 {
 	public static Game game;
 	public static SpriteFont defaultFont { get; private set; }
+	public static SpriteFont arialFont { get; private set; }
 	
 	public static void LoadFonts()
 	{
+		//defaultFont = game.Content.Load<SpriteFont>("Fonts/Retro Gaming");
 		defaultFont = game.Content.Load<SpriteFont>("Fonts/Arial");
 	}
 }
