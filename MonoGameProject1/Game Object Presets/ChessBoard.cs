@@ -57,8 +57,8 @@ public class ChessBoard : GameObject
 		{
 			if (square.occupyingPiece == null)
 			{
-				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
-				ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
+				ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
+				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
 				square.SetPiece(newPiece);;

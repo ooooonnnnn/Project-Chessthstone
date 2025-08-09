@@ -26,6 +26,19 @@ public class Knight(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite,
 
 	public override List<Point> GetAttackCoordList()
 	{
-		throw new NotImplementedException();
+		List<Point> attacks = new();
+		for (int i = -2; i <= 2; i++)
+		{
+			for (int j = -2; j <= 2; j++)
+			{
+				if ((Math.Abs(i) == 2 && Math.Abs(j) == 1) || (Math.Abs(i) == 1 && Math.Abs(j) == 2))
+				{
+					Point nextCoord = new Point(column + i, row + j);
+					bool alwaysTrue = true;
+					if (ValidateAttack(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
+				}
+			}
+		}
+		return attacks;
 	}
 }

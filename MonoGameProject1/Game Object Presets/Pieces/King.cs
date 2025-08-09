@@ -23,6 +23,17 @@ public class King(ChessBoard board, bool isWhite) : ChessPiece(board, isWhite, P
 
 	public override List<Point> GetAttackCoordList()
 	{
-		throw new System.NotImplementedException();
+		List<Point> attacks = new();
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				if (i == 0 && j == 0) continue;
+				bool alwaysTrue = true;
+				Point nextCoord = new Point(column + i, row + j);
+				if (ValidateAttack(nextCoord, ref alwaysTrue)) attacks.Add(nextCoord);
+			}
+		}
+		return attacks;
 	}
 }
