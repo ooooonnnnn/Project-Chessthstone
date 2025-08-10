@@ -11,17 +11,19 @@ public class TestGameScene : Scene
 		board.transform.SetScaleFromFloat(0.2f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
-		
-		Player whitePlayer = new Player("White", true, board);
-		Player blackPlayer = new Player("Black", false, board);
 
-		TurnManager turnManager = new TurnManager("TurnManager", board, blackPlayer, whitePlayer);
+		TriggerManager triggerManager = new TriggerManager("TriggerManager");
+		
+		Player whitePlayer = new Player("White", true, board, triggerManager);
+		Player blackPlayer = new Player("Black", false, board, triggerManager);
+
+		TurnManager turnManager = new TurnManager("TurnManager", board, triggerManager, blackPlayer, whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
 		
 		endTurnButton.AddListener(turnManager.ChangeTurn);
 		
-		AddGameObjects([board, whitePlayer, blackPlayer, turnManager, endTurnButton]);
+		AddGameObjects([board, whitePlayer, blackPlayer, turnManager, endTurnButton, triggerManager]);
 	}
 }

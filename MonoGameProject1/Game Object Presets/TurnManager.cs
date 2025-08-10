@@ -14,14 +14,16 @@ public class TurnManager : GameObject
 	public bool isWhiteTurn { get; private set; } = true;
 	private Player _blackPlayer, _whitePlayer;
 	private ChessBoard _board;
+	private TriggerManager triggerManager;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
 	
-	public TurnManager(string name,ChessBoard board, Player blackPlayer, Player whitePlayer) : base(name)
+	public TurnManager(string name,ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer) : base(name)
 	{
 		ValidatePlayerColors(blackPlayer, whitePlayer);
 		_blackPlayer = blackPlayer;
 		_whitePlayer = whitePlayer;
 		_board = board;
+		this.triggerManager = triggerManager;
 		StartTurn();
 	}
 
@@ -36,6 +38,7 @@ public class TurnManager : GameObject
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
 		StartTurn();
+		triggerManager.UpdateStateAndTrigger(isWhiteTurn);
 	}
 
 	private void EndTurn()

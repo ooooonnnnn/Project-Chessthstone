@@ -8,7 +8,7 @@ namespace MonoGameProject1;
 /// <summary>
 /// A player in the game.
 /// </summary>
-public class Player : GameObject
+public class Player(string name, bool isWhite, ChessBoard board, TriggerManager triggerManager) : GameObject(name)
 {
 	/// <summary>
 	/// Mana to pay for activated abilities
@@ -23,18 +23,14 @@ public class Player : GameObject
 		}
 	}
 	private int _mana;
+	
 	/// <summary>
 	/// Color. White goes first
 	/// </summary>
-	public bool isWhite { get; } 
-	private ChessBoard board { get; }
+	public bool isWhite { get; } = isWhite;
+	private ChessBoard board { get; } = board;
+	private TriggerManager triggerManager { get; } = triggerManager;
 
-	public Player(string name, bool isWhite, ChessBoard board) : base(name)
-	{
-		this.board = board;
-		this.isWhite = isWhite;
-	}
-	
 	/// <summary>
 	/// Handles what happens when a square is clicked: <br/>
 	/// Nothing selected and empty square => Spawn new piece <br/>
@@ -53,6 +49,8 @@ public class Player : GameObject
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
 				newPiece.TeleportToSquare(square);
+				//Inform trigger manager
+				triggerManager.UpdateStateAndTrigger(isWhite);
 			}
 			else if (square.occupyingPiece.isWhite == isWhite) //piece belongs to this player => select it
 			{
@@ -81,12 +79,20 @@ public class Player : GameObject
 				if (_selectedPiece.GetMoveCoordList().Contains(squareCoords))
 				{
 					if (_selectedPiece.MoveToSquare(square))
+					{
 						DeselectAll();
+						//Inform trigger manager
+						triggerManager.UpdateStateAndTrigger(isWhite);
+					}
 				}
 				else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
 				{
 					if (_selectedPiece.AttackPieceOnSquare(square)) //true if successful attack
+					{
 						DeselectAll();
+						//Inform trigger manager
+						triggerManager.UpdateStateAndTrigger(isWhite);
+					}
 				}
 				else
 				{
@@ -115,6 +121,8 @@ public class Player : GameObject
 		
 		mana -= activatedAbility.manaCost;
 		activatedAbility.Activate(null);
+		//Inform trigger manager
+		triggerManager.UpdateStateAndTrigger(isWhite);
 		DeselectAll();
 	}
 
