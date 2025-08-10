@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace MonoGameProject1;
 
 /// <summary>
 /// Keeps track of the turns of two players
 /// </summary>
-public class TurnManager : GameObject
+public class TurnManager : SingletonGameObject<TurnManager>
 {
 	/// <summary>
 	/// Starts as true because white goes first
@@ -15,8 +16,17 @@ public class TurnManager : GameObject
 	private ChessBoard _board;
 	private TriggerManager triggerManager;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
-	
-	public TurnManager(string name,ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer) : base(name)
+
+	public static bool Instantiate(string name, ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer)
+	{
+		if (instance != null) 
+			return false;
+		
+		instance = new TurnManager(name, board, triggerManager, blackPlayer, whitePlayer);
+		return true;
+	}
+
+	protected TurnManager(string name,ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer) : base(name)
 	{
 		ValidatePlayerColors(blackPlayer, whitePlayer);
 		_blackPlayer = blackPlayer;

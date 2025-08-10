@@ -179,8 +179,8 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		//TODO: add death animation
 		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
-		parentScene.RemoveGameObject(this);
 		OnDeath?.Invoke(this);
+		parentScene.RemoveGameObject(this);
 	}
 	public event Action<ChessPiece> OnDeath;
 	

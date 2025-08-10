@@ -17,13 +17,13 @@ public class TestGameScene : Scene
 		Player whitePlayer = new Player("White", true, board, triggerManager);
 		Player blackPlayer = new Player("Black", false, board, triggerManager);
 
-		TurnManager turnManager = new TurnManager("TurnManager", board, triggerManager, blackPlayer, whitePlayer);
+		TurnManager.Instantiate("TurnManager", board, triggerManager, blackPlayer, whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
 		
-		endTurnButton.AddListener(turnManager.ChangeTurn);
+		endTurnButton.AddListener(TurnManager.instance.ChangeTurn);
 		
-		AddGameObjects([board, whitePlayer, blackPlayer, turnManager, endTurnButton, triggerManager]);
+		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, triggerManager]);
 	}
 }

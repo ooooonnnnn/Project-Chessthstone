@@ -49,7 +49,11 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
 				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				_pieces.Add(newPiece);
-				newPiece.OnDeath += (pieceToRemove) => _pieces.Remove(pieceToRemove);
+				newPiece.OnDeath += pieceToRemove =>
+				{
+					Console.WriteLine($"Removing {pieceToRemove.name}");
+					_pieces.Remove(pieceToRemove);
+				};
 				
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
