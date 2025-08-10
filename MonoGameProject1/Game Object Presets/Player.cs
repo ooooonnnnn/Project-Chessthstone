@@ -28,6 +28,8 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 	/// Color. White goes first
 	/// </summary>
 	public bool isWhite { get; } = isWhite;
+	private List<ChessPiece> _pieces { get; } = new();
+	public IReadOnlyList<ChessPiece> pieces => _pieces;
 	private ChessBoard board { get; } = board;
 	private TriggerManager triggerManager { get; } = triggerManager;
 
@@ -46,6 +48,9 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 				ChessPiece newPiece = new BasicKing(board, this);
 				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
 				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
+				_pieces.Add(newPiece);
+				newPiece.OnDeath += (pieceToRemove) => _pieces.Remove(pieceToRemove);
+				
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
 				newPiece.TeleportToSquare(square);

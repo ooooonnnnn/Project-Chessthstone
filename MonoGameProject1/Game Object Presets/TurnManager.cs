@@ -52,9 +52,17 @@ public class TurnManager : GameObject
 	private void StartTurn()
 	{
 		Player player = activePlayer;
+		//Subscribe player to input actions
 		_board.OnSquareClicked += player.HandleSquareClicked;
 		MouseInput.OnRightClick += player.TryActivateAbility;
-		player.mana = 10;
+		
+		//Reset mana and action points
+		player.mana = 0;
+		foreach (var playerPiece in player.pieces)
+		{
+			playerPiece.actionPoints = 1;
+		}
+		
 		Console.WriteLine($"{player.name}'s turn started");
 	}
 }

@@ -180,7 +180,9 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
 		parentScene.RemoveGameObject(this);
+		OnDeath?.Invoke(this);
 	}
+	public event Action<ChessPiece> OnDeath;
 	
 	/// <summary>
 	/// List of int coordinates of the squares this piece can move to. <br/>
@@ -269,5 +271,11 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	{
 		string color = isWhite ? "White" : "Black";
 		return $"{color} {type}";
+	}
+
+	public override void Dispose()
+	{
+		base.Dispose();
+		OnDeath = null;
 	}
 }
