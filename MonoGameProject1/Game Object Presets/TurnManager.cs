@@ -14,25 +14,23 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	public bool isWhiteTurn { get; private set; } = true;
 	private Player _blackPlayer, _whitePlayer;
 	private ChessBoard _board;
-	private TriggerManager triggerManager;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
 
-	public static bool Instantiate(string name, ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer)
+	public static bool Instantiate(string name, ChessBoard board, Player blackPlayer, Player whitePlayer)
 	{
 		if (instance != null) 
 			return false;
 		
-		instance = new TurnManager(name, board, triggerManager, blackPlayer, whitePlayer);
+		instance = new TurnManager(name, board, blackPlayer, whitePlayer);
 		return true;
 	}
 
-	protected TurnManager(string name,ChessBoard board, TriggerManager triggerManager, Player blackPlayer, Player whitePlayer) : base(name)
+	protected TurnManager(string name,ChessBoard board, Player blackPlayer, Player whitePlayer) : base(name)
 	{
 		ValidatePlayerColors(blackPlayer, whitePlayer);
 		_blackPlayer = blackPlayer;
 		_whitePlayer = whitePlayer;
 		_board = board;
-		this.triggerManager = triggerManager;
 		StartTurn();
 	}
 
@@ -47,7 +45,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
 		StartTurn();
-		triggerManager.UpdateStateAndTrigger(isWhiteTurn);
+		TriggerManager.instance.UpdateStateAndTrigger(isWhiteTurn);
 	}
 
 	private void EndTurn()

@@ -8,7 +8,7 @@ namespace MonoGameProject1;
 /// <summary>
 /// A player in the game.
 /// </summary>
-public class Player(string name, bool isWhite, ChessBoard board, TriggerManager triggerManager) : GameObject(name)
+public class Player(string name, bool isWhite, ChessBoard board) : GameObject(name)
 {
 	/// <summary>
 	/// Mana to pay for activated abilities
@@ -31,7 +31,6 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 	private List<ChessPiece> _pieces { get; } = new();
 	public IReadOnlyList<ChessPiece> pieces => _pieces;
 	private ChessBoard board { get; } = board;
-	private TriggerManager triggerManager { get; } = triggerManager;
 
 	/// <summary>
 	/// Handles what happens when a square is clicked: <br/>
@@ -59,7 +58,7 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 				parentScene.AddGameObjects([newPiece]);
 				newPiece.TeleportToSquare(square);
 				//Inform trigger manager
-				triggerManager.UpdateStateAndTrigger(isWhite);
+				TriggerManager.instance.UpdateStateAndTrigger(isWhite);
 			}
 			else if (square.occupyingPiece.isWhite == isWhite) //piece belongs to this player => select it
 			{
@@ -91,7 +90,7 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 					{
 						DeselectAll();
 						//Inform trigger manager
-						triggerManager.UpdateStateAndTrigger(isWhite);
+						TriggerManager.instance.UpdateStateAndTrigger(isWhite);
 					}
 				}
 				else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
@@ -100,7 +99,7 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 					{
 						DeselectAll();
 						//Inform trigger manager
-						triggerManager.UpdateStateAndTrigger(isWhite);
+						TriggerManager.instance.UpdateStateAndTrigger(isWhite);
 					}
 				}
 				else
@@ -131,7 +130,7 @@ public class Player(string name, bool isWhite, ChessBoard board, TriggerManager 
 		mana -= activatedAbility.manaCost;
 		activatedAbility.Activate(null);
 		//Inform trigger manager
-		triggerManager.UpdateStateAndTrigger(isWhite);
+		TriggerManager.instance.UpdateStateAndTrigger(isWhite);
 		DeselectAll();
 	}
 
