@@ -17,11 +17,11 @@ public abstract class TriggeredAbility : InstantaneousAbility
 	/// Checks the trigger and activates the ability if it's true.
 	/// </summary>
 	/// <param name="objects">GameObjects to act on</param>
-	public void CheckTriggerAndActivate(GameState previousState, GameState currentState, GameObjectReferences objects)
+	public void CheckTriggerAndActivate(GameState previousState, GameState currentState)
 	{
 		if (Trigger(previousState, currentState))
 		{
-			OneShotEffect(objects);
+			OneShotEffect();
 		}
 	}
 }

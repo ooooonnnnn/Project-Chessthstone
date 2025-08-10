@@ -13,6 +13,6 @@ public abstract class ActivatedAbility : InstantaneousAbility
 	/// </summary>
 	public void Activate(GameObjectReferences objects)
 	{
-		OneShotEffect(objects);
+		OneShotEffect();
 	} 
 }

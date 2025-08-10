@@ -7,7 +7,7 @@ public class BasicKnightAbility : ActivatedAbility
 {
 	public BasicKnightAbility() => manaCost = 2;
 	
-	protected override void OneShotEffect(GameObjectReferences objects)
+	protected override void OneShotEffect()
 	{
 		ownerPiece.actionPoints++;
 	}

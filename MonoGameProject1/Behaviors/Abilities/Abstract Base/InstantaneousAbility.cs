@@ -6,9 +6,9 @@ namespace MonoGameProject1.Behaviors;
 public abstract class InstantaneousAbility : Ability
 {
 	/// <summary>
-	/// The effect of the ability.
+	/// The effect of the ability. Affects the pieces in the same scene.
 	/// </summary>
 	/// <param name="objects"></param>
 	//TODO: this will be a OneShotEffect class
-	protected abstract void OneShotEffect(GameObjectReferences objects); 
+	protected abstract void OneShotEffect(); 
 }

@@ -46,6 +46,7 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	/// </summary>
 	public int column => currentSquare.column;
 	public int row => currentSquare.row;
+	public Point position => new Point(column, row);
 	protected ChessSquare currentSquare;
 
 	/// <summary>

@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System.Linq;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -15,9 +16,18 @@ public class TriggerManager(string name) : GameObject(name)
 	/// <summary>
 	/// Updates the game state history and prompts all pieces to try activating
 	/// </summary>
-	public void UpdateStateAndTrigger(bool isWhiteTurn, Scene gameScene)
+	public void UpdateStateAndTrigger(bool isWhiteTurn)
 	{
 		_prevState = _currentState;
-		_currentState = new GameState(isWhiteTurn, gameScene);
+		_currentState = new GameState(isWhiteTurn, parentScene);
+		parentScene.gameObjects.ForEach(obj =>
+		{
+			if (obj is not ChessPiece chessPiece)
+				return;
+			Ability ability = chessPiece.ability;
+			(ability as TriggeredAbility)?.CheckTriggerAndActivate(_prevState, _currentState);
+			(ability as StaticAbility)?.TryApplyEffect(_currentState);
+			return;
+		});
 	}
 }
