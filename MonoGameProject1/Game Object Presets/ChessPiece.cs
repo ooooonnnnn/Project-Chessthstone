@@ -44,8 +44,8 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	/// <summary>
 	/// Current position
 	/// </summary>
-	protected int column => currentSquare.column;
-	protected int row => currentSquare.row;
+	public int column => currentSquare.column;
+	public int row => currentSquare.row;
 	protected ChessSquare currentSquare;
 
 	/// <summary>
