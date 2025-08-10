@@ -15,10 +15,12 @@ public class TestGameScene : Scene
 		Player whitePlayer = new Player("White", true, board);
 		Player blackPlayer = new Player("Black", false, board);
 
-		TurnManager turnManager = new TurnManager("TurnManager", blackPlayer, whitePlayer);
+		TurnManager turnManager = new TurnManager("TurnManager", board, blackPlayer, whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
+		
+		endTurnButton.AddListener(turnManager.ChangeTurn);
 		
 		AddGameObjects([board, whitePlayer, blackPlayer, turnManager, endTurnButton]);
 	}

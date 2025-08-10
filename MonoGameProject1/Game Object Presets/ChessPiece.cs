@@ -83,12 +83,21 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		Point nextCoord = new Point(square.column, square.row);
 		if (!GetMoveCoordList().Contains(nextCoord)) return false;
 		
+		DoMoveToSquare(square);
+
+		return true;
+	}
+
+	/// <summary>
+	/// Moves without requiring an action point
+	/// </summary>
+	/// <param name="square"></param>
+	private void DoMoveToSquare(ChessSquare square)
+	{
 		currentSquare.occupyingPiece = null;
 		currentSquare = square;
 		currentSquare.occupyingPiece = this;
 		transform.parentSpacePos = square.transform.worldSpacePos;
-
-		return true;
 	}
 
 	/// <summary>
@@ -105,7 +114,7 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		ChessPiece attackedPiece = square.occupyingPiece;
 		if (attackedPiece.TakeDamage(baseDamage))
 		{
-			MoveToSquare(square);
+			DoMoveToSquare(square);
 		}
 		
 		return true;

@@ -33,10 +33,6 @@ public class Player : GameObject
 	{
 		this.board = board;
 		this.isWhite = isWhite;
-		//TODO: this player is always active. Add turn manager class and StartTurn and EndTurn functions here 
-		board.OnSquareClicked += HandleSquareClicked;
-		//TODO: ability activation test
-		MouseInput.OnRightClick += TryActivateAbility;
 	}
 	
 	/// <summary>
@@ -102,7 +98,7 @@ public class Player : GameObject
 	}
 	private ChessPiece _selectedPiece;
 
-	private void TryActivateAbility()
+	public void TryActivateAbility()
 	{
 		ActivatedAbility activatedAbility = _selectedPiece?.ability as ActivatedAbility;
 		if (activatedAbility == null)
