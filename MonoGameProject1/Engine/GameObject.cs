@@ -28,15 +28,17 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	private List<IUpdateable> _updatables = new();
 	private List<IDrawable> _drawables = new();
 
-	public GameObject(string name)
+	public GameObject(string name, List<Behavior> behaviors = null)
 	{
 		this.name = name;
-	}
-
-	public GameObject(string name, List<Behavior> behaviors) : this(name)
-	{
-		this.behaviors = behaviors;
-		InitializeBehaviors(behaviors);
+		
+		if (behaviors == null)
+			this.behaviors = new List<Behavior>();
+		else
+		{
+			this.behaviors = behaviors;
+			InitializeBehaviors(behaviors);
+		}
 	}
 
 	/// <summary>
