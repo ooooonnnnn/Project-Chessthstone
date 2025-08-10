@@ -50,10 +50,18 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 		{
 			behavior.gameObject = this;
 			behavior.Initialize();
-			if (behavior is IUpdateable updateable) _updatables.Add(updateable);
-			if (behavior is IDrawable drawable) _drawables.Add(drawable);
-			if (behavior is IHierarchy hierarchy) _hierarchicalBehaviors.Add(hierarchy);
+			ClassifyBehavior(behavior);
 		}
+	}
+
+	/// <summary>
+	/// Adds a reference of the behavior to the proper lists, for functionality, i.e. IUpdatables need to be in _updatables
+	/// </summary>
+	protected virtual void ClassifyBehavior(Behavior behavior)
+	{
+		if (behavior is IUpdateable updateable) _updatables.Add(updateable);
+		if (behavior is IDrawable drawable) _drawables.Add(drawable);
+		if (behavior is IHierarchy hierarchy) _hierarchicalBehaviors.Add(hierarchy);
 	}
 
 	/// <summary>

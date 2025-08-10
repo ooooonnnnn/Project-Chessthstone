@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -12,7 +13,16 @@ public class Player : GameObject
 	/// <summary>
 	/// Mana to pay for activated abilities
 	/// </summary>
-	public int mana { get; set; }
+	public int mana
+	{
+		get => _mana;
+		set
+		{
+			_mana = value;
+			Console.WriteLine($"{name} has {_mana} mana");
+		}
+	}
+	private int _mana;
 	/// <summary>
 	/// Color. White goes first
 	/// </summary>
@@ -25,6 +35,8 @@ public class Player : GameObject
 		this.isWhite = isWhite;
 		//TODO: this player is always active. Add turn manager class and StartTurn and EndTurn functions here 
 		board.OnSquareClicked += HandleSquareClicked;
+		//TODO: ability activation test
+		MouseInput.OnRightClick += TryActivateAbility;
 	}
 	
 	/// <summary>
@@ -39,7 +51,8 @@ public class Player : GameObject
 		{
 			if (square.occupyingPiece == null) //empty square => create piece
 			{
-				ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
+				ChessPiece newPiece = new  BasicKnight(board, this);
+				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
 				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 				parentScene.AddGameObjects([newPiece]);
@@ -87,9 +100,28 @@ public class Player : GameObject
 		}
 		
 	}
-
 	private ChessPiece _selectedPiece;
-	
+
+	private void TryActivateAbility()
+	{
+		ActivatedAbility activatedAbility = _selectedPiece?.ability as ActivatedAbility;
+		if (activatedAbility == null)
+		{
+			Console.WriteLine("Selected piece does not have an activated ability");
+			return;
+		}
+
+		if (mana < activatedAbility.manaCost)
+		{
+			Console.WriteLine("Not enough mana to activate ability");
+			return;
+		}
+		
+		mana -= activatedAbility.manaCost;
+		activatedAbility.Activate(null);
+		DeselectAll();
+	}
+
 	private void DeselectAll()
 	{
 		_selectedPiece = null;
@@ -102,6 +134,7 @@ public class Player : GameObject
 	public override void Dispose()
 	{
 		base.Dispose();
+		MouseInput.OnRightClick -= TryActivateAbility;
 		if (board != null)
 			board.OnSquareClicked -= HandleSquareClicked;
 	}

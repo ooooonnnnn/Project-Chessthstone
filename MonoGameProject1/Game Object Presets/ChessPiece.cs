@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -16,9 +17,29 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	public ChessBoard board { get; init; } = board;
 
 	/// <summary>
-	/// Attacking, moving, and activating abilities costs 1 action point.
+	/// Health and damage
 	/// </summary>
-	public int actionPoints { get; set; } = 1;
+	protected int baseHealth = baseHealth, baseDamage = baseDamage, health = baseHealth;
+
+	/// <summary>
+	/// Attacking and moving costs 1 action point.
+	/// </summary>
+	public int actionPoints
+	{
+		get => _actionPoints;
+		set
+		{
+			_actionPoints = value;
+			Console.WriteLine($"{name} has {actionPoints} action points");
+		}
+	}
+
+	private int _actionPoints = 1;
+
+	/// <summary>
+	/// One of its behaviors can be an ability. Assigned automatically on AddBehaviors => ClassifyBehavior
+	/// </summary>
+	public Ability ability { get; private set; }
 
 	/// <summary>
 	/// Current position
@@ -26,7 +47,6 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	protected int column => currentSquare.column;
 	protected int row => currentSquare.row;
 	protected ChessSquare currentSquare;
-	protected int baseHealth = baseHealth, baseDamage = baseDamage, health = baseHealth;
 
 	/// <summary>
 	/// Moves the piece to the target square. To move the piece, use MoveToSquare
@@ -46,6 +66,7 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		canTeleport = false;
 	}
 	protected bool canTeleport = true;
+	
 	/// <summary>
 	/// Use this if you want the piece to teleport after the initial spawning.
 	/// </summary>
@@ -90,6 +111,18 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		return true;
 	}
 
+	// /// <summary>
+	// /// Activates this pieces' ActivatedAbility if it exists
+	// /// </summary>
+	// /// <returns>True if successful</returns>
+	// public bool ActivateAbility(GameObjectReferences objects)
+	// {
+	// 	if(ability is null or not ActivatedAbility) 
+	// 		return false;
+	// 	((ActivatedAbility)ability).Activate(objects);
+	// 	return true;
+	// }
+	
 	/// <summary>
 	/// Tries to pay one action point. 
 	/// </summary>
@@ -102,7 +135,6 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 			return false;
 		}
 		actionPoints--;
-		Console.WriteLine($"{name} has {actionPoints} action points left");
 		return true;
 	}
 	
@@ -212,6 +244,15 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 		//Square blocked, stop searching this direction
 		directionValid = false;
 		return false;
+	}
+
+	/// <summary>
+	/// Gets a reference to the Ability behavior
+	/// </summary>
+	protected override void ClassifyBehavior(Behavior behavior)
+	{
+		base.ClassifyBehavior(behavior);
+		if (behavior is Ability) ability = (Ability) behavior;
 	}
 
 	private static string CreateName(bool isWhite, PieceType type)
