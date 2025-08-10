@@ -51,7 +51,7 @@ public class Player : GameObject
 		{
 			if (square.occupyingPiece == null) //empty square => create piece
 			{
-				ChessPiece newPiece = new  BasicKnight(board, this);
+				ChessPiece newPiece = new  BasicBishop(board, this);
 				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
 				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
 				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
