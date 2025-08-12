@@ -40,12 +40,19 @@ public class TurnManager : SingletonGameObject<TurnManager>
 			throw new ArgumentException("The black player must be black and the white player must be white");
 	}
 
-	public void ChangeTurn()
+	/// <summary>
+	/// Passes the turn from one player to the other.
+	/// </summary>
+	/// <param name="sendTrigger">Default true. set false to prevent turn change triggers (in setup phase)</param>
+	public void ChangeTurn(bool sendTrigger = true)
 	{
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
 		StartTurn();
-		TriggerManager.instance.UpdateStateAndTrigger(isWhiteTurn);
+		if (sendTrigger)
+			TriggerManager.instance.UpdateStateAndTrigger(isWhiteTurn);
+		else
+			TriggerManager.instance.UpdateGameState(isWhiteTurn);
 	}
 
 	private void EndTurn()

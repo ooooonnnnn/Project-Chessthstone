@@ -59,7 +59,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 			//pass the turn if successful
 			if (TryPlacePiece(square))
 			{
-				TurnManager.instance.ChangeTurn();
+				TurnManager.instance.ChangeTurn(sendTrigger: false);
 			}
 			return;
 		}
@@ -145,11 +145,13 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		_pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
 		parentScene.AddGameObjects([_pieceToPlace]);
 		_pieceToPlace.TeleportToSquare(square);
+		
+		_pieceToPlace = null;
 
 		return true;
 	}
 
-	private Keys[] numberKeys = [ Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 ];
+	private readonly Keys[] numberKeys = [ Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 ];
 	public override void Update(GameTime gameTime)
 	{
 		base.Update(gameTime);
@@ -176,7 +178,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		ActivatedAbility activatedAbility = _selectedActivePiece?.ability as ActivatedAbility;
 		if (activatedAbility == null)
 		{
-			Console.WriteLine("Selected piece does not have an activated ability");
+			Console.WriteLine("No piece selected OR no ability");
 			return;
 		}
 

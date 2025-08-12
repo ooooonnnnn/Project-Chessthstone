@@ -31,7 +31,7 @@ public class TestGameScene : Scene
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
 		
-		endTurnButton.AddListener(TurnManager.instance.ChangeTurn);
+		endTurnButton.AddListener(() => TurnManager.instance.ChangeTurn());
 		
 		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance]);
 	}

@@ -30,8 +30,7 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	/// </summary>
 	public void UpdateStateAndTrigger(bool isWhiteTurn)
 	{
-		_prevState = _currentState;
-		_currentState = new GameState(isWhiteTurn, parentScene);
+		UpdateGameState(isWhiteTurn);
 		parentScene.gameObjects.ForEach(obj =>
 		{
 			if (obj is not ChessPiece chessPiece)
@@ -39,7 +38,15 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 			Ability ability = chessPiece.ability;
 			(ability as TriggeredAbility)?.CheckTriggerAndActivate(_prevState, _currentState);
 			(ability as StaticAbility)?.TryApplyEffect(_currentState);
-			return;
 		});
+	}
+
+	/// <summary>
+	/// Only updates the state history without triggering the pieces
+	/// </summary>
+	public void UpdateGameState(bool isWhiteTurn)
+	{
+		_prevState = _currentState;
+		_currentState = new GameState(isWhiteTurn, parentScene);
 	}
 }
