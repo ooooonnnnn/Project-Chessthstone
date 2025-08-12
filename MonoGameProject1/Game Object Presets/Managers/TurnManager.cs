@@ -70,6 +70,10 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		_board.OnSquareClicked -= player.HandleSquareClicked;
 		MouseInput.OnRightClick -= player.TryActivateAbility;
 		Console.WriteLine($"{player.name}'s turn ended");
+		
+		//try changing phase 
+		if (player.teamPieces.Count == 0 && inactivePlayer.teamPieces.Count == 0)
+			GamePhaseManager.instance.phase = GamePhase.Gameplay;
 	}
 
 	private void StartTurn()
@@ -90,9 +94,10 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		}
 		
 		Console.WriteLine($"{player.name}'s turn started");
-		if (player.teamPieces.Count > 0)
+		GamePhase currentPhase = GamePhaseManager.instance.phase;
+		if (currentPhase == GamePhase.Setup)
 			Console.WriteLine($"Choose piece to place: [{string.Join(", ", player.teamPieces.Select(p => p.name))}]");
-		else
+		else if (currentPhase == GamePhase.Gameplay)
 		{
 			Console.WriteLine(string.Join(", ",
 				player.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
