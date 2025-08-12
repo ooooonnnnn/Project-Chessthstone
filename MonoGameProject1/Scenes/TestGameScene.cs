@@ -13,6 +13,7 @@ public class TestGameScene : Scene
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 
 		TriggerManager.Instantiate("TriggerManager");
+		GamePhaseManager.Instantiate("GamePhaseManager");
 		
 		Player whitePlayer = new Player("White", true, board);
 		Player blackPlayer = new Player("Black", false, board);
@@ -33,6 +34,7 @@ public class TestGameScene : Scene
 		
 		endTurnButton.AddListener(() => TurnManager.instance.ChangeTurn());
 		
-		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance]);
+		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance, 
+		GamePhaseManager.instance]);
 	}
 }

@@ -165,7 +165,7 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	/// <summary>
 	/// Calls Start on IStart behaviors
 	/// </summary>
-	public void Start()
+	public virtual void Start()
 	{
 		foreach (var behavior in behaviors)
 		{

@@ -5,7 +5,7 @@ using System.Linq;
 namespace MonoGameProject1;
 
 /// <summary>
-/// Keeps track of the turns of two players
+/// Keeps track of the turns of two players.
 /// </summary>
 public class TurnManager : SingletonGameObject<TurnManager>
 {
@@ -33,7 +33,13 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		_blackPlayer = blackPlayer;
 		_whitePlayer = whitePlayer;
 		_board = board;
-		StartTurn();
+		GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
+		{
+			if (phase is GamePhase.Gameplay or GamePhase.Setup && prev == GamePhase.None)
+			{
+				StartTurn();
+			}
+		};
 	}
 
 	private void ValidatePlayerColors(Player blackPlayer, Player whitePlayer)
@@ -81,7 +87,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		
 		Console.WriteLine($"{player.name}'s turn started");
 		if (player.teamPieces.Count > 0)
-			Console.WriteLine($"You can place: {string.Join(", ", player.teamPieces.Select(p => p.name))}");
+			Console.WriteLine($"Choose piece to place: [{string.Join(", ", player.teamPieces.Select(p => p.name))}]");
 		else
 		{
 			Console.WriteLine(string.Join(", ",
