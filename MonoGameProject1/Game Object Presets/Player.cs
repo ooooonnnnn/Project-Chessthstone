@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
@@ -29,12 +30,16 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 	/// </summary>
 	public bool isWhite { get; } = isWhite;
 	/// <summary>
+	/// Is this player taking its turn rn?
+	/// </summary>
+	public bool isPlayerActive => TurnManager.instance.isWhiteTurn == isWhite; 
+	/// <summary>
 	/// The pieces the player starts with and places when the game starts
 	/// </summary>
 	public List<ChessPiece> teamPieces;
 	private ChessPiece _pieceToPlace;
 	/// <summary>
-	/// The pieces that are currently on the board
+	/// The pieckes that are currently on the board
 	/// </summary>
 	private List<ChessPiece> _activePieces { get; } = new();
 	public IReadOnlyList<ChessPiece> pieces => _activePieces;
@@ -52,8 +57,6 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		{
 			//try placing a piece
 			//pass the turn if successful
-			//TODO: test
-			_pieceToPlace = teamPieces[0];
 			if (TryPlacePiece(square))
 			{
 				TurnManager.instance.ChangeTurn();
@@ -145,7 +148,29 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 
 		return true;
 	}
-	
+
+	private Keys[] numberKeys = [ Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 ];
+	public override void Update(GameTime gameTime)
+	{
+		base.Update(gameTime);
+		
+		if (isPlayerActive)
+		{
+			KeyboardState state = Keyboard.GetState();
+			for (int i = 0; i < numberKeys.Length; i++)
+			{
+				if (i > teamPieces.Count - 1) 
+					break;
+				if (state.IsKeyDown(numberKeys[i]))
+				{
+					_pieceToPlace = teamPieces[i];
+					Console.WriteLine($"Chose {_pieceToPlace.name} to place");
+					return;
+				}
+			}
+		}
+	}
+
 	public void TryActivateAbility()
 	{
 		ActivatedAbility activatedAbility = _selectedActivePiece?.ability as ActivatedAbility;
