@@ -19,7 +19,9 @@ public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType
 	/// <summary>
 	/// Health and damage
 	/// </summary>
-	protected int baseHealth = baseHealth, baseDamage = baseDamage, health = baseHealth;
+	public int baseHealth { get; protected set; } = baseHealth;
+	public int baseDamage { get; protected set; } = baseDamage;
+	public int health { get; protected set; } = baseHealth;
 
 	/// <summary>
 	/// Attacking and moving costs 1 action point.

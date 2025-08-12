@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGameProject1;
 
@@ -15,6 +16,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	private Player _blackPlayer, _whitePlayer;
 	private ChessBoard _board;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
+	public Player inactivePlayer => isWhiteTurn ? _blackPlayer : _whitePlayer;
 
 	public static bool Instantiate(string name, ChessBoard board, Player blackPlayer, Player whitePlayer)
 	{
@@ -78,5 +80,14 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		}
 		
 		Console.WriteLine($"{player.name}'s turn started");
+		if (player.teamPieces.Count > 0)
+			Console.WriteLine($"You can place: {string.Join(", ", player.teamPieces.Select(p => p.name))}");
+		else
+		{
+			Console.WriteLine(string.Join(", ",
+				player.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
+			Console.WriteLine(string.Join(", ",
+				inactivePlayer.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
+		}
 	}
 }
