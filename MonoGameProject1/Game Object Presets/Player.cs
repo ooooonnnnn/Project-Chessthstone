@@ -58,9 +58,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 			//try placing a piece
 			//pass the turn if successful
 			if (TryPlacePiece(square))
-			{
-				TurnManager.instance.ChangeTurn(sendTrigger: false);
-			}
+				TurnManager.instance.ChangeTurn();
 			return;
 		}
 		

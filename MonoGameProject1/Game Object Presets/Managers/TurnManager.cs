@@ -52,14 +52,15 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// Passes the turn from one player to the other.
 	/// </summary>
 	/// <param name="sendTrigger">Default true. set false to prevent turn change triggers (in setup phase)</param>
-	public void ChangeTurn(bool sendTrigger = true)
+	public void ChangeTurn()
 	{
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
 		StartTurn();
-		if (sendTrigger)
+		GamePhase currentPhase = GamePhaseManager.instance.phase;
+		if (currentPhase == GamePhase.Gameplay)
 			TriggerManager.instance.UpdateStateAndTrigger(isWhiteTurn);
-		else
+		else if (currentPhase == GamePhase.Setup)
 			TriggerManager.instance.UpdateGameState(isWhiteTurn);
 	}
 
@@ -79,10 +80,13 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		MouseInput.OnRightClick += player.TryActivateAbility;
 		
 		//Reset mana and action points
-		player.mana = 0;
-		foreach (var playerPiece in player.pieces)
+		if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
 		{
-			playerPiece.actionPoints = 1;
+			player.mana = 0;
+			foreach (var playerPiece in player.pieces)
+			{
+				playerPiece.actionPoints = 1;
+			}
 		}
 		
 		Console.WriteLine($"{player.name}'s turn started");
