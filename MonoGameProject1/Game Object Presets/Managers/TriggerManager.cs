@@ -26,11 +26,14 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	protected TriggerManager(string name) : base(name) { }
 
 	/// <summary>
-	/// Updates the game state history and prompts all pieces to try activating
+	/// Updates the game state history. If the phase is gameplay: prompts all pieces to try activating
 	/// </summary>
-	public void UpdateStateAndTrigger(bool isWhiteTurn)
+	public void UpdateStateAndTryTrigger(bool isWhiteTurn)
 	{
 		UpdateGameState(isWhiteTurn);
+		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
+			return;
+		
 		parentScene.gameObjects.ForEach(obj =>
 		{
 			if (obj is not ChessPiece chessPiece)
@@ -44,7 +47,7 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	/// <summary>
 	/// Only updates the state history without triggering the pieces
 	/// </summary>
-	public void UpdateGameState(bool isWhiteTurn)
+	private void UpdateGameState(bool isWhiteTurn)
 	{
 		_prevState = _currentState;
 		_currentState = new GameState(isWhiteTurn, parentScene);

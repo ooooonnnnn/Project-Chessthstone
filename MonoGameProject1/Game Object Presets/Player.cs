@@ -96,7 +96,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 					{
 						DeselectAll();
 						//Inform trigger manager
-						TriggerManager.instance.UpdateStateAndTrigger(isWhite);
+						TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
 					}
 				}
 				else if (_selectedActivePiece.GetAttackCoordList().Contains(squareCoords))
@@ -105,7 +105,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 					{
 						DeselectAll();
 						//Inform trigger manager
-						TriggerManager.instance.UpdateStateAndTrigger(isWhite);
+						TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
 					}
 				}
 				else
@@ -189,7 +189,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		mana -= activatedAbility.manaCost;
 		activatedAbility.Activate(null);
 		//Inform trigger manager
-		TriggerManager.instance.UpdateStateAndTrigger(isWhite);
+		TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
 		DeselectAll();
 	}
 

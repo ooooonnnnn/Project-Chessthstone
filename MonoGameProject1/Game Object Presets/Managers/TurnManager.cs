@@ -57,11 +57,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
 		StartTurn();
-		GamePhase currentPhase = GamePhaseManager.instance.phase;
-		if (currentPhase == GamePhase.Gameplay)
-			TriggerManager.instance.UpdateStateAndTrigger(isWhiteTurn);
-		else if (currentPhase == GamePhase.Setup)
-			TriggerManager.instance.UpdateGameState(isWhiteTurn);
+		TriggerManager.instance.UpdateStateAndTryTrigger(isWhiteTurn);
 	}
 
 	private void EndTurn()
