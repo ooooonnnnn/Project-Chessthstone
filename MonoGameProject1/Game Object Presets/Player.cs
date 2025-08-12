@@ -65,7 +65,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		{
 			if (square.occupyingPiece == null)
 				return;
-			if (square.occupyingPiece.isWhite != isWhite) //piece doesn't belongs to this player => can't select select it
+			if (square.occupyingPiece.isWhite != isWhite) //piece doesn't belongs to this player => can't select it
 				return;
 			
 			_selectedActivePiece = square.occupyingPiece;
