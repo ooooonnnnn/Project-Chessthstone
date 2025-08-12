@@ -28,74 +28,79 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 	/// Color. White goes first
 	/// </summary>
 	public bool isWhite { get; } = isWhite;
-	private List<ChessPiece> _pieces { get; } = new();
-	public IReadOnlyList<ChessPiece> pieces => _pieces;
+	/// <summary>
+	/// The pieces the player starts with and places when the game starts
+	/// </summary>
+	public List<ChessPiece> teamPieces;
+	private ChessPiece _pieceToPlace;
+	/// <summary>
+	/// The pieces that are currently on the board
+	/// </summary>
+	private List<ChessPiece> _activePieces { get; } = new();
+	public IReadOnlyList<ChessPiece> pieces => _activePieces;
 	private ChessBoard board { get; } = board;
 
 	/// <summary>
 	/// Handles what happens when a square is clicked: <br/>
-	/// Nothing selected and empty square => Spawn new piece <br/>
+	/// Nothing selected and empty square => Spawn a new piece. <br/>
 	/// Piece selected and square is valid move => move <br/>
 	/// Piece selected and square is valid attack => attack
 	/// </summary>
 	public void HandleSquareClicked(ChessSquare square)
 	{
-		if (_selectedPiece == null) //no piece selected => create or select
+		if (teamPieces.Count > 0)
 		{
-			if (square.occupyingPiece == null) //empty square => create piece
+			//try placing a piece
+			//pass the turn if successful
+			//TODO: test
+			_pieceToPlace = teamPieces[0];
+			if (TryPlacePiece(square))
 			{
-				ChessPiece newPiece = new BasicKing(board, this);
-				// ChessPiece newPiece = PieceFactory.CreateRandomPiece(board, this);
-				// ChessPiece newPiece = PieceFactory.CreatePiece(this, QuickRandom.NextInt(0,2) == 0, PieceType.Pawn);
-				_pieces.Add(newPiece);
-				newPiece.OnDeath += pieceToRemove =>
-				{
-					Console.WriteLine($"Removing {pieceToRemove.name}");
-					_pieces.Remove(pieceToRemove);
-				};
-				
-				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
-				parentScene.AddGameObjects([newPiece]);
-				newPiece.TeleportToSquare(square);
-				//Inform trigger manager
-				TriggerManager.instance.UpdateStateAndTrigger(isWhite);
+				TurnManager.instance.ChangeTurn();
 			}
-			else if (square.occupyingPiece.isWhite == isWhite) //piece belongs to this player => select it
+			return;
+		}
+		
+		if (_selectedActivePiece == null) //no piece selected, try select
+		{
+			if (square.occupyingPiece == null)
+				return;
+			if (square.occupyingPiece.isWhite != isWhite) //piece doesn't belongs to this player => can't select select it
+				return;
+			
+			_selectedActivePiece = square.occupyingPiece;
+			//Test: show all possible attacks
+			foreach (Point move in _selectedActivePiece.GetAttackCoordList())
 			{
-				_selectedPiece = square.occupyingPiece;
-				//Test: show all possible attacks
-				foreach (Point move in _selectedPiece.GetAttackCoordList())
-				{
-					board.squares[move.X, move.Y].spriteRenderer.color = Color.Red;
-				}
-				//Test: show all possible moves
-				foreach (Point move in _selectedPiece.GetMoveCoordList())
-				{
-					board.squares[move.X, move.Y].spriteRenderer.color = Color.Green;
-				}
+				board.squares[move.X, move.Y].spriteRenderer.color = Color.Red;
+			}
+			//Test: show all possible moves
+			foreach (Point move in _selectedActivePiece.GetMoveCoordList())
+			{
+				board.squares[move.X, move.Y].spriteRenderer.color = Color.Green;
 			}
 		}
 		else //piece selected => move or attack or deselect
 		{
-			if (square.occupyingPiece == _selectedPiece)
+			if (square.occupyingPiece == _selectedActivePiece)
 			{
 				DeselectAll();
 			}
 			else
 			{
 				Point squareCoords = new Point(square.column, square.row);
-				if (_selectedPiece.GetMoveCoordList().Contains(squareCoords))
+				if (_selectedActivePiece.GetMoveCoordList().Contains(squareCoords))
 				{
-					if (_selectedPiece.MoveToSquare(square))
+					if (_selectedActivePiece.MoveToSquare(square))
 					{
 						DeselectAll();
 						//Inform trigger manager
 						TriggerManager.instance.UpdateStateAndTrigger(isWhite);
 					}
 				}
-				else if (_selectedPiece.GetAttackCoordList().Contains(squareCoords))
+				else if (_selectedActivePiece.GetAttackCoordList().Contains(squareCoords))
 				{
-					if (_selectedPiece.AttackPieceOnSquare(square)) //true if successful attack
+					if (_selectedActivePiece.AttackPieceOnSquare(square)) //true if successful attack
 					{
 						DeselectAll();
 						//Inform trigger manager
@@ -110,11 +115,40 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 		}
 		
 	}
-	private ChessPiece _selectedPiece;
+	private ChessPiece _selectedActivePiece;
 
+	//TODO: this should probably be in another class like ChessBoard
+	private bool TryPlacePiece(ChessSquare square)
+	{
+		if (_pieceToPlace == null)
+			return false;
+		//Can't place if the square is occupied
+		if (square.occupyingPiece != null)
+			return false;
+		//check square is on my side
+		bool onMySide = isWhite ? square.column >= ChessProperties.boardSize / 2 :
+			square.column < ChessProperties.boardSize / 2;
+		if (!onMySide)
+			return false;
+		
+		_activePieces.Add(_pieceToPlace);
+		teamPieces.Remove(_pieceToPlace);
+		_pieceToPlace.OnDeath += pieceToRemove =>
+		{
+			Console.WriteLine($"Removing {pieceToRemove.name}");
+			_activePieces.Remove(pieceToRemove);
+		};
+
+		_pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
+		parentScene.AddGameObjects([_pieceToPlace]);
+		_pieceToPlace.TeleportToSquare(square);
+
+		return true;
+	}
+	
 	public void TryActivateAbility()
 	{
-		ActivatedAbility activatedAbility = _selectedPiece?.ability as ActivatedAbility;
+		ActivatedAbility activatedAbility = _selectedActivePiece?.ability as ActivatedAbility;
 		if (activatedAbility == null)
 		{
 			Console.WriteLine("Selected piece does not have an activated ability");
@@ -136,7 +170,7 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 
 	private void DeselectAll()
 	{
-		_selectedPiece = null;
+		_selectedActivePiece = null;
 		foreach (ChessSquare square in board.squares)
 		{
 			square.spriteRenderer.color = Color.White;

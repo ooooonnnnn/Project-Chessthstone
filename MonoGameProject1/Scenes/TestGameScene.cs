@@ -16,6 +16,15 @@ public class TestGameScene : Scene
 		
 		Player whitePlayer = new Player("White", true, board);
 		Player blackPlayer = new Player("Black", false, board);
+		
+		whitePlayer.teamPieces = 
+		[
+			new BasicBishop(board, whitePlayer), new BasicKing(board, whitePlayer), new BasicKnight(board, whitePlayer)
+		];
+		blackPlayer.teamPieces =
+		[
+			new BasicBishop(board, blackPlayer), new BasicKing(board, blackPlayer), new BasicKnight(board, blackPlayer)
+		];
 
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
 
