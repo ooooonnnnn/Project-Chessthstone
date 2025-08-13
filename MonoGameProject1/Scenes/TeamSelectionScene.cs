@@ -27,7 +27,9 @@ public class TeamSelectionScene : Scene
 		List<GameObject> objectsToAdd = [nextOrStartButton];
 		for (int i = 0; i < selectors.Length; i++)
 		{
-			selectors[i] = new Selector("", []);
+			selectors[i] = new Selector("", [
+				new Sprite("1", TextureManager.GetLogoTexture()),
+			new Sprite("2", TextureManager.GetChessPieceTexture(true, PieceType.Pawn))]);
 			selectors[i].transform.parentSpacePos = new Vector2(GameManager.Graphics.Viewport.Width / 2f + 100 * i, 
 				GameManager.Graphics.Viewport.Height / 2f);
 			objectsToAdd.Add(selectors[i]);
