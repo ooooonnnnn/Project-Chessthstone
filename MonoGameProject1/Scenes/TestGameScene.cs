@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Scenes;
 
 public class TestGameScene : Scene
 {
-	public TestGameScene(List<ChessPiece> whiteTeam = null, List<ChessPiece> blackTeam = null)
+	public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
 	{
 		ChessBoard board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.2f);
@@ -15,21 +16,29 @@ public class TestGameScene : Scene
 		TriggerManager.Instantiate("TriggerManager");
 		GamePhaseManager.Instantiate("GamePhaseManager");
 		
-		Player whitePlayer = new Player("White", true);
-		Player blackPlayer = new Player("Black", false);
+		Player whitePlayer = new Player("White", true){board = board};
+		Player blackPlayer = new Player("Black", false){board = board};
 		
-		whitePlayer.teamPieces = whiteTeam ?? new List<ChessPiece>();
-		blackPlayer.teamPieces = blackTeam ?? new List<ChessPiece>();
-		
-		// whitePlayer.teamPieces = 
-		// [
-		// 	new BasicBishop(board, whitePlayer), new BasicKing(board, whitePlayer), new BasicKnight(board, whitePlayer)
-		// ];
-		// blackPlayer.teamPieces =
-		// [
-		// 	new BasicBishop(board, blackPlayer), new BasicKing(board, blackPlayer), new BasicKnight(board, blackPlayer)
-		// ];
+		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 
+		foreach (ChessPiece piece in whitePlayer.teamPieces)
+		{
+			piece.SetActive(true);
+			piece.ownerPlayer = whitePlayer;
+			piece.board = board;
+			piece.transform.origin = Vector2.Zero;
+		}
+
+		foreach (ChessPiece piece in blackPlayer.teamPieces)
+		{
+			piece.SetActive(true);
+			piece.ownerPlayer = blackPlayer;
+			piece.board = board;
+			piece.transform.origin = Vector2.Zero;
+			piece.transform.parentSpacePos = Vector2.Zero;
+		}
+		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");

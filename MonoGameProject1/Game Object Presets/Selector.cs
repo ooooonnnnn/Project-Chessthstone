@@ -81,11 +81,19 @@ public class Selector : GameObject
 	/// <summary>
 	/// Removes the current sprites from the scene and adds the new ones
 	/// </summary>
-	public void ChangeSprites(IEnumerable<Sprite> sprites)
+	/// <param name="disposeOldSprites">set to false to prevent removal and disposal of old sprites</param>
+	public void ChangeSprites(IEnumerable<Sprite> sprites, bool disposeOldSprites = true)
 	{
 		foreach (var sprite in _sprites)
 		{
-			parentScene.RemoveGameObject(sprite);
+			if (disposeOldSprites)
+			{
+				parentScene.RemoveGameObject(sprite);
+			}
+			else
+			{
+				sprite.SetActive(false);
+			}
 			transform.RemoveChild(sprite.transform);
 		}
 

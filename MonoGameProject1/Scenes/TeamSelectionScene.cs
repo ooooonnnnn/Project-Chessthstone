@@ -48,7 +48,7 @@ public class TeamSelectionScene : Scene
 	{
 		for (int i = 0; i < selectors.Length; i++)
 		{
-			selectors[i].ChangeSprites(ChessPieceFactory.GetAllPieces(isWhite, (PieceType)i));
+			selectors[i].ChangeSprites(ChessPieceFactory.GetAllPieces(isWhite, (PieceType)i), false);
 		}
 	}
 
@@ -58,7 +58,9 @@ public class TeamSelectionScene : Scene
 		{
 			for (int i = 0; i < selectors.Length; i++)
 			{
-				whiteTeam[i] = selectors[i].currentSprite as ChessPiece;
+				ChessPiece whitePiece = selectors[i].currentSprite as ChessPiece;
+				whitePiece.transform.parent = null;
+				whiteTeam[i] = whitePiece;
 			}
 			LoadSelectors(false);
 			currentPlayerIsWhite = false;
@@ -67,9 +69,11 @@ public class TeamSelectionScene : Scene
 		{
 			for (int i = 0; i < selectors.Length; i++)
 			{
-				blackTeam[i] = selectors[i].currentSprite as ChessPiece;
+				ChessPiece blackPiece = selectors[i].currentSprite as ChessPiece;
+				blackPiece.transform.parent = null;
+				blackTeam[i] = blackPiece;
 			}
-			SceneManager.ChangeScene(new TestGameScene());
+			SceneManager.ChangeScene(new TestGameScene(whiteTeam, blackTeam));
 		}
 	}
 }

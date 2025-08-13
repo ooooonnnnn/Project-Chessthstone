@@ -64,7 +64,7 @@ public class Player(string name, bool isWhite) : GameObject(name)
 	/// </summary>
 	public void HandleSquareClicked(ChessSquare square)
 	{
-		if (teamPieces.Count > 0)
+		if (GamePhaseManager.instance.phase == GamePhase.Setup)
 		{
 			//try placing a piece
 			//pass the turn if successful
@@ -160,6 +160,7 @@ public class Player(string name, bool isWhite) : GameObject(name)
 		return true;
 	}
 
+	//TODO: this is a placeholder. change to mouse control
 	private readonly Keys[] numberKeys = [ Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 ];
 	public override void Update(GameTime gameTime)
 	{
