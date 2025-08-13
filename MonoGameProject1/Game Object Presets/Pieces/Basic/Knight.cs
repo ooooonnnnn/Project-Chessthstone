@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1;
 
-public class Knight(ChessBoard board, Player owner, int baseHealth, int baseDamage)
-	: ChessPiece(board, owner, PieceType.Knight, baseHealth, baseDamage)
+public class Knight(bool isWhite, int baseHealth, int baseDamage)
+	: ChessPiece(isWhite, PieceType.Knight, baseHealth, baseDamage)
 {
 	public override List<Point> GetMoveCoordList()
 	{

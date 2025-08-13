@@ -8,13 +8,43 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for chess pieces
 /// </summary>
-public abstract class ChessPiece(ChessBoard board, Player ownerPlayer, PieceType type, int baseHealth, int baseDamage)
-	: Sprite(CreateName(ownerPlayer.isWhite, type), TextureManager.GetChessPieceTexture(ownerPlayer.isWhite, type))
+public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage)
+	: Sprite(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
 {
 	public PieceType type { get; init; } = type;
-	public Player ownerPlayer { get; init; } = ownerPlayer;
-	public bool isWhite { get; init; } = ownerPlayer.isWhite;
-	public ChessBoard board { get; init; } = board;
+
+	public Player ownerPlayer
+	{
+		get
+		{
+			if (_ownerPlayer == null)
+				throw new Exception($"Owner player not set for {name}");
+			return _ownerPlayer;
+		}
+		set
+		{
+			if (value.isWhite != isWhite)
+				throw new Exception($"Player {value.name} is not the same color as {name}");
+			_ownerPlayer = value;
+		}
+	}
+
+	private Player _ownerPlayer;
+
+	public bool isWhite = isWhite;
+
+	public ChessBoard board
+	{
+		get
+		{
+			if (_board == null)
+				throw new Exception($"Board not set for {name}");
+			return _board;
+		}
+		set => _board = value;
+	}
+
+	private ChessBoard _board;
 
 	/// <summary>
 	/// Health and damage

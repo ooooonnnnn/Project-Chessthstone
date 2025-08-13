@@ -18,25 +18,21 @@ public class Selector : GameObject
 
 	public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
 	{
-		_sprites = new LinkedList<Sprite>(sprites);
-		_currentSprite = _sprites.First;
 		
 		transform = new Transform();
 		AddBehaviors([transform]);
 
-		//Sprite children
-		foreach (var sprite in _sprites)
-		{
-			Transform childTransform = sprite.transform;
-			transform.AddChild(childTransform);
-			childTransform.parentSpacePos = Vector2.Zero;
-			childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
-			if (sprite == currentSprite)
-				sprite.SetActive(true);
-			else
-				sprite.SetActive(false);
-		}
+		//Text Child
+		_textTransform = new Transform();
+		_textRenderer = new TextRenderer();
+		new GameObject($"{name} text", [_textTransform, _textRenderer]);
+		_textRenderer.color = Color.Black;
+		transform.AddChild(_textTransform);
+		_textTransform.parentSpacePos = Vector2.UnitY * -80;
 		
+		//Sprite children
+		InitializeSprites(sprites);
+
 		//Button children
 		Button next = new Button($"{name} next button", "Next");
 		Button previous = new Button($"{name} previous button", "Previous");
@@ -46,20 +42,56 @@ public class Selector : GameObject
 		transform.AddChild(next.transform);
 		transform.AddChild(previous.transform);
 		
-		next.transform.parentSpacePos = Vector2.UnitY * -100;
-		previous.transform.parentSpacePos = Vector2.UnitY * 100;
+		next.transform.parentSpacePos = Vector2.UnitY * -150;
+		previous.transform.parentSpacePos = Vector2.UnitY * 150;
 		next.transform.origin = next.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		previous.transform.origin = previous.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		
-		//Text Child
-		_textTransform = new Transform();
-		_textRenderer = new TextRenderer();
-		new GameObject($"{name} text", [_textTransform, _textRenderer]);
-		transform.AddChild(_textTransform);
 		UpdateText();
-		_textTransform.parentSpacePos = Vector2.UnitY * -80;
 	}
 
+	/// <summary>
+	/// Adds the sprites as children 
+	/// </summary>
+	/// <param name="sprites"></param>
+	private void InitializeSprites(IEnumerable<Sprite> sprites)
+	{
+		_sprites = new LinkedList<Sprite>(sprites);
+		_currentSprite = _sprites.First;
+		UpdateText();
+		List<GameObject> objects = new();
+		foreach (var sprite in _sprites)
+		{
+			Transform childTransform = sprite.transform;
+			transform.AddChild(childTransform);
+			childTransform.parentSpacePos = Vector2.Zero;
+			sprite.spriteRenderer.sizePx = new Point(100, 100);
+			childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
+			if (sprite == currentSprite)
+				sprite.SetActive(true);
+			else
+				sprite.SetActive(false);
+			
+			objects.Add(sprite);
+		}
+		
+		parentScene?.AddGameObjects(objects);
+	}
+
+	/// <summary>
+	/// Removes the current sprites from the scene and adds the new ones
+	/// </summary>
+	public void ChangeSprites(IEnumerable<Sprite> sprites)
+	{
+		foreach (var sprite in _sprites)
+		{
+			parentScene.RemoveGameObject(sprite);
+			transform.RemoveChild(sprite.transform);
+		}
+
+		InitializeSprites(sprites);
+	}
+	
 	private void NextSprite()
 	{
 		if (_currentSprite == null) 
@@ -123,6 +155,7 @@ public class Selector : GameObject
 		_textRenderer.text = _currentSprite.Value.name;
 		CenterText();
 	}
+	//TODO: this should be a function of textRenderer
 	private void CenterText()
 	{
 		_textTransform.origin = _textRenderer.font.MeasureString(_textRenderer.text) * 0.5f;

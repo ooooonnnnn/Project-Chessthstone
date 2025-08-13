@@ -9,7 +9,7 @@ namespace MonoGameProject1;
 /// <summary>
 /// A player in the game.
 /// </summary>
-public class Player(string name, bool isWhite, ChessBoard board) : GameObject(name)
+public class Player(string name, bool isWhite) : GameObject(name)
 {
 	/// <summary>
 	/// Mana to pay for activated abilities
@@ -43,7 +43,18 @@ public class Player(string name, bool isWhite, ChessBoard board) : GameObject(na
 	/// </summary>
 	private List<ChessPiece> _activePieces { get; } = new();
 	public IReadOnlyList<ChessPiece> pieces => _activePieces;
-	private ChessBoard board { get; } = board;
+
+	public ChessBoard board
+	{
+		get
+		{
+			if (_board == null)
+				throw new Exception($"Board not set for {name}");
+			return _board;
+		}
+		set => _board = value;
+	}
+	private ChessBoard _board;
 
 	/// <summary>
 	/// Handles what happens when a square is clicked: <br/>

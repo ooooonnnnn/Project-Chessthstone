@@ -120,9 +120,9 @@ public class Transform : Behavior, IHierarchy<Transform>
 		set
 		{
 			if (_parent == value) return;
-			_parent?.RemoveChild(gameObject);
+			_parent?._children.Remove(this);
 			_parent = value;
-			_parent?.AddChild(gameObject);
+			_parent?._children.Add(this);
 			UpdateParentSpacePosition(worldSpacePos);
 		}
 	}

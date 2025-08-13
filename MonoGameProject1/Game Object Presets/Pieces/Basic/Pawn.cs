@@ -7,8 +7,8 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for pawns. Check HLD to see how they move
 /// </summary>
-public class Pawn(ChessBoard board, Player owner, int baseHealth, int baseDamage) 
-	: ChessPiece(board, owner, PieceType.Pawn, baseHealth, baseDamage)
+public class Pawn(bool isWhite, int baseHealth, int baseDamage) 
+	: ChessPiece(isWhite, PieceType.Pawn, baseHealth, baseDamage)
 {
 	public override List<Point> GetMoveCoordList()
 	{

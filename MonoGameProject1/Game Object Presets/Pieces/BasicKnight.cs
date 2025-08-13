@@ -4,8 +4,10 @@ namespace MonoGameProject1;
 
 public class BasicKnight : Knight
 {
-	public BasicKnight(ChessBoard board, Player owner) : base(board, owner, 20, 10)
+	public BasicKnight(bool isWhite) : base(isWhite, 20, 10)
 	{
+		string color = this.isWhite ? "White" : "Black";
+		name = $"Basic {color} Knight";
 		AddBehaviors([new BasicKnightAbility()]);
 	}
 }

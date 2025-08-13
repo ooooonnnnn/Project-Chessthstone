@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Scenes;
@@ -9,31 +10,66 @@ namespace MonoGameProject1.Scenes;
 /// </summary>
 public class TeamSelectionScene : Scene
 {
-	private List<ChessPiece> whiteTeam = [];
-	private List<ChessPiece> blackTeam = [];
+	private ChessPiece[] whiteTeam = new ChessPiece[6];
+	private ChessPiece[] blackTeam = new ChessPiece[6];
+	private bool currentPlayerIsWhite = true;
 	
 	private Button nextOrStartButton;
-	private Selector[] selectors = new Selector[1];
+	private Selector[] selectors = new Selector[6];
 
 	public TeamSelectionScene()
 	{
 		nextOrStartButton = new ("Next or start", "Ready");
-		nextOrStartButton.AddListener(() =>
-		{
-			SceneManager.ChangeScene(new TestGameScene());
-		});
-
+		nextOrStartButton.AddListener(HandleNextButtonPress);
 
 		List<GameObject> objectsToAdd = [nextOrStartButton];
+
+		//Instantiate and load selectors
 		for (int i = 0; i < selectors.Length; i++)
 		{
-			selectors[i] = new Selector($"Selector {i + 1}", [
-				new Sprite("1", TextureManager.GetLogoTexture()),
-			new Sprite("2", TextureManager.GetChessPieceTexture(true, PieceType.Pawn))]);
-			selectors[i].transform.parentSpacePos = new Vector2(GameManager.Graphics.Viewport.Width / 2f + 100 * i, 
+			selectors[i] = new Selector($"Selector {i + 1}",
+				ChessPieceFactory.GetAllPieces(true, (PieceType)i));
+		}
+
+		for (int i = 0; i < selectors.Length; i++)
+		{
+			selectors[i].transform.parentSpacePos = new Vector2(
+				GameManager.Graphics.Viewport.Width / 2f + -800 + 300 * i, 
 				GameManager.Graphics.Viewport.Height / 2f);
 			objectsToAdd.Add(selectors[i]);
 		}
 		AddGameObjects(objectsToAdd);
+	}
+
+	/// <summary>
+	/// Loads the selectors with the apropriate pieces 
+	/// </summary>
+	private void LoadSelectors(bool isWhite)
+	{
+		for (int i = 0; i < selectors.Length; i++)
+		{
+			selectors[i].ChangeSprites(ChessPieceFactory.GetAllPieces(isWhite, (PieceType)i));
+		}
+	}
+
+	private void HandleNextButtonPress()
+	{
+		if (currentPlayerIsWhite)
+		{
+			for (int i = 0; i < selectors.Length; i++)
+			{
+				whiteTeam[i] = selectors[i].currentSprite as ChessPiece;
+			}
+			LoadSelectors(false);
+			currentPlayerIsWhite = false;
+		}
+		else
+		{
+			for (int i = 0; i < selectors.Length; i++)
+			{
+				blackTeam[i] = selectors[i].currentSprite as ChessPiece;
+			}
+			SceneManager.ChangeScene(new TestGameScene());
+		}
 	}
 }

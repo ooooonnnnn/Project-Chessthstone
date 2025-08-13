@@ -15,8 +15,8 @@ public class TestGameScene : Scene
 		TriggerManager.Instantiate("TriggerManager");
 		GamePhaseManager.Instantiate("GamePhaseManager");
 		
-		Player whitePlayer = new Player("White", true, board);
-		Player blackPlayer = new Player("Black", false, board);
+		Player whitePlayer = new Player("White", true);
+		Player blackPlayer = new Player("Black", false);
 		
 		whitePlayer.teamPieces = whiteTeam ?? new List<ChessPiece>();
 		blackPlayer.teamPieces = blackTeam ?? new List<ChessPiece>();
