@@ -39,24 +39,28 @@ public class Selector : GameObject
 		transform.AddChild(next.transform);
 		transform.AddChild(previous.transform);
 		
-		next.transform.parentSpacePos = Vector2.UnitY * -50;
-		previous.transform.parentSpacePos = Vector2.UnitY * 50;
+		next.transform.parentSpacePos = Vector2.UnitY * -100;
+		previous.transform.parentSpacePos = Vector2.UnitY * 100;
 		next.transform.origin = next.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		previous.transform.origin = previous.spriteRenderer.sizePx.ToVector2() * 0.5f;
 	}
 	
 	private void NextSprite()
 	{
-		_currentSprite.Value.SetActive(false);
+		if (_currentSprite == null) 
+			return;
+		_currentSprite.Value?.SetActive(false);
 		_currentSprite = _currentSprite.Next ?? _sprites.First;
-		_currentSprite.Value.SetActive(true);
+		_currentSprite.Value?.SetActive(true);
 	}
 
 	private void PreviousSprite()
 	{
-		_currentSprite.Value.SetActive(false);
+		if (_currentSprite == null) 
+			return;
+		_currentSprite.Value?.SetActive(false);
 		_currentSprite = _currentSprite.Previous ?? _sprites.Last;
-		_currentSprite.Value.SetActive(true);
+		_currentSprite.Value?.SetActive(true);
 	}
 
 	/// <summary>
