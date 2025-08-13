@@ -2,14 +2,14 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Behaviors;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
+using MonoGameProject1.Content;
 
 namespace MonoGameProject1;
 
 /// <summary>
 /// Requires SpriteRenderer and SenseMouseHover. <br/>
 /// </summary>
-public class ChangeTintWhenHover : Behavior, IUpdateable
+public class ChangeTintWhenHover : Behavior, IUpdatable
 {
 	public Color tintWhenHover;
 	public Color tintWhenMouseDown;

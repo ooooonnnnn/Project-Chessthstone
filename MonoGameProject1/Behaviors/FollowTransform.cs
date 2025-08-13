@@ -1,12 +1,12 @@
 using Microsoft.Xna.Framework;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
+using MonoGameProject1.Content;
 
 namespace MonoGameProject1.Behaviors;
 
 /// <summary>
 /// Follows a target transform. Requires a transform
 /// </summary>
-public class FollowTransform(Transform followTarget, Vector2 offset) : Behavior, IUpdateable
+public class FollowTransform(Transform followTarget, Vector2 offset) : Behavior, IUpdatable
 {
 	public Transform followTarget = followTarget;
 	public Vector2 offset = offset;

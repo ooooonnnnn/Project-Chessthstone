@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
+using MonoGameProject1.Content;
 
 namespace MonoGameProject1;
 
@@ -9,7 +9,7 @@ namespace MonoGameProject1;
 /// reports when the mouse starts and stops hovering over this object's collider. <br/>
 /// requires the collider behavior
 /// </summary>
-public class SenseMouseHover : Behavior, IUpdateable, IDisposable
+public class SenseMouseHover : Behavior, IUpdatable, IDisposable
 {
 	public event Action OnStartHover;
 	public event Action OnEndHover;

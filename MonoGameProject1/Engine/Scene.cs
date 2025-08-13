@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using IDrawable = MonoGameProject1.Content.IDrawable;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1;
 

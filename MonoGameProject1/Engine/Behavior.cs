@@ -13,14 +13,6 @@ public abstract class Behavior
 	public GameObject gameObject;
 
 	/// <summary>
-	/// When set with false, the behavior will no longer be updated. It starts as active by default
-	/// </summary>
-	public virtual void SetActive(bool active)
-	{
-		gameObject.ActivateBehavior(active, this);
-	}
-
-	/// <summary>
 	/// for validation and stuff. if you're inheriting from a behavior that isn't Behavior, call Initialize on the base first
 	/// </summary>
 	/// <param name="text"></param>

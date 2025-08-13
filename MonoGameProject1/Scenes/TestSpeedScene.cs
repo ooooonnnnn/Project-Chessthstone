@@ -4,7 +4,7 @@ using System.Timers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Behaviors;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
+using MonoGameProject1.Content;
 
 namespace MonoGameProject1.Scenes;
 
@@ -26,7 +26,7 @@ public class TestSpeedScene : Scene
 	}
 }
 
-public class SpeedTester : Behavior, IUpdateable
+public class SpeedTester : Behavior, IUpdatable
 {
 	private TextRenderer text;
 	public override void Initialize()
