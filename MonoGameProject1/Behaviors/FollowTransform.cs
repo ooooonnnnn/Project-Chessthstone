@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using MonoGameProject1.Content;
 
 namespace MonoGameProject1.Behaviors;
 

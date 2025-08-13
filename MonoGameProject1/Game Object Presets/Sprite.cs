@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Behaviors;
-using IDrawable = MonoGameProject1.Content.IDrawable;
+using IDrawable = MonoGameProject1.IDrawable;
 
 namespace MonoGameProject1;
 

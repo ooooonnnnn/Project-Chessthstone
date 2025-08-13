@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGameProject1.Content;
+namespace MonoGameProject1;
 
 public interface IDrawable
 {

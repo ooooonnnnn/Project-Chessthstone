@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Scenes;
 
@@ -12,6 +13,7 @@ public class TeamSelectionScene : Scene
 	private List<ChessPiece> blackTeam = [];
 	
 	private Button nextOrStartButton;
+	private Selector[] selectors = new Selector[6];
 
 	public TeamSelectionScene()
 	{
@@ -20,7 +22,16 @@ public class TeamSelectionScene : Scene
 		{
 			SceneManager.ChangeScene(new TestGameScene());
 		});
-		
-		AddGameObjects([nextOrStartButton]);
+
+
+		List<GameObject> objectsToAdd = [nextOrStartButton];
+		for (int i = 0; i < selectors.Length; i++)
+		{
+			selectors[i] = new Selector("", []);
+			selectors[i].transform.parentSpacePos = new Vector2(GameManager.Graphics.Viewport.Width / 2f + 100 * i, 
+				GameManager.Graphics.Viewport.Height / 2f);
+			objectsToAdd.Add(selectors[i]);
+		}
+		AddGameObjects(objectsToAdd);
 	}
 }

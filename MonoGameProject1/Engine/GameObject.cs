@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameProject1.Content;
 using MonoGameProject1.Engine;
-using IDrawable = MonoGameProject1.Content.IDrawable;
+using IDrawable = MonoGameProject1.IDrawable;
 
 namespace MonoGameProject1;
 
@@ -73,7 +72,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 	/// <summary>
 	/// Sets the active state of all behaviors of this GameObject. IUpdateables  GameObjects start as inactive
 	/// </summary>
-	public void SetActive(bool active)
+	public virtual void SetActive(bool active)
 	{
 		foreach (Behavior behavior in behaviors)
 		{

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameProject1.Content;
 using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Behaviors;
