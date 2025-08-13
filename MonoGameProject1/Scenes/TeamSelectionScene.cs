@@ -13,7 +13,7 @@ public class TeamSelectionScene : Scene
 	private List<ChessPiece> blackTeam = [];
 	
 	private Button nextOrStartButton;
-	private Selector[] selectors = new Selector[6];
+	private Selector[] selectors = new Selector[1];
 
 	public TeamSelectionScene()
 	{
@@ -27,7 +27,7 @@ public class TeamSelectionScene : Scene
 		List<GameObject> objectsToAdd = [nextOrStartButton];
 		for (int i = 0; i < selectors.Length; i++)
 		{
-			selectors[i] = new Selector("", [
+			selectors[i] = new Selector($"Selector {i + 1}", [
 				new Sprite("1", TextureManager.GetLogoTexture()),
 			new Sprite("2", TextureManager.GetChessPieceTexture(true, PieceType.Pawn))]);
 			selectors[i].transform.parentSpacePos = new Vector2(GameManager.Graphics.Viewport.Width / 2f + 100 * i, 

@@ -15,12 +15,7 @@ public class TextRenderer : Renderer
 	public SpriteFont font = FontManager.defaultFont;
 	public bool rightToLeft = false;
 
-	public TextRenderer()
-	{
-		
-	}
-	
-	public TextRenderer(string text)
+	public TextRenderer(string text = "")
 	{
 		this.text = text;
 	}

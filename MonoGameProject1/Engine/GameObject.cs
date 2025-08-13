@@ -40,8 +40,6 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 			this.behaviors = behaviors;
 			InitializeBehaviors(behaviors);
 		}
-		
-		SetActive(false);
 	}
 
 	/// <summary>
@@ -70,7 +68,8 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 	}
 
 	/// <summary>
-	/// Sets the active state of all behaviors of this GameObject. IUpdateables  GameObjects start as inactive
+	/// Sets the active state of all behaviors of this GameObject.
+	/// IUpdatables and IDrawables get added or removed from their lsits
 	/// </summary>
 	public virtual void SetActive(bool active)
 	{
@@ -95,6 +94,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 			}
 		}
 		_isActive = active;
+		Console.WriteLine($"{name} active: {active}");
 
 		foreach (var hierarchy in _hierarchicalBehaviors)
 		{

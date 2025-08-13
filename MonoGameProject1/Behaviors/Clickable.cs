@@ -16,6 +16,7 @@ public class Clickable : Behavior, IDisposable, IActivatable
 	public override void Initialize()
 	{
 		senseMouseHover = gameObject.TryGetBehavior<SenseMouseHover>();
+		SetActive(true);
 	}
 
 	private void AttemptClick()

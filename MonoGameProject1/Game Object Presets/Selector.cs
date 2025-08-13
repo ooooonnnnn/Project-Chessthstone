@@ -13,6 +13,8 @@ public class Selector : GameObject
 	public Transform transform;
 	private LinkedList<Sprite> _sprites;
 	private LinkedListNode<Sprite> _currentSprite;
+	private TextRenderer _textRenderer;
+	private Transform _textTransform;
 
 	public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
 	{
@@ -22,12 +24,17 @@ public class Selector : GameObject
 		transform = new Transform();
 		AddBehaviors([transform]);
 
+		//Sprite children
 		foreach (var sprite in _sprites)
 		{
 			Transform childTransform = sprite.transform;
 			transform.AddChild(childTransform);
 			childTransform.parentSpacePos = Vector2.Zero;
 			childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
+			if (sprite == currentSprite)
+				sprite.SetActive(true);
+			else
+				sprite.SetActive(false);
 		}
 		
 		//Button children
@@ -43,8 +50,16 @@ public class Selector : GameObject
 		previous.transform.parentSpacePos = Vector2.UnitY * 100;
 		next.transform.origin = next.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		previous.transform.origin = previous.spriteRenderer.sizePx.ToVector2() * 0.5f;
+		
+		//Text Child
+		_textTransform = new Transform();
+		_textRenderer = new TextRenderer();
+		new GameObject($"{name} text", [_textTransform, _textRenderer]);
+		transform.AddChild(_textTransform);
+		UpdateText();
+		_textTransform.parentSpacePos = Vector2.UnitY * -80;
 	}
-	
+
 	private void NextSprite()
 	{
 		if (_currentSprite == null) 
@@ -52,6 +67,8 @@ public class Selector : GameObject
 		_currentSprite.Value?.SetActive(false);
 		_currentSprite = _currentSprite.Next ?? _sprites.First;
 		_currentSprite.Value?.SetActive(true);
+		
+		UpdateText();
 	}
 
 	private void PreviousSprite()
@@ -61,6 +78,8 @@ public class Selector : GameObject
 		_currentSprite.Value?.SetActive(false);
 		_currentSprite = _currentSprite.Previous ?? _sprites.Last;
 		_currentSprite.Value?.SetActive(true);
+		
+		UpdateText();
 	}
 
 	/// <summary>
@@ -69,9 +88,9 @@ public class Selector : GameObject
 	public override void SetActive(bool active)
 	{
 		//Set active on children
+		//deactivate normally
 		if (!active)
 		{
-			//deactivate normally
 			base.SetActive(false);
 		}
 		else //active = true:
@@ -86,11 +105,26 @@ public class Selector : GameObject
 						continue;
 					}
 
-					//don't activate sprites that aren't selected
-					if (_sprites.Contains(childSprite) && childSprite == currentSprite)
+					//don't activate sprites from the list that aren't selected
+					if (!_sprites.Contains(childSprite))
+					{
+						childSprite.SetActive(true);
+						continue;
+					}
+					if (childSprite == currentSprite)
 						child.SetActive(true);
 				}
 			}
 		}
+	}
+	
+	private void UpdateText()
+	{
+		_textRenderer.text = _currentSprite.Value.name;
+		CenterText();
+	}
+	private void CenterText()
+	{
+		_textTransform.origin = _textRenderer.font.MeasureString(_textRenderer.text) * 0.5f;
 	}
 }

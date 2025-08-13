@@ -58,7 +58,6 @@ public static class SceneManager
 	public static void RemoveGameObject(GameObject gameObject)
 	{
 		_gameObjects.Remove(gameObject);
-		gameObject.SetActive(false);
 	}
 
 	/// <summary>
@@ -69,7 +68,6 @@ public static class SceneManager
 		if (!_gameObjects.Contains(gameObject))
 		{
 			_gameObjects.Add(gameObject);
-			gameObject.SetActive(true);
 			gameObject.Start();
 		}
 	}
