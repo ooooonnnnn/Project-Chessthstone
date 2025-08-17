@@ -20,6 +20,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Arial.spritefont
 
+#begin Fonts/Retro Gaming.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Retro Gaming.spritefont
+
 #begin Images/bishopBlack.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -103,6 +110,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/logo.png
+
+#begin Images/NineSlices/decoratedWood9Slice.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/NineSlices/decoratedWood9Slice.png
 
 #begin Images/pawnBlack.png
 /importer:TextureImporter

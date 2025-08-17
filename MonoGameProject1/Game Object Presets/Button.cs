@@ -21,7 +21,7 @@ public class Button : GameObject, ICallback
 		set
 		{
 			_text = value;
-			_childTextRenderer.text = value;
+			_childTextRenderer.Text = value;
 			CenterText();
 		}
 	}
@@ -101,7 +101,7 @@ public class Button : GameObject, ICallback
 
 	private void CenterText()
 	{
-		_childTransform.origin = _childTextRenderer.font.MeasureString(text) * 0.5f;
+		_childTransform.origin = _childTextRenderer.Font.MeasureString(text) * 0.5f;
 		_childTransform.parentSpacePos = new Vector2(
 			spriteRenderer.sourceWidth*0.5f, spriteRenderer.sourceHeight*0.5f);
 	}
