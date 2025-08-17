@@ -9,7 +9,7 @@ public class TestGameScene : Scene
 	public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
 	{
 		ChessBoard board = new ChessBoard("");
-		board.transform.SetScaleFromFloat(0.2f);
+		board.transform.SetScaleFromFloat(0.4f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 

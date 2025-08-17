@@ -153,18 +153,6 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		return true;
 	}
 
-	// /// <summary>
-	// /// Activates this pieces' ActivatedAbility if it exists
-	// /// </summary>
-	// /// <returns>True if successful</returns>
-	// public bool ActivateAbility(GameObjectReferences objects)
-	// {
-	// 	if(ability is null or not ActivatedAbility) 
-	// 		return false;
-	// 	((ActivatedAbility)ability).Activate(objects);
-	// 	return true;
-	// }
-	
 	/// <summary>
 	/// Tries to pay one action point. 
 	/// </summary>
