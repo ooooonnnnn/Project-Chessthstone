@@ -19,9 +19,9 @@ public class PieceOverlay : Renderer
     public SpriteFont font;
     
     // Values to display
-    public int health;
-    public int damage;
-    public int actionPoints;
+    private int health;
+    private int damage;
+    private int actionPoints;
     
     // Layout properties
     public Vector2 iconSpacing = new Vector2(32, 0); // Horizontal spacing between elements
@@ -30,15 +30,32 @@ public class PieceOverlay : Renderer
     public float iconScale = 1.0f;
 
     public PieceOverlay(Texture2D healthIcon, Texture2D damageIcon, Texture2D actionPointsIcon, 
-                       SpriteFont font, int health, int damage, int actionPoints)
+                       SpriteFont font)
     {
         this.healthIcon = healthIcon;
         this.damageIcon = damageIcon;
         this.actionPointsIcon = actionPointsIcon;
         this.font = font;
-        this.health = health;
-        this.damage = damage;
-        this.actionPoints = actionPoints;
+    }
+
+    /// <summary>
+    /// Sets the parent piece of this overlay and subscribes to the pieces' stat change events
+    /// </summary>
+    /// <param name="piece"></param>
+    public void SetChessPiece(ChessPiece piece)
+    {
+        //Set transform parent and relative position
+        _transform.parent = piece.transform;
+        _transform.parentSpacePos = Vector2.Zero;
+        
+        //Get stats and subscribe to events
+        health = piece.health;
+        damage = piece.baseDamage;
+        actionPoints = piece.actionPoints;
+        
+        piece.OnBaseDamageChanged += d => damage = d;
+        piece.OnHealthChanged += h => health = h;
+        piece.OnActionPointsChanged += ap => actionPoints = ap;
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -55,14 +72,6 @@ public class PieceOverlay : Renderer
         // Draw action points
         Vector2 actionPos = basePosition + iconSpacing * 2 * _transform.worldSpaceScale;
         DrawStatWithIcon(spriteBatch, actionPointsIcon, actionPoints.ToString(), actionPos);
-    }
-
-    // Public method to update stats from gameplay
-    public void UpdateStats(int newHealth, int newDamage, int newActionPoints)
-    {
-        health = newHealth;
-        damage = newDamage;
-        actionPoints = newActionPoints;
     }
 
     private void DrawStatWithIcon(SpriteBatch spriteBatch, Texture2D icon, string text, Vector2 position)

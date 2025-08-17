@@ -28,7 +28,6 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 			_ownerPlayer = value;
 		}
 	}
-
 	private Player _ownerPlayer;
 
 	public bool isWhite = isWhite;
@@ -43,15 +42,34 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		}
 		set => _board = value;
 	}
-
 	private ChessBoard _board;
 
 	/// <summary>
 	/// Health and damage
 	/// </summary>
 	public int baseHealth { get; protected set; } = baseHealth;
-	public int baseDamage { get; protected set; } = baseDamage;
-	public int health { get; protected set; } = baseHealth;
+
+	public int baseDamage
+	{
+		get => _baseDamage;
+		set
+		{
+			_baseDamage = value;
+			OnBaseDamageChanged?.Invoke(_baseDamage);
+		}
+	}
+	private int _baseDamage = baseDamage;
+
+	public int health
+	{
+		get => _health;
+		set
+		{
+			_health = value;
+			OnHealthChanged?.Invoke(_health);
+		}
+	} 
+	private	int _health = baseHealth;
 
 	/// <summary>
 	/// Attacking and moving costs 1 action point.
@@ -62,11 +80,19 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		set
 		{
 			_actionPoints = value;
+			OnActionPointsChanged?.Invoke(_actionPoints);
 			Console.WriteLine($"{name} has {actionPoints} action points");
 		}
 	}
-
 	private int _actionPoints = 1;
+	
+	/// <summary>
+	/// Stat change events
+	/// </summary>
+	public event Action<int> OnHealthChanged;
+
+	public event Action<int> OnBaseDamageChanged;
+	public event Action<int> OnActionPointsChanged;
 
 	/// <summary>
 	/// One of its behaviors can be an ability. Assigned automatically on AddBehaviors => ClassifyBehavior
@@ -153,18 +179,6 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		return true;
 	}
 
-	// /// <summary>
-	// /// Activates this pieces' ActivatedAbility if it exists
-	// /// </summary>
-	// /// <returns>True if successful</returns>
-	// public bool ActivateAbility(GameObjectReferences objects)
-	// {
-	// 	if(ability is null or not ActivatedAbility) 
-	// 		return false;
-	// 	((ActivatedAbility)ability).Activate(objects);
-	// 	return true;
-	// }
-	
 	/// <summary>
 	/// Tries to pay one action point. 
 	/// </summary>
@@ -309,5 +323,8 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	{
 		base.Dispose();
 		OnDeath = null;
+		OnHealthChanged = null;
+		OnBaseDamageChanged = null;
+		OnActionPointsChanged = null;
 	}
 }
