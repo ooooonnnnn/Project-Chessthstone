@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameProject1;
 
+/// <summary>
+/// Basic game manager for general use
+/// </summary>
 public static class GameManager
 {
 	public static Game game;

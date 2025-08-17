@@ -4,19 +4,20 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Engine;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
-using IDrawable = MonoGameProject1.Content.IDrawable;
+using IDrawable = MonoGameProject1.IDrawable;
 
 namespace MonoGameProject1;
 
 /// <summary>
 /// Any dynamic object in the game. It has a list of behaviors that do stuff.
 /// </summary>
-public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
+public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatable
 {
 	public List<Behavior> behaviors { get; protected set; } = new();
 	public string name { get; init; }
 	public Scene parentScene;
+	private bool _isActive = false;
+	public bool isActive => _isActive;
 
 	/// <summary>
 	/// Some behaviors are hierarchical, which means they have children of the same type.
@@ -25,18 +26,20 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	private List<IHierarchy> _hierarchicalBehaviors = new();
 	public IReadOnlyList<IHierarchy> hierarchicalBehaviors => _hierarchicalBehaviors;
 	
-	private List<IUpdateable> _updatables = new();
+	private List<IUpdatable> _updatables = new();
 	private List<IDrawable> _drawables = new();
 
-	public GameObject(string name)
+	public GameObject(string name, List<Behavior> behaviors = null)
 	{
 		this.name = name;
-	}
-
-	public GameObject(string name, List<Behavior> behaviors) : this(name)
-	{
-		this.behaviors = behaviors;
-		InitializeBehaviors(behaviors);
+		
+		if (behaviors == null)
+			this.behaviors = new List<Behavior>();
+		else
+		{
+			this.behaviors = behaviors;
+			InitializeBehaviors(behaviors);
+		}
 	}
 
 	/// <summary>
@@ -50,32 +53,55 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 		{
 			behavior.gameObject = this;
 			behavior.Initialize();
-			if (behavior is IUpdateable updateable) _updatables.Add(updateable);
-			if (behavior is IDrawable drawable) _drawables.Add(drawable);
-			if (behavior is IHierarchy hierarchy) _hierarchicalBehaviors.Add(hierarchy);
+			ClassifyBehavior(behavior);
 		}
 	}
 
 	/// <summary>
-	/// Add/removes the behavior to the update list
+	/// Adds a reference of the behavior to the proper lists, for functionality, i.e. IUpdatables need to be in _updatables
 	/// </summary>
-	/// <param name="active"></param>
-	/// <param name="behavior">behavior to add</param>
-	public void ActivateBehavior(bool active, Behavior behavior)
+	protected virtual void ClassifyBehavior(Behavior behavior)
 	{
-		if (behavior is not IUpdateable)
+		if (behavior is IUpdatable updateable) _updatables.Add(updateable);
+		if (behavior is IDrawable drawable) _drawables.Add(drawable);
+		if (behavior is IHierarchy hierarchy) _hierarchicalBehaviors.Add(hierarchy);
+	}
+
+	/// <summary>
+	/// Sets the active state of all behaviors of this GameObject.
+	/// IUpdatables and IDrawables get added or removed from their lsits
+	/// </summary>
+	public virtual void SetActive(bool active)
+	{
+		foreach (Behavior behavior in behaviors)
 		{
-			throw new ArgumentException("Behavior must implement IUpdateable");
+			(behavior as IActivatable)?.SetActive(active);
+			
+			if (behavior is IUpdatable updatable)
+			{
+				if (active && !_updatables.Contains(updatable))
+					_updatables.Add(updatable);
+				else if (!active)
+					_updatables.Remove(updatable);
+			}
+
+			if (behavior is IDrawable drawable)
+			{
+				if (active && !_drawables.Contains(drawable))
+					_drawables.Add(drawable);
+				else if (!active)
+					_drawables.Remove(drawable);
+			}
 		}
-		
-		IUpdateable updateable = (IUpdateable)behavior;
-		if (active)
+		_isActive = active;
+		Console.WriteLine($"{name} active: {active}");
+
+		foreach (var hierarchy in _hierarchicalBehaviors)
 		{
-			if (!_updatables.Contains(updateable)) _updatables.Add(updateable);
-		}
-		else
-		{
-			_updatables.Remove(updateable);
+			foreach (GameObject child in hierarchy.children)
+			{
+				child.SetActive(active);
+			}
 		}
 	}
 
@@ -155,7 +181,7 @@ public class GameObject : IUpdateable, IDrawable, IDisposable, IStart
 	/// <summary>
 	/// Calls Start on IStart behaviors
 	/// </summary>
-	public void Start()
+	public virtual void Start()
 	{
 		foreach (var behavior in behaviors)
 		{

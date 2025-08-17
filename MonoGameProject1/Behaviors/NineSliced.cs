@@ -2,7 +2,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Behaviors;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1;
 
@@ -76,7 +75,7 @@ public class NineSliced : SpriteRenderer
 	private void ValidateInput(int leftMargin, int rightMargin, int topMargin, int bottomMargin)
 	{
 		//check sourceRectangle is big enough
-		if (width < 3 || height < 3)
+		if (sourceWidth < 3 || sourceHeight < 3)
 			throw new ArgumentException("Source texture isn't big enough to be split into 9 regions. Must be at least 3x3");
 		
 		//check margins are valid
@@ -88,7 +87,7 @@ public class NineSliced : SpriteRenderer
 			throw new ArgumentException("Right and bottom margins must be greater than left and bottom margins respectively");
 		
 		//check margins don't go outside of sourceRectangle
-		if (leftMargin > width - 1 || rightMargin > width - 1 || topMargin > height - 1 || bottomMargin > height - 1)
+		if (leftMargin > sourceWidth - 1 || rightMargin > sourceWidth - 1 || topMargin > sourceHeight - 1 || bottomMargin > sourceHeight - 1)
 			throw new ArgumentException("Margins must be less than the width and height of the source texture");
 	}
 	
@@ -103,12 +102,12 @@ public class NineSliced : SpriteRenderer
 		leftWidth = leftMargin;
 		int ctrWidth = rightMargin - leftMargin;
 		invCtrWidth = 1f / ctrWidth;
-		rghtWidth = width - rightMargin - 1;
+		rghtWidth = sourceWidth - rightMargin - 1;
 		
 		topHeight = topMargin;
 		int ctrHeight = bottomMargin - topMargin;
 		invCtrHeight = 1f / ctrHeight;
-		btmHeight = height - bottomMargin - 1;
+		btmHeight = sourceHeight - bottomMargin - 1;
 		
 		
 		topLeft = new Rectangle(baseOrigin.X, baseOrigin.Y, leftWidth, topHeight);
@@ -127,25 +126,25 @@ public class NineSliced : SpriteRenderer
 		UpdateScales();
 		//Draw corners
 		DrawRegion(spriteBatch, topLeft, tlScale, _transform.ToWorldSpace(Vector2.Zero));
-		DrawRegion(spriteBatch, btmLeft, blScale, _transform.ToWorldSpace(height* Vector2.UnitY),
+		DrawRegion(spriteBatch, btmLeft, blScale, _transform.ToWorldSpace(sourceHeight* Vector2.UnitY),
 			Vector2.UnitY * btmLeft.Height);
-		DrawRegion(spriteBatch, topRght, trScale, _transform.ToWorldSpace(width * Vector2.UnitX),
+		DrawRegion(spriteBatch, topRght, trScale, _transform.ToWorldSpace(sourceWidth * Vector2.UnitX),
 			Vector2.UnitX * topRght.Width);
-		DrawRegion(spriteBatch, btmRght, brScale, _transform.ToWorldSpace(new Vector2(width, height)),
+		DrawRegion(spriteBatch, btmRght, brScale, _transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight)),
 			new Vector2(btmRght.Width, btmRght.Height));
 		
 		//Draw edges
-		DrawRegion(spriteBatch, topCtr, tcScale, _transform.ToWorldSpace((width*0.5f)*Vector2.UnitX),
+		DrawRegion(spriteBatch, topCtr, tcScale, _transform.ToWorldSpace((sourceWidth*0.5f)*Vector2.UnitX),
 			new Vector2(topCtr.Width*0.5f,0));
-		DrawRegion(spriteBatch, ctrLeft, clScale, _transform.ToWorldSpace(height*0.5f*Vector2.UnitY),
+		DrawRegion(spriteBatch, ctrLeft, clScale, _transform.ToWorldSpace(sourceHeight*0.5f*Vector2.UnitY),
 			new Vector2(0,ctrLeft.Height*0.5f));
-		DrawRegion(spriteBatch, btmCtr, bcScale, _transform.ToWorldSpace(new Vector2(width*0.5f, height)), 
+		DrawRegion(spriteBatch, btmCtr, bcScale, _transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight)), 
 			new Vector2(btmCtr.Width*0.5f, btmCtr.Height));
-		DrawRegion(spriteBatch, ctrRght, crScale, _transform.ToWorldSpace(new Vector2(width, height*0.5f)),
+		DrawRegion(spriteBatch, ctrRght, crScale, _transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight*0.5f)),
 			new Vector2(ctrRght.Width, ctrRght.Height*0.5f));
 		
 		//Draw center
-		DrawRegion(spriteBatch, ctrCtr, ccScale, _transform.ToWorldSpace(new Vector2(width*0.5f, height*0.5f)),
+		DrawRegion(spriteBatch, ctrCtr, ccScale, _transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight*0.5f)),
 			new Vector2(ctrCtr.Width*0.5f, ctrCtr.Height*0.5f));
 	}
 
@@ -161,8 +160,8 @@ public class NineSliced : SpriteRenderer
 
 	private void UpdateScales()
 	{
-		float centerColumnWidth = invCtrWidth * (width * _transform.worldSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
-		float centerRowHeight = invCtrHeight * (height * _transform.worldSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
+		float centerColumnWidth = invCtrWidth * (sourceWidth * _transform.worldSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
+		float centerRowHeight = invCtrHeight * (sourceHeight * _transform.worldSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
 		//edge scaling
 		clScale.Y = centerRowHeight;
 		clScale.X = cornerScale;

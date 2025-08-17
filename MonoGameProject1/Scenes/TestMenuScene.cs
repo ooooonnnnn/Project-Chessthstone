@@ -17,12 +17,12 @@ public class TestMenuScene : Scene
 		settingsButton.AddListener(() => Console.WriteLine("Settings."));
 		startButton.AddListener(() => SceneManager.ChangeScene(new TestCharacterScene()));
 		
-		exitButton.transform.origin = new Vector2(exitButton.spriteRenderer.width * 0.5f,
-			exitButton.spriteRenderer.height * 0.5f);
-		settingsButton.transform.origin = new Vector2(settingsButton.spriteRenderer.width * 0.5f,
-			settingsButton.spriteRenderer.height * 0.5f);
-		startButton.transform.origin = new Vector2(startButton.spriteRenderer.width * 0.5f,
-			startButton.spriteRenderer.height * 0.5f);
+		exitButton.transform.origin = new Vector2(exitButton.spriteRenderer.sourceWidth * 0.5f,
+			exitButton.spriteRenderer.sourceHeight * 0.5f);
+		settingsButton.transform.origin = new Vector2(settingsButton.spriteRenderer.sourceWidth * 0.5f,
+			settingsButton.spriteRenderer.sourceHeight * 0.5f);
+		startButton.transform.origin = new Vector2(startButton.spriteRenderer.sourceWidth * 0.5f,
+			startButton.spriteRenderer.sourceHeight * 0.5f);
 		
 		
 		Vector2 center = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
@@ -63,7 +63,7 @@ public class TestMenuScene : Scene
 		
 		button.transform.AddChild(textChild);
 		textTransform.parentSpacePos = new Vector2(
-			button.spriteRenderer.width*0.5f, button.spriteRenderer.height*0.5f);
+			button.spriteRenderer.sourceWidth*0.5f, button.spriteRenderer.sourceHeight*0.5f);
 		
 		return textChild;
 	}

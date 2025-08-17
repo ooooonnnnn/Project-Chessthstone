@@ -2,14 +2,13 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Behaviors;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1;
 
 /// <summary>
 /// Changes the position with wasd. Requires Transform
 /// </summary>
-public class WasdMove : Behavior, IUpdateable
+public class WasdMove : Behavior, IUpdatable
 {
 	public float speed = 100;
 	private Transform _transform;

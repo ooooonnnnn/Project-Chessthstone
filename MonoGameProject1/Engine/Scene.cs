@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using IDrawable = MonoGameProject1.Content.IDrawable;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
+using IDrawable = MonoGameProject1.IDrawable;
 
 namespace MonoGameProject1;
 
@@ -65,6 +64,21 @@ public abstract class Scene : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Removes and disposes a gameobject. 
+	/// </summary>
+	/// <param name="go">object to remove</param>
+	public void RemoveGameObject(GameObject go)
+	{
+		if (_gameObjects == null) throw new Exception($"Tried to remove {go.name} from a scene {this} that has no gameobjects.");
+		_gameObjects.Remove(go);
+		go.Dispose();
+		if (isLoaded) //remove it from the scene manager
+		{
+			SceneManager.RemoveGameObject(go);
+		}
+	}
+	
 	public void Dispose()
 	{
 		foreach (GameObject gameObject in gameObjects)
@@ -74,4 +88,6 @@ public abstract class Scene : IDisposable
 		
 		gameObjects = null;
 	}
+
+	
 }

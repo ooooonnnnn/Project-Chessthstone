@@ -12,10 +12,8 @@ public class ChessBoard : GameObject
 {
 	public ChessSquare[,] squares { get; init; }
 	public Transform transform;
-	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.width;
-	
-	private ChessPiece _selectedPiece;
-	private ChessSquare _selectedSquare;
+	public float totalWidth => ChessProperties.boardSize * squares[0, 0].spriteRenderer.sourceWidth;
+	public event Action<ChessSquare> OnSquareClicked;
 	
 	public ChessBoard(string name) : base(name, [new Transform()])
 	{
@@ -31,7 +29,7 @@ public class ChessBoard : GameObject
 			{
 				//Construct ChessSquare
 				bool isWhite = ChessProperties.IsWhiteSquare(i, j);
-				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", i, j, isWhite);
+				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", this, i, j, isWhite);
 				newSquare.board = this;
 				squares[i, j] = newSquare;
 				
@@ -39,7 +37,7 @@ public class ChessBoard : GameObject
 				Transform squareTransform = newSquare.transform;
 				transform.AddChild(squareTransform);
 				Vector2 squareSize = new Vector2(
-					newSquare.spriteRenderer.width, newSquare.spriteRenderer.height);
+					newSquare.spriteRenderer.sourceWidth, newSquare.spriteRenderer.sourceHeight);
 				
 				squareTransform.parentSpacePos = new Vector2(
 					squareSize.X * i, squareSize.Y * j); //i - column - x | j - row - y
@@ -47,79 +45,8 @@ public class ChessBoard : GameObject
 		}
 	}
 
-	/// <summary>
-	/// Handles what happens when a square is clicked: <br/>
-	/// Nothing selected & empty square => Spawn new piece <br/>
-	/// </summary>
-	public void HandleSquareClicked(ChessSquare square)
+	public void SquareClicked(ChessSquare square)
 	{
-		if (_selectedPiece == null) //no piece selected => create or select
-		{
-			if (square.occupyingPiece == null)
-			{
-				ChessPiece newPiece = PieceFactory.CreateRandomPiece(this);
-				newPiece.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
-				parentScene.AddGameObjects([newPiece]);
-				square.SetPiece(newPiece);;
-			}
-			else
-			{
-				_selectedPiece = square.occupyingPiece;
-				_selectedSquare = square;
-				//Test: show all possible moves
-				foreach (Point move in _selectedPiece.GetPossibleMoves())
-				{
-					squares[move.X, move.Y].spriteRenderer.color = Color.Red;
-				}
-			}
-		}
-		else //piece selected => move or deselect
-		{
-			if (square == _selectedSquare)
-			{
-				DeselectAll();
-			}
-			else if (square.occupyingPiece == null)
-			{
-				Point squareCoords = new Point(square.column, square.row);
-				if(_selectedPiece.GetPossibleMoves().Contains(squareCoords))
-				{
-					_selectedSquare.occupyingPiece = null;
-					_selectedPiece.GoToSquare(square);
-					square.occupyingPiece = _selectedPiece;
-					DeselectAll();
-				}
-				else
-				{
-					Console.WriteLine("Square not in possible moves, try again");
-				}
-			}
-			else
-			{
-				Console.WriteLine("Can't move to occupied square, try again");
-			}
-		}
-		
+		OnSquareClicked?.Invoke(square);
 	}
-
-	private void DeselectAll()
-	{
-		_selectedSquare = null;
-		_selectedPiece = null;
-		foreach (ChessSquare square in squares)
-		{
-			square.spriteRenderer.color = Color.White;
-		}
-	}
-
-	/// <summary>
-	/// Attempts to place a chesspiece on a square with a certain row and column
-	/// </summary>
-	/// <param name="row">Square row</param>
-	/// <param name="column">Square column</param>
-	/// <returns>True if succesful, false otherwise</returns>
-	// public bool TryPlacePiece(int row, int column, ChessPiece piece)
-	// {
-	// 	
-	// }
 }

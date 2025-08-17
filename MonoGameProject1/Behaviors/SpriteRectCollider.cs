@@ -29,7 +29,7 @@ public class SpriteRectCollider : Collider
 		Vector2 localSpacePt = localSpacePtNullable.Value;
 		
 		//now check that the point is within the bounds
-		bool result = localSpacePt.X >= 0 && localSpacePt.Y >= 0 && localSpacePt.X < _sprite.width && localSpacePt.Y < _sprite.height;
+		bool result = localSpacePt.X >= 0 && localSpacePt.Y >= 0 && localSpacePt.X < _sprite.sourceWidth && localSpacePt.Y < _sprite.sourceHeight;
 		
 		return result;
 	}

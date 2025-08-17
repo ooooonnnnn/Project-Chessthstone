@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Engine;
-using IUpdateable = MonoGameProject1.Content.IUpdateable;
 
 namespace MonoGameProject1.Behaviors;
 
@@ -12,7 +11,7 @@ namespace MonoGameProject1.Behaviors;
 /// Handles animations. Requires SpriteRenderer behavior.
 /// The constructor takes a dictionary of animations, where the key is the animation name and the value is a SpriteSheet.
 /// </summary>
-public class Animation : Behavior, IUpdateable, IStart
+public class Animation : Behavior, IUpdatable, IStart
 {
     private Texture2D originalSprite;
 

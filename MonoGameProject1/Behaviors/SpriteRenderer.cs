@@ -9,14 +9,31 @@ namespace MonoGameProject1.Behaviors;
 public class SpriteRenderer : Renderer
 {
     /// <summary>
-    /// The height of the source rectangle
+    /// Texture
     /// </summary>
-    public int height => sourceRectangle.Height;
-    public int width => sourceRectangle.Width;
-
-    // texture
     public Texture2D texture;
     public Rectangle sourceRectangle;
+
+    /// <summary>
+    /// Size in pixels. Changes the transform scale accordingly
+    /// </summary>
+    public Point sizePx
+    {
+        get => new((int)(sourceWidth * _transform.worldSpaceScale.X), (int)(sourceHeight * _transform.worldSpaceScale.Y));
+        set
+        {
+            Vector2 worldScaleOfParent = _transform.parent?.worldSpaceScale ?? Vector2.One;
+            _transform.parentSpaceScale = new(
+                value.X / (float)sourceWidth / worldScaleOfParent.X,
+                value.Y / (float)sourceHeight / worldScaleOfParent.Y);
+        }
+    }
+
+    /// <summary>
+    /// Size of the source rectangle
+    /// </summary>
+    public int sourceHeight => sourceRectangle.Height;
+    public int sourceWidth => sourceRectangle.Width;
 
     public SpriteRenderer(Texture2D texture, Rectangle sourceRectangle = default)
     {

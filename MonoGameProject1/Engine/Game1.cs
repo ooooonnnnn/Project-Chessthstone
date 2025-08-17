@@ -20,11 +20,11 @@ public class Game1 : Game
 		Content.RootDirectory = "Content";
 		IsMouseVisible = true;
 		//Full screen
-		// _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-		// _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-		// _graphics.IsFullScreen = false;  // Set to false for borderless
-		// Window.IsBorderless = true;
-		// _graphics.ApplyChanges();
+		_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+		_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+		_graphics.IsFullScreen = false;
+		Window.IsBorderless = false;
+		_graphics.ApplyChanges();
 	}
 
 	protected override void Initialize()
@@ -46,7 +46,7 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		// End loading here
 		
-		SceneManager.ChangeScene(new TestMenuScene());
+		SceneManager.ChangeScene(new TeamSelectionScene());
 	}
 	
 	protected override void Update(GameTime gameTime)

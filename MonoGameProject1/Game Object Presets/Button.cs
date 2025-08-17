@@ -8,11 +8,24 @@ using MonoGameProject1.Behaviors;
 namespace MonoGameProject1;
 
 /// <summary>
-/// Button with text and hover tinting. 
+/// Button with text (as a child) and hover tinting. 
 /// </summary>
 public class Button : GameObject, ICallback
 {
-	public string text;
+	/// <summary>
+	/// The text appearing on the child
+	/// </summary>
+	public string text
+	{
+		get => _text;
+		set
+		{
+			_text = value;
+			_childTextRenderer.text = value;
+			CenterText();
+		}
+	}
+	private string _text = "";
 	public Texture2D texture;
 	public Transform transform;
 	
@@ -21,6 +34,11 @@ public class Button : GameObject, ICallback
 	/// </summary>
 	public SpriteRenderer spriteRenderer { get; private set; }
 	public ChangeTintWhenHover hoverTinting;
+	/// <summary>
+	/// The behaviors of the child
+	/// </summary>
+	private TextRenderer _childTextRenderer;
+	private Transform _childTransform;
 	
 	private Clickable _clickable;
 
@@ -30,10 +48,12 @@ public class Button : GameObject, ICallback
 	/// <param name="text">Text on the button</param>
 	public Button(string name, string text = ""): base(name)
 	{
-		this.text = text;
 		texture = TextureManager.GetDefaultButtonTexture();
-		spriteRenderer = new NineSliced(texture, 40, 58, 40, 58, 2f);
+		spriteRenderer = new NineSliced(texture, 40, 58, 40, 58);
 		AddButtonBehaviors();
+		
+		CreateTextChild();
+		this.text = text;
 	}
 
 	/// <summary>
@@ -41,10 +61,12 @@ public class Button : GameObject, ICallback
 	/// </summary>
 	public Button(string name, Texture2D texture, string text = "") : base(name)
 	{
-		this.text = text;
 		this.texture = texture;
 		spriteRenderer = new SpriteRenderer(texture);
 		AddButtonBehaviors();
+		
+		CreateTextChild();
+		this.text = text;
 	}
 
 	/// <summary>
@@ -52,11 +74,38 @@ public class Button : GameObject, ICallback
 	/// </summary>
 	public Button(string name, NineSliced nineSliced, string text = "") : base(name)
 	{
-		this.text = text;
 		spriteRenderer = nineSliced;
 		AddButtonBehaviors();
+		
+		CreateTextChild();
+		this.text = text;
 	}
-	
+
+	/// <summary>
+	/// Creates the text child
+	/// </summary>
+	/// <returns>The text renderer of the child</returns>
+	private void CreateTextChild()
+	{
+		Transform textTransform = new Transform();
+		TextRenderer textRenderer = new TextRenderer(text) { color = Color.Black };
+		GameObject textChild = new GameObject( name + " Text", [textTransform, textRenderer]);
+
+		transform.AddChild(textChild);
+		
+		_childTextRenderer = textRenderer;
+		_childTransform = textTransform;
+
+		CenterText();
+	}
+
+	private void CenterText()
+	{
+		_childTransform.origin = _childTextRenderer.font.MeasureString(text) * 0.5f;
+		_childTransform.parentSpacePos = new Vector2(
+			spriteRenderer.sourceWidth*0.5f, spriteRenderer.sourceHeight*0.5f);
+	}
+
 	private void AddButtonBehaviors()
 	{
 		transform = new Transform();
