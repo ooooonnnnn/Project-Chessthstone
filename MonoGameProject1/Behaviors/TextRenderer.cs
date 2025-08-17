@@ -11,18 +11,65 @@ namespace MonoGameProject1.Behaviors;
 /// </summary>
 public class TextRenderer : Renderer
 {
-	public string text;
-	public SpriteFont font = FontManager.defaultFont;
-	public bool rightToLeft = false;
+	private string _text;
 
-	public TextRenderer(string text = "")
+	public string Text
 	{
-		this.text = text;
+		get => _text;
+		set
+		{
+			_text = value;
+			if (MaxWidth > 0)
+			{
+				WrapText();
+			}
+		}
+	}
+	public SpriteFont Font = FontManager.defaultFont;
+	private bool rightToLeft = false;
+	
+	private int _maxWidth = 0;
+	public int MaxWidth
+	{
+		get => _maxWidth;
+		set
+		{
+			_maxWidth = value;
+			if (_maxWidth > 0)
+			{
+				WrapText();
+			}
+		}
+	}
+
+	private void WrapText()
+	{
+		if (string.IsNullOrEmpty(Text) || Font == null || MaxWidth <= 0) return;
+		int lastSpaceIndex = 0;
+		for (int i = 2; i < Text.Length; i++)
+		{
+			if (Text[i] == ' ') lastSpaceIndex = i;
+			
+			var width = Font.MeasureString(Text.Substring(lastSpaceIndex, i)).X;
+
+			if (!(width > MaxWidth)) continue;
+			if(lastSpaceIndex == 0) lastSpaceIndex = i - 1; // If no space found, break at current character
+			Text = Text.Insert(lastSpaceIndex, "\n");
+			i++;
+		}
+	}
+
+	/// <param name="text">Content.</param>
+	/// <param name="maxWidth">If above 0, text will warp to its width in pixels.</param>
+	public TextRenderer(string text = "", int maxWidth = 0)
+	{
+		this.Text = text;
+		MaxWidth = maxWidth;
 	}
 
 	public override void Draw(SpriteBatch spriteBatch)
 	{
-		spriteBatch.DrawString(font, text, _transform.worldSpacePos, color, _transform.rotation,
+		spriteBatch.DrawString(Font, Text, _transform.worldSpacePos, color, _transform.rotation,
 			_transform.origin, _transform.worldSpaceScale, effects, layerDepth, rightToLeft);
 	}
 }

@@ -160,12 +160,12 @@ public class Selector : GameObject
 	
 	private void UpdateText()
 	{
-		_textRenderer.text = _currentSprite.Value.name;
+		_textRenderer.Text = _currentSprite.Value.name;
 		CenterText();
 	}
 	//TODO: this should be a function of textRenderer
 	private void CenterText()
 	{
-		_textTransform.origin = _textRenderer.font.MeasureString(_textRenderer.text) * 0.5f;
+		_textTransform.origin = _textRenderer.Font.MeasureString(_textRenderer.Text) * 0.5f;
 	}
 }

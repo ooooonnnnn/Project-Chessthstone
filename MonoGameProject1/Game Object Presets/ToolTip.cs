@@ -20,7 +20,7 @@ public class ToolTip : GameObject
 
     public ToolTip(string name, string text, int maxWidth = 100, int padding = 10) : base(name)
     {
-        this._textRenderer = new TextRenderer(text, maxWidth + padding);
+        this._textRenderer = new TextRenderer(text, maxWidth - padding);
     }
     
     public void GenerateBackground(Texture2D texture, Rectangle sourceRectangle, int padding = 10)
