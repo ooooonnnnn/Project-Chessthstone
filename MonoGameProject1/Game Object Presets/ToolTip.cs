@@ -13,17 +13,38 @@ public class ToolTip : GameObject
         set
         {
             _textRenderer.Text = value;
-            
+            modifyBackgroundSize(_textRenderer.MaxWidth + _padding);
         }
     }
-    private NineSlicedSprite _nineSlicedBackground;
+    private NineSliced _nineSlicedBackground;
+    private Transform _nineSlicedBackgroundTransform;
+    
+    public Transform transform;
+    
+    private int _padding = 10;
 
-    public ToolTip(string name, string text, int maxWidth = 100, int padding = 10) : base(name)
+    public ToolTip(string name, string text, int width = 100, int padding = 10) : base(name)
     {
-        this._textRenderer = new TextRenderer(text, maxWidth - padding);
+        this._padding = padding;
+        this._textRenderer = new TextRenderer(text, width - padding);
+        transform = new Transform();
+        AddBehaviors([transform, _textRenderer]);
+        
+        this._nineSlicedBackground = new NineSliced(
+            TextureManager.TestSpriteSheetTexture,
+            padding, padding, padding, padding);
+        
+        this._nineSlicedBackgroundTransform = new Transform();
+        
+        transform.AddChild(new GameObject("ToolTipBackground",
+            [_nineSlicedBackground, _nineSlicedBackgroundTransform]));
     }
     
-    public void GenerateBackground(Texture2D texture, Rectangle sourceRectangle, int padding = 10)
+    
+    private void modifyBackgroundSize(int width)
     {
+        // Adjust the size of the background based on the text size
+        var textSize = _textRenderer.GetTextSize();
+        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + _padding);
     }
 }

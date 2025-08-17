@@ -58,6 +58,16 @@ public class TextRenderer : Renderer
 			i++;
 		}
 	}
+	
+	/// <summary>
+	/// returns the size of the text in pixels, based on the current font and text.
+	/// </summary>
+	/// <returns></returns>
+	public Vector2 GetTextSize()
+	{
+		if (string.IsNullOrEmpty(Text) || Font == null) return Vector2.Zero;
+		return Font.MeasureString(Text);
+	}
 
 	/// <param name="text">Content.</param>
 	/// <param name="maxWidth">If above 0, text will warp to its width in pixels.</param>
