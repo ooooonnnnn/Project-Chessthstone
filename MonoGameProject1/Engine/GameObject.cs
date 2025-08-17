@@ -168,7 +168,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 	}
 
 	/// <summary>
-	/// Disposes disposable behaviors
+	/// Disposes disposable behaviors and the parentScene reference
 	/// </summary>
 	public virtual void Dispose()
 	{
@@ -176,6 +176,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 		{
 			if (behavior is IDisposable disposable) disposable.Dispose();
 		}
+		parentScene = null;
 	}
 
 	/// <summary>

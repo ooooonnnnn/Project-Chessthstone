@@ -200,10 +200,16 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
 		OnDeath?.Invoke(this);
-		parentScene.RemoveGameObject(this);
+		// parentScene.RemoveGameObject(this);
 	}
 	public event Action<ChessPiece> OnDeath;
-	
+
+	public override void Start()
+	{
+		base.Start();
+		OnDeath += _ => MatchManager.instance.CheckWin();
+	}
+
 	/// <summary>
 	/// List of int coordinates of the squares this piece can move to. <br/>
 	/// Takes the board size and existing pieces into account
@@ -241,7 +247,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	}
 
 	/// <summary>
-	/// Returns true if: 1. directionValid is true 2. the target square is within the board 3. the target square is<br/>
+	/// Returns true if: 1. directionValid is true 2. the target square is within the board 3. the target square is
 	///  occupied by an opposing piece.
 	/// If (2) is false or the target square is occupied by an ally, returns false and updates directionValid <br/>
 	/// False otherwise

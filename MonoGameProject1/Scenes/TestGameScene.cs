@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -15,12 +16,16 @@ public class TestGameScene : Scene
 
 		TriggerManager.Instantiate("TriggerManager");
 		GamePhaseManager.Instantiate("GamePhaseManager");
+		MatchManager.Instantiate("MatchManager");
+		MatchManager.instance.board = board;
 		
 		Player whitePlayer = new Player("White", true){board = board};
 		Player blackPlayer = new Player("Black", false){board = board};
 		
-		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
-		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		// whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		// blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		whitePlayer.teamPieces = [new BasicBishop(true)];
+		blackPlayer.teamPieces = [new BasicBishop(false)];
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
@@ -50,7 +55,9 @@ public class TestGameScene : Scene
 				TurnManager.instance.ChangeTurn();
 		});
 		
-		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance, 
-		GamePhaseManager.instance]);
+		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
+			TriggerManager.instance, 
+			GamePhaseManager.instance,
+			MatchManager.instance]);
 	}
 }

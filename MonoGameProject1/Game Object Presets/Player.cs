@@ -39,7 +39,7 @@ public class Player(string name, bool isWhite) : GameObject(name)
 	public List<ChessPiece> teamPieces;
 	private ChessPiece _pieceToPlace;
 	/// <summary>
-	/// The pieckes that are currently on the board
+	/// The pieces that are currently on the board
 	/// </summary>
 	private List<ChessPiece> _activePieces { get; } = new();
 	public IReadOnlyList<ChessPiece> pieces => _activePieces;

@@ -20,7 +20,15 @@ public enum GamePhase
 	/// <summary>
 	/// Normal gameplay
 	/// </summary>
-	Gameplay = 1
+	Gameplay = 1,
+	/// <summary>
+	/// Game ended, white won
+	/// </summary>
+	WhiteWon = 2,
+	/// <summary>
+	/// Game ended, black won
+	/// </summary>
+	BlackWon = 3
 }
 
 /// <summary>
@@ -39,7 +47,6 @@ public class GamePhaseManager : SingletonGameObject<GamePhaseManager>
 			OnPhaseChanged?.Invoke(prevPhase, _phase);
 		}
 	}
-
 	private GamePhase _phase = GamePhase.None;
 
 	/// <summary>
