@@ -190,6 +190,9 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		Console.WriteLine($"{name} took {damage} damage");
 		bool die = false;
 		health -= damage;
+		
+		AudioManager.PlaySound(AudioClips.HitSound);
+		
 		if (health <= 0)
 		{
 			die = true;

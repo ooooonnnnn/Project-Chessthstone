@@ -34,6 +34,7 @@ public class Game1 : Game
 		TextureManager.game = this;
 		GameManager.game = this;
 		FontManager.game = this;
+		AudioClips.game = this;
 		base.Initialize();
 	}
 
@@ -44,10 +45,11 @@ public class Game1 : Game
 		// TODO: use this.Content to load your game content here
 		TextureManager.LoadTextures();
 		FontManager.LoadFonts();
+		AudioClips.LoadAudio();
 		// End loading here
 		
 		//SceneManager.ChangeScene(new TeamSelectionScene());
-		SceneManager.ChangeScene(new TestToolTipScene());
+		SceneManager.ChangeScene(new TestGameScene());
 	}
 	
 	protected override void Update(GameTime gameTime)

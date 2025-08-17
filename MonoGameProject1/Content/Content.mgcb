@@ -267,3 +267,9 @@
 /processorParam:TextureFormat=Color
 /build:Images/tile1WhiteWithCorners.png
 
+#begin Sounds/hitHurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/hitHurt.wav
+
