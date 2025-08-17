@@ -335,5 +335,7 @@ public abstract class ChessPiece : Sprite
 		base.Dispose();
 		OnDeath = null;
 		OnGetHit = null;
+		OnTeleport = null;
+		OnMove = null;
 	}
 }
