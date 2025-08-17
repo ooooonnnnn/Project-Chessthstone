@@ -210,4 +210,9 @@ public class Transform : Behavior, IHierarchy<Transform>
 		_children.Remove(transform);
 		transform.parent = null;
 	}
+
+	public void UpdateWorldSpace()
+	{
+		throw new System.NotImplementedException();
+	}
 }

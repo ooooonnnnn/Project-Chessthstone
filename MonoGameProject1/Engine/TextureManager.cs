@@ -16,6 +16,8 @@ public static class TextureManager
 	public static Texture2D KingBlackDeathSheet{ get; private set; }
 	private static Texture2D[] _chessSquareTextures;
 	private static Texture2D[,] _chessPieceTextures= new Texture2D[2,6];
+	
+	public static Texture2D ToolTipNineSliceTexture { get; private set; }
 
 	public static void LoadTextures()
 	{
@@ -39,6 +41,8 @@ public static class TextureManager
 		_chessPieceTextures[1, (int)PieceType.Queen] = game.Content.Load<Texture2D>("Images/queenWhite");
 		_chessPieceTextures[0, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingBlack");
 		_chessPieceTextures[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhite");
+		
+		ToolTipNineSliceTexture = game.Content.Load<Texture2D>("Images/NineSlices/decoratedWood9Slice");
 	}
 
 	public static Texture2D GetDefaultButtonTexture()

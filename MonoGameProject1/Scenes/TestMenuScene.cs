@@ -53,7 +53,7 @@ public class TestMenuScene : Scene
 		TextRenderer textRenderer = new TextRenderer(button.text);
 		textRenderer.color = Color.Black;
 
-		textTransform.origin = textRenderer.font.MeasureString(button.text) * 0.5f;
+		textTransform.origin = textRenderer.Font.MeasureString(button.text) * 0.5f;
 		textTransform.SetScaleFromFloat(1f);
 		
 		textChild.AddBehaviors([

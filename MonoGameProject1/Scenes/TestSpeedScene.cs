@@ -67,7 +67,7 @@ public class SpeedTester : Behavior, IUpdatable
 			double optimized = stopwatch.Elapsed.TotalMilliseconds;
 			stopwatch.Stop();
 
-			text.text = $"Regular: {regular}ms\nOptimized: {optimized}ms";
+			text.Text = $"Regular: {regular}ms\nOptimized: {optimized}ms";
 		}
 		else if (Keyboard.GetState().IsKeyDown(Keys.Space))
 		{
