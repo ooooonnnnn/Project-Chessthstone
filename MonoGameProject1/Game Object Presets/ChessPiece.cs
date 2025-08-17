@@ -80,6 +80,7 @@ public abstract class ChessPiece : Sprite
 	public Point position => new Point(column, row);
 	protected ChessSquare currentSquare;
 
+	public event Action OnTeleport;
 	/// <summary>
 	/// Moves the piece to the target square. To move the piece, use MoveToSquare
 	/// </summary>
@@ -96,6 +97,7 @@ public abstract class ChessPiece : Sprite
 		currentSquare.occupyingPiece = this;
 		transform.parentSpacePos = square.transform.worldSpacePos;
 		canTeleport = false;
+		OnTeleport?.Invoke();
 	}
 	protected bool canTeleport = true;
 
@@ -136,6 +138,7 @@ public abstract class ChessPiece : Sprite
 		return true;
 	}
 
+	public event Action OnMove;
 	/// <summary>
 	/// Moves without requiring an action point
 	/// </summary>
@@ -146,6 +149,8 @@ public abstract class ChessPiece : Sprite
 		currentSquare = square;
 		currentSquare.occupyingPiece = this;
 		transform.parentSpacePos = square.transform.worldSpacePos;
+		
+		OnMove?.Invoke();
 	}
 
 	/// <summary>
@@ -195,7 +200,7 @@ public abstract class ChessPiece : Sprite
 		return true;
 	}
 	
-	public event Action OnHit;
+	public event Action OnGetHit;
 	
 	/// <summary>
 	/// Takes damage and dies if necessary
@@ -208,7 +213,7 @@ public abstract class ChessPiece : Sprite
 		bool die = false;
 		health -= damage;
 		
-		OnHit?.Invoke();
+		OnGetHit?.Invoke();
 		
 		if (health <= 0)
 		{
@@ -329,6 +334,6 @@ public abstract class ChessPiece : Sprite
 	{
 		base.Dispose();
 		OnDeath = null;
-		OnHit = null;
+		OnGetHit = null;
 	}
 }

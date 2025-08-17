@@ -35,7 +35,7 @@ public class ToolTip : GameObject
         
         this._nineSlicedBackground = new NineSliced(
             TextureManager.ToolTipNineSliceTexture,
-            50, 100, 50, 100);
+            50, 99, 50, 99);
         
         this._nineSlicedBackgroundTransform = new Transform();
         

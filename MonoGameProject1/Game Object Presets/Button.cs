@@ -49,7 +49,7 @@ public class Button : GameObject, ICallback
 	public Button(string name, string text = ""): base(name)
 	{
 		texture = TextureManager.ToolTipNineSliceTexture;
-		spriteRenderer = new NineSliced(texture, 40, 58, 40, 58);
+		spriteRenderer = new NineSliced(texture, 50, 99, 50, 99);
 		spriteRenderer.layerDepth = LayerDepthManager.UiDepth;
 		AddButtonBehaviors();
 		
