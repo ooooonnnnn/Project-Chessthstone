@@ -41,9 +41,10 @@ public class TestGameScene : Scene
 			piece.transform.origin = Vector2.Zero;
 			
 			//Add overlays to the pieces
-			PieceOverlay pieceOverlay = new PieceOverlay(TextureManager.GetLogoTexture(),
-				TextureManager.GetLogoTexture(),
-				TextureManager.GetLogoTexture(),
+			PieceOverlay pieceOverlay = new PieceOverlay(
+				TextureManager.GetHealthIcon(),
+				TextureManager.GetDamageIcon(),
+				TextureManager.GetActionPointsIcon(),
 				FontManager.defaultFont);
 			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
 			pieceOverlay.SetChessPiece(piece);
