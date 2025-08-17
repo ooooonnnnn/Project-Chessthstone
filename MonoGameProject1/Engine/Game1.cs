@@ -46,7 +46,8 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		// End loading here
 		
-		SceneManager.ChangeScene(new TeamSelectionScene());
+		//SceneManager.ChangeScene(new TeamSelectionScene());
+		SceneManager.ChangeScene(new TestToolTipScene());
 	}
 	
 	protected override void Update(GameTime gameTime)
@@ -67,7 +68,7 @@ public class Game1 : Game
 		GraphicsDevice.Clear(Color.CornflowerBlue);
 
 		// TODO: Add your drawing code here
-		_spriteBatch.Begin();
+		_spriteBatch.Begin(SpriteSortMode.BackToFront);
 		SceneManager.Draw(_spriteBatch);
 		_spriteBatch.End();
 		base.Draw(gameTime);

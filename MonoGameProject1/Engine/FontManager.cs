@@ -14,7 +14,7 @@ public static class FontManager
 	
 	public static void LoadFonts()
 	{
-		//defaultFont = game.Content.Load<SpriteFont>("Fonts/Retro Gaming");
-		defaultFont = game.Content.Load<SpriteFont>("Fonts/Arial");
+		defaultFont = game.Content.Load<SpriteFont>("Fonts/Retro Gaming");
+		//defaultFont = game.Content.Load<SpriteFont>("Fonts/Arial");
 	}
 }

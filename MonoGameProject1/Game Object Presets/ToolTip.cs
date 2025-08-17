@@ -12,8 +12,9 @@ public class ToolTip : GameObject
         get => _textRenderer.Text;
         set
         {
+            _textRenderer ??= new TextRenderer(value);
             _textRenderer.Text = value;
-            modifyBackgroundSize(_textRenderer.MaxWidth + _padding);
+            ModifyBackgroundSize(_textRenderer.MaxWidth + _padding);
         }
     }
     private NineSliced _nineSlicedBackground;
@@ -23,28 +24,36 @@ public class ToolTip : GameObject
     
     private int _padding = 10;
 
-    public ToolTip(string name, string text, int width = 100, int padding = 10) : base(name)
+    public ToolTip(string name, string text, int width = 200, int padding = 50) : base(name)
     {
         this._padding = padding;
         this._textRenderer = new TextRenderer(text, width - padding);
+        this._textRenderer.layerDepth = 0.1f;
+        
         transform = new Transform();
         AddBehaviors([transform, _textRenderer]);
         
         this._nineSlicedBackground = new NineSliced(
-            TextureManager.TestSpriteSheetTexture,
-            padding, padding, padding, padding);
+            TextureManager.ToolTipNineSliceTexture,
+            50, 100, 50, 100);
         
         this._nineSlicedBackgroundTransform = new Transform();
         
         transform.AddChild(new GameObject("ToolTipBackground",
             [_nineSlicedBackground, _nineSlicedBackgroundTransform]));
+        _nineSlicedBackground.layerDepth = 0.2f;
+        
+        _nineSlicedBackgroundTransform.origin = Vector2.Zero;
+        _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-_padding, -_padding);
+        
+        ModifyBackgroundSize(width + _padding);
     }
     
     
-    private void modifyBackgroundSize(int width)
+    private void ModifyBackgroundSize(int width)
     {
         // Adjust the size of the background based on the text size
         var textSize = _textRenderer.GetTextSize();
-        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + _padding);
+        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + _padding * 2);
     }
 }

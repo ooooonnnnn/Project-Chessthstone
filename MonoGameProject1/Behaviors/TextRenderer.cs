@@ -19,10 +19,7 @@ public class TextRenderer : Renderer
 		set
 		{
 			_text = value;
-			if (MaxWidth > 0)
-			{
-				WrapText();
-			}
+			WrapText();
 		}
 	}
 	public SpriteFont Font = FontManager.defaultFont;
@@ -35,29 +32,38 @@ public class TextRenderer : Renderer
 		set
 		{
 			_maxWidth = value;
-			if (_maxWidth > 0)
-			{
-				WrapText();
-			}
+			WrapText();
 		}
 	}
 
 	private void WrapText()
 	{
-		if (string.IsNullOrEmpty(Text) || Font == null || MaxWidth <= 0) return;
-		int lastSpaceIndex = 0;
-		for (int i = 2; i < Text.Length; i++)
-		{
-			if (Text[i] == ' ') lastSpaceIndex = i;
-			
-			var width = Font.MeasureString(Text.Substring(lastSpaceIndex, i)).X;
+		if (string.IsNullOrEmpty(_text) || Font == null || MaxWidth <= 0) return;
 
-			if (!(width > MaxWidth)) continue;
-			if(lastSpaceIndex == 0) lastSpaceIndex = i - 1; // If no space found, break at current character
-			Text = Text.Insert(lastSpaceIndex, "\n");
-			i++;
+		int lineStart = 0;
+		int lastSpaceIndex = -1;
+
+		for (int i = 0; i < _text.Length; i++)
+		{
+			if (_text[i] == ' ')
+				lastSpaceIndex = i;
+
+			// measure from lineStart up to i
+			var width = Font.MeasureString(_text.Substring(lineStart, i - lineStart + 1)).X;
+
+			if (width > MaxWidth && lastSpaceIndex > lineStart)
+			{
+				// replace the space with a newline
+				_text = _text.Remove(lastSpaceIndex, 1).Insert(lastSpaceIndex, "\n");
+
+				// reset indices
+				lineStart = lastSpaceIndex + 1;
+				i = lineStart;
+				lastSpaceIndex = -1;
+			}
 		}
 	}
+
 	
 	/// <summary>
 	/// returns the size of the text in pixels, based on the current font and text.
@@ -73,8 +79,9 @@ public class TextRenderer : Renderer
 	/// <param name="maxWidth">If above 0, text will warp to its width in pixels.</param>
 	public TextRenderer(string text = "", int maxWidth = 0)
 	{
-		this.Text = text;
+		Text = text;
 		MaxWidth = maxWidth;
+		WrapText();
 	}
 
 	public override void Draw(SpriteBatch spriteBatch)
