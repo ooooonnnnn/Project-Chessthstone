@@ -31,6 +31,12 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	/// </summary>
 	public void UpdateStateAndTryTrigger(bool isWhiteTurn)
 	{
+		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
+		{
+			Console.WriteLine("Not updating state because phase is not gameplay");
+			return;
+		}
+		
 		UpdateGameState(isWhiteTurn);
 		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
 			return;
