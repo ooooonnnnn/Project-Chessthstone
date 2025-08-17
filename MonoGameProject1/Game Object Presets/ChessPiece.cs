@@ -8,10 +8,9 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for chess pieces
 /// </summary>
-public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage)
-	: Sprite(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
+public abstract class ChessPiece : Sprite
 {
-	public PieceType type { get; init; } = type;
+	public PieceType type { get; init; }
 
 	public Player ownerPlayer
 	{
@@ -31,7 +30,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 
 	private Player _ownerPlayer;
 
-	public bool isWhite = isWhite;
+	public bool isWhite;
 
 	public ChessBoard board
 	{
@@ -49,9 +48,9 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	/// <summary>
 	/// Health and damage
 	/// </summary>
-	public int baseHealth { get; protected set; } = baseHealth;
-	public int baseDamage { get; protected set; } = baseDamage;
-	public int health { get; protected set; } = baseHealth;
+	public int baseHealth { get; protected set; }
+	public int baseDamage { get; protected set; }
+	public int health { get; protected set; }
 
 	/// <summary>
 	/// Attacking and moving costs 1 action point.
@@ -99,7 +98,23 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		canTeleport = false;
 	}
 	protected bool canTeleport = true;
-	
+
+	/// <summary>
+	/// Base class for chess pieces
+	/// </summary>
+	protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
+	{
+		this.type = type;
+		this.isWhite = isWhite;
+		this.baseHealth = baseHealth;
+		this.baseDamage = baseDamage;
+		health = baseHealth;
+		
+		spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
+		
+		AddBehaviors([new ChessPieceFeedback()]);
+	}
+
 	/// <summary>
 	/// Use this if you want the piece to teleport after the initial spawning.
 	/// </summary>
@@ -180,6 +195,8 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		return true;
 	}
 	
+	public event Action OnHit;
+	
 	/// <summary>
 	/// Takes damage and dies if necessary
 	/// </summary>
@@ -191,7 +208,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		bool die = false;
 		health -= damage;
 		
-		AudioManager.PlaySound(AudioClips.HitSound);
+		OnHit?.Invoke();
 		
 		if (health <= 0)
 		{
@@ -312,5 +329,6 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	{
 		base.Dispose();
 		OnDeath = null;
+		OnHit = null;
 	}
 }

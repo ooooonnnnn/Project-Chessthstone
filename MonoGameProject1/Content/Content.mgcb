@@ -267,6 +267,12 @@
 /processorParam:TextureFormat=Color
 /build:Images/tile1WhiteWithCorners.png
 
+#begin Sounds/chessDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/chessDeath.wav
+
 #begin Sounds/hitHurt.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
