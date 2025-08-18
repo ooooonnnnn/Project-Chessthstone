@@ -21,6 +21,10 @@ public static class TextureManager
 	private static Texture2D _damageIcon;
 	private static Texture2D _actionPointsIcon;
 	public static Texture2D ToolTipNineSliceTexture { get; private set; }
+	
+	public static Texture2D WhiteTurnButtonTexture { get; private set; }
+	public static Texture2D BlackTurnButtonTexture { get; private set; }
+	
 	public static void LoadTextures()
 	{
 		_defaultButtonTexture = game.Content.Load<Texture2D>("Images/RoundedFilledSquare");
@@ -48,6 +52,9 @@ public static class TextureManager
 		_chessPieceTextures[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhite");
 		
 		ToolTipNineSliceTexture = game.Content.Load<Texture2D>("Images/NineSlices/decoratedWood9Slice");
+		
+		WhiteTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnWhite");
+		BlackTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnBlack");
 	}
 
 	public static Texture2D GetDefaultButtonTexture()
