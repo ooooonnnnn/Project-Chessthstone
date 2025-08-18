@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
+using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Scenes;
 
@@ -30,19 +32,28 @@ public class TestGameScene : Scene
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
-			piece.SetActive(true);
 			piece.ownerPlayer = whitePlayer;
-			piece.board = board;
-			piece.transform.origin = Vector2.Zero;
 		}
-
+		
 		foreach (ChessPiece piece in blackPlayer.teamPieces)
 		{
-			piece.SetActive(true);
 			piece.ownerPlayer = blackPlayer;
+		}
+		
+		foreach (ChessPiece piece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))
+		{
+			piece.SetActive(true);
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
-			piece.transform.parentSpacePos = Vector2.Zero;
+			
+			//Add overlays to the pieces
+			PieceOverlay pieceOverlay = new PieceOverlay(
+				TextureManager.GetHealthIcon(),
+				TextureManager.GetDamageIcon(),
+				TextureManager.GetActionPointsIcon(),
+				FontManager.defaultFont);
+			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
+			pieceOverlay.SetChessPiece(piece);
 		}
 		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
