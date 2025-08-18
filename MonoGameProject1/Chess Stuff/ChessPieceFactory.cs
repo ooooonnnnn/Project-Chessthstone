@@ -18,11 +18,11 @@ public static class ChessPieceFactory
 				yield break;
 			}
 			case PieceType.Knight:
-				yield return new BasicKnight(isWhite);
+				yield return new KnightRegainAp(isWhite);
 				yield return new Knight(isWhite, 1 ,1);
 				yield break;
 			case PieceType.Bishop:
-				yield return new BasicBishop(isWhite);
+				yield return new BishopRegainAp(isWhite);
 				yield return new Bishop(isWhite, 1 ,1);
 				yield break;
 			case PieceType.Rook:
@@ -32,7 +32,7 @@ public static class ChessPieceFactory
 				yield return new Queen(isWhite, 1 ,1);
 				yield break;
 			case PieceType.King:
-				yield return new BasicKing(isWhite);
+				yield return new KingGainManaFromAdj(isWhite);
 				yield return new King(isWhite, 1 ,1);
 				yield break;
 		}

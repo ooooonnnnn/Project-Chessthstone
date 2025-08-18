@@ -22,10 +22,10 @@ public class TestGameScene : Scene
 		//whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
 		//blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 		whitePlayer.teamPieces = [
-			new BasicBishop(true)
+			new BishopRegainAp(true)
 		];
 		blackPlayer.teamPieces = [
-			new BasicBishop(false)
+			new BishopRegainAp(false)
 		];
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)

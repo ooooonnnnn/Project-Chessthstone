@@ -152,6 +152,22 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		
 		return true;
 	}
+	
+	/// <summary>
+	/// Deals damage to the piece if it is in range without spending action point. <br/>
+	/// </summary>
+	public void DealDamageToPiece(ChessPiece piece, int damage = 0)
+	{
+		if (damage <= 0) damage = baseDamage;
+		if (piece == null)
+		{
+			Console.WriteLine($"{name} tried to attack a null piece");
+			return;
+		}
+
+		Console.WriteLine($"{name} damaged {piece.name} for {damage} damage");
+		piece.TakeDamage(damage);
+	}
 
 	// /// <summary>
 	// /// Activates this pieces' ActivatedAbility if it exists
