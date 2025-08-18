@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
+using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Scenes;
 
@@ -22,7 +24,7 @@ public class TestGameScene : Scene
 		GamePhaseManager.Instantiate("GamePhaseManager");
 		TurnManager.Instantiate("TurnManager");
 		MatchManager.Instantiate("MatchManager");
-		
+		PieceOverlay pieceOverlay;
 		board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.4f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
@@ -75,6 +77,13 @@ public class TestGameScene : Scene
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
 			piece.transform.parentSpacePos = Vector2.Zero;
+			PieceOverlay pieceOverlay = new PieceOverlay(
+				TextureManager.GetHealthIcon(),
+				TextureManager.GetDamageIcon(),
+				TextureManager.GetActionPointsIcon(),
+				FontManager.defaultFont);
+			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
+			pieceOverlay.SetChessPiece(piece);
 		}
 		
 		endTurnButton.AddListener(() =>
