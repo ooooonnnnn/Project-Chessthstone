@@ -49,6 +49,7 @@ public class Game1 : Game
 		// End loading here
 		
 		SceneManager.ChangeScene(new TeamSelectionScene());
+		//SceneManager.ChangeScene(new TestGameScene());
 	}
 	
 	protected override void Update(GameTime gameTime)

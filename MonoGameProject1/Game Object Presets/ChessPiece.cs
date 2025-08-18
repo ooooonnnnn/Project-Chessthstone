@@ -8,10 +8,9 @@ namespace MonoGameProject1;
 /// <summary>
 /// Base class for chess pieces
 /// </summary>
-public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage)
-	: Sprite(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
+public abstract class ChessPiece : Sprite
 {
-	public PieceType type { get; init; } = type;
+	public PieceType type { get; init; }
 
 	public Player ownerPlayer
 	{
@@ -31,7 +30,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 
 	private Player _ownerPlayer;
 
-	public bool isWhite = isWhite;
+	public bool isWhite;
 
 	public ChessBoard board
 	{
@@ -49,9 +48,9 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	/// <summary>
 	/// Health and damage
 	/// </summary>
-	public int baseHealth { get; protected set; } = baseHealth;
-	public int baseDamage { get; protected set; } = baseDamage;
-	public int health { get; protected set; } = baseHealth;
+	public int baseHealth { get; protected set; }
+	public int baseDamage { get; protected set; }
+	public int health { get; protected set; }
 
 	/// <summary>
 	/// Attacking and moving costs 1 action point.
@@ -81,6 +80,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	public Point position => new Point(column, row);
 	protected ChessSquare currentSquare;
 
+	public event Action OnTeleport;
 	/// <summary>
 	/// Moves the piece to the target square. To move the piece, use MoveToSquare
 	/// </summary>
@@ -97,9 +97,26 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		currentSquare.occupyingPiece = this;
 		transform.parentSpacePos = square.transform.worldSpacePos;
 		canTeleport = false;
+		OnTeleport?.Invoke();
 	}
 	protected bool canTeleport = true;
-	
+
+	/// <summary>
+	/// Base class for chess pieces
+	/// </summary>
+	protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
+	{
+		this.type = type;
+		this.isWhite = isWhite;
+		this.baseHealth = baseHealth;
+		this.baseDamage = baseDamage;
+		health = baseHealth;
+		
+		spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
+		
+		AddBehaviors([new ChessPieceFeedback()]);
+	}
+
 	/// <summary>
 	/// Use this if you want the piece to teleport after the initial spawning.
 	/// </summary>
@@ -121,6 +138,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		return true;
 	}
 
+	public event Action OnMove;
 	/// <summary>
 	/// Moves without requiring an action point
 	/// </summary>
@@ -131,6 +149,8 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		currentSquare = square;
 		currentSquare.occupyingPiece = this;
 		transform.parentSpacePos = square.transform.worldSpacePos;
+		
+		OnMove?.Invoke();
 	}
 
 	/// <summary>
@@ -168,6 +188,8 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		return true;
 	}
 	
+	public event Action OnGetHit;
+	
 	/// <summary>
 	/// Takes damage and dies if necessary
 	/// </summary>
@@ -179,7 +201,7 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 		bool die = false;
 		health -= damage;
 		
-		AudioManager.PlaySound(AudioClips.HitSound);
+		OnGetHit?.Invoke();
 		
 		if (health <= 0)
 		{
@@ -306,5 +328,8 @@ public abstract class ChessPiece(bool isWhite, PieceType type, int baseHealth, i
 	{
 		base.Dispose();
 		OnDeath = null;
+		OnGetHit = null;
+		OnTeleport = null;
+		OnMove = null;
 	}
 }

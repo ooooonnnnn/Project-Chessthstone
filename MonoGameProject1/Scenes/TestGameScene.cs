@@ -31,6 +31,7 @@ public class TestGameScene : Scene
 			piece.ownerPlayer = whitePlayer;
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
+			piece.InitializeBehaviors();
 		}
 
 		foreach (ChessPiece piece in blackPlayer.teamPieces)
@@ -40,6 +41,7 @@ public class TestGameScene : Scene
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
 			piece.transform.parentSpacePos = Vector2.Zero;
+			piece.InitializeBehaviors();
 		}
 		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);

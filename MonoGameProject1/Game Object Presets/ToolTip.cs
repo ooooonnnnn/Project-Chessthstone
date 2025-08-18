@@ -28,20 +28,20 @@ public class ToolTip : GameObject
     {
         this._padding = padding;
         this._textRenderer = new TextRenderer(text, width - padding);
-        this._textRenderer.layerDepth = 0.1f;
+        this._textRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
         
         transform = new Transform();
         AddBehaviors([transform, _textRenderer]);
         
         this._nineSlicedBackground = new NineSliced(
             TextureManager.ToolTipNineSliceTexture,
-            50, 100, 50, 100);
+            50, 99, 50, 99);
         
         this._nineSlicedBackgroundTransform = new Transform();
         
         transform.AddChild(new GameObject("ToolTipBackground",
             [_nineSlicedBackground, _nineSlicedBackgroundTransform]));
-        _nineSlicedBackground.layerDepth = 0.2f;
+        _nineSlicedBackground.layerDepth = LayerDepthManager.UiDepth;
         
         _nineSlicedBackgroundTransform.origin = Vector2.Zero;
         _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-_padding, -_padding);
