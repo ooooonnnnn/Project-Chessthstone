@@ -21,14 +21,14 @@ public class TestGameScene : Scene
 		Player whitePlayer = new Player("White", true){board = board};
 		Player blackPlayer = new Player("Black", false){board = board};
 		
-		//whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
-		//blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
-		whitePlayer.teamPieces = [
+		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		/*whitePlayer.teamPieces = [
 			new BasicBishop(true)
 		];
 		blackPlayer.teamPieces = [
 			new BasicBishop(false)
-		];
+		];*/
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
