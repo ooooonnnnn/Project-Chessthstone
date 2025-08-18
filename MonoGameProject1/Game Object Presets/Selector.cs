@@ -65,7 +65,7 @@ public class Selector : GameObject
         {
             Transform childTransform = sprite.transform;
             transform.AddChild(childTransform);
-            childTransform.parentSpacePos = new(-32, -10);
+            childTransform.parentSpacePos = new(-32, 0);
             sprite.spriteRenderer.sizePx = new Point(100, 100);
             childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
             if (sprite == currentSprite)

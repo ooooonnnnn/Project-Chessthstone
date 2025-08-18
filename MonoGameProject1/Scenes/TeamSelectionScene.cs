@@ -23,7 +23,7 @@ public class TeamSelectionScene : Scene
 		nextOrStartButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
 		nextOrStartButton.transform.origin = nextOrStartButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		nextOrStartButton.transform.parentSpacePos = new Vector2(
-			GameManager.Graphics.Viewport.Width / 2f + -800 + 300 * 6, 
+			GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * 6, 
 			GameManager.Graphics.Viewport.Height / 2f);
 		nextOrStartButton.AddListener(HandleNextButtonPress);
 
@@ -39,7 +39,7 @@ public class TeamSelectionScene : Scene
 		for (int i = 0; i < selectors.Length; i++)
 		{
 			selectors[i].transform.parentSpacePos = new Vector2(
-				GameManager.Graphics.Viewport.Width / 2f + -800 + 300 * i, 
+				GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * i, 
 				GameManager.Graphics.Viewport.Height / 2f);
 			objectsToAdd.Add(selectors[i]);
 		}

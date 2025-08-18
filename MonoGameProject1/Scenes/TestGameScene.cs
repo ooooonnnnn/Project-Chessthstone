@@ -26,9 +26,9 @@ public class TestGameScene : Scene
 		MatchManager.Instantiate("MatchManager");
 		PieceOverlay pieceOverlay;
 		board = new ChessBoard("");
-		board.transform.SetScaleFromFloat(0.4f);
+		board.transform.SetScaleFromFloat(0.35f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
-		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
+		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() + new Vector2(0, 64);
 		
 		whitePlayer = new Player("White", true){board = board};
 		blackPlayer = new Player("Black", false){board = board};
@@ -37,11 +37,11 @@ public class TestGameScene : Scene
 		this.blackTeam = blackTeam.ToList();
 
 		endTurnButton = new Button("End Turn Button", "", TextureManager.WhiteTurnButtonTexture);
-		endTurnButton.ChangeBackgroundScale(new Vector2(0.2f, 0.2f));
+		endTurnButton.ChangeBackgroundScale(new Vector2(0.18f, 0.18f));
 		//endTurnButton.transform.origin = endTurnButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		endTurnButton.transform.parentSpacePos = new Vector2(
-			GameManager.Graphics.Viewport.Width / 2f - 128, 
-			GameManager.Graphics.Viewport.Height / 2f - 650);
+			GameManager.Graphics.Viewport.Width / 2f - 115, 
+			GameManager.Graphics.Viewport.Height / 2f - 128 - 365);
 		
 		
 		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
@@ -126,7 +126,6 @@ public class TestGameScene : Scene
 		
 		TurnManager.instance.OnTurnChanged += isWhiteTurn =>
 		{
-			Console.WriteLine("I TRIED SO HARD TO CHANGE THE BUTTON TEXTURE" + isWhiteTurn);
 			endTurnButton.spriteRenderer.texture = isWhiteTurn
 				? TextureManager.WhiteTurnButtonTexture
 				: TextureManager.BlackTurnButtonTexture;
