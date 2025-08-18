@@ -8,7 +8,7 @@ public class AttackNearbyAbility : TriggeredAbility
 {
     public override string ToString()
     {
-        return $"When your turn starts, damage all adjacent enemy pieces by 3";
+        return "When your turn starts, deal 3 damage to all adjacent enemy pieces";
     }
 
     private GameState currentState;

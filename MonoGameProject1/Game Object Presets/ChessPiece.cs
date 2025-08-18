@@ -73,6 +73,11 @@ public abstract class ChessPiece : Sprite
 	public Ability ability { get; private set; }
 
 	/// <summary>
+	/// The tooltip object which is a child of this
+	/// </summary>
+	private ToolTip toolTip;
+
+	/// <summary>
 	/// Current position
 	/// </summary>
 	public int column => currentSquare.column;
@@ -115,6 +120,9 @@ public abstract class ChessPiece : Sprite
 		spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
 		
 		AddBehaviors([new ChessPieceFeedback()]);
+
+		toolTip = new ToolTip($"{name} tooltip", "");
+		transform.AddChild(toolTip.transform);
 	}
 
 	/// <summary>
@@ -333,8 +341,11 @@ public abstract class ChessPiece : Sprite
 	protected override void ClassifyBehavior(Behavior behavior)
 	{
 		base.ClassifyBehavior(behavior);
-		if (behavior is Ability) 
-			ability = (Ability) behavior;
+		if (behavior is Ability ab)
+		{
+			ability = ab;
+			toolTip.Text = ability.ToString();
+		}
 	}
 
 	private static string CreateName(bool isWhite, PieceType type)
