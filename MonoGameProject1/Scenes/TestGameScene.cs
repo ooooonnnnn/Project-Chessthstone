@@ -61,13 +61,25 @@ public class TestGameScene : Scene
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
-			
 			piece.ownerPlayer = whitePlayer;
+			Clickable clickable = new();
+			SenseMouseHover hover = new();
+			SpriteRectCollider collider = new();
+			piece.AddBehaviors([clickable, hover, collider]);
+
+			clickable.OnClick += () => piece.ownerPlayer.TryChooseTeamPiece(piece);
 		}
 
 		foreach (ChessPiece piece in blackPlayer.teamPieces)
 		{
 			piece.ownerPlayer = blackPlayer;
+			
+			Clickable clickable = new();
+			SenseMouseHover hover = new();
+			SpriteRectCollider collider = new();
+			piece.AddBehaviors([clickable, hover, collider]);
+
+			clickable.OnClick += () => piece.ownerPlayer.TryChooseTeamPiece(piece);
 		}
 		
 		foreach (var piece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))

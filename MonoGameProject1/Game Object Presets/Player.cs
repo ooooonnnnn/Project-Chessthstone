@@ -191,10 +191,6 @@ public class Player : GameObject
         return true;
     }
 
-    //TODO: this is a placeholder. change to mouse control
-    private readonly Keys[] numberKeys =
-        [Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9];
-
     /// <summary>
     /// A player in the game.
     /// </summary>
@@ -204,23 +200,16 @@ public class Player : GameObject
         TurnManager.instance.OnTurnChanged += isItMyTurn => DeselectAll();
     }
 
-    public override void Update(GameTime gameTime)
+    /// <summary>
+    /// Attempts to choose a piece from the team 
+    /// </summary>
+    public void TryChooseTeamPiece(ChessPiece piece)
     {
-        base.Update(gameTime);
-
-        if (isPlayerActive)
+        if (isPlayerActive && GamePhaseManager.instance.phase == GamePhase.Setup)
         {
-            KeyboardState state = Keyboard.GetState();
-            for (int i = 0; i < numberKeys.Length; i++)
+            if (teamPieces.Contains(piece))
             {
-                if (i > teamPieces.Count - 1)
-                    break;
-                if (state.IsKeyDown(numberKeys[i]))
-                {
-                    _pieceToPlace = teamPieces[i];
-                    Console.WriteLine($"Chose {_pieceToPlace.name} to place");
-                    return;
-                }
+                _pieceToPlace = piece;
             }
         }
     }
