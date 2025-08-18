@@ -53,7 +53,7 @@ public class TestGameScene : Scene
 				TextureManager.GetActionPointsIcon(),
 				FontManager.defaultFont);
 			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
-			pieceOverlay.SetChessPiece(piece);
+			pieceOverlay.SetChessPiece(piece); 
 		}
 		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
