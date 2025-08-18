@@ -11,70 +11,70 @@ namespace MonoGameProject1;
 
 public class Game1 : Game
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+	private GraphicsDeviceManager _graphics;
+	private SpriteBatch _spriteBatch;
 
-    public Game1()
-    {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-        //Full screen
-        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-        _graphics.IsFullScreen = false;
-        Window.IsBorderless = false;
-        _graphics.ApplyChanges();
-    }
+	public Game1()
+	{
+		_graphics = new GraphicsDeviceManager(this);
+		Content.RootDirectory = "Content";
+		IsMouseVisible = true;
+		//Full screen
+		_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+		_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+		_graphics.IsFullScreen = false;
+		Window.IsBorderless = false;
+		_graphics.ApplyChanges();
+	}
 
-    protected override void Initialize()
-    {
-        // TODO: Add your initialization logic here
-        //Setup managers
-        TextureManager.game = this;
-        GameManager.game = this;
-        FontManager.game = this;
-        AudioClips.game = this;
-        base.Initialize();
-    }
+	protected override void Initialize()
+	{
+		// TODO: Add your initialization logic here
+		//Setup managers
+		TextureManager.game = this;
+		GameManager.game = this;
+		FontManager.game = this;
+		AudioClips.game = this;
+		base.Initialize();
+	}
 
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+	protected override void LoadContent()
+	{
+		_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // TODO: use this.Content to load your game content here
-        TextureManager.LoadTextures();
-        FontManager.LoadFonts();
-        AudioClips.LoadAudio();
-        // End loading here
+		// TODO: use this.Content to load your game content here
+		TextureManager.LoadTextures();
+		FontManager.LoadFonts();
+		AudioClips.LoadAudio();
+		// End loading here
+		SceneManager.ChangeScene(new TestHUDScene());
+		//SceneManager.ChangeScene(new TeamSelectionScene());
+		//SceneManager.ChangeScene(new TestGameScene());
+	}
+	
+	protected override void Update(GameTime gameTime)
+	{
+		if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+		    Keyboard.GetState().IsKeyDown(Keys.Escape))
+			Exit();
 
-        SceneManager.ChangeScene(new TeamSelectionScene());
-        //SceneManager.ChangeScene(new TestGameScene());
-    }
+		// TODO: Add your update logic here
+		MouseInput.Update(gameTime);
+		SceneManager.Update(gameTime);
+		
+		base.Update(gameTime);
+	}
 
-    protected override void Update(GameTime gameTime)
-    {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+	protected override void Draw(GameTime gameTime)
+	{
+		GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your update logic here
-        MouseInput.Update(gameTime);
-        SceneManager.Update(gameTime);
+		// TODO: Add your drawing code here
+		_spriteBatch.Begin(SpriteSortMode.BackToFront);
+		SceneManager.Draw(_spriteBatch);
+		_spriteBatch.End();
+		base.Draw(gameTime);
+	}
 
-        base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(new Color(85, 69, 50));
-
-        // TODO: Add your drawing code here
-        _spriteBatch.Begin(SpriteSortMode.BackToFront);
-        SceneManager.Draw(_spriteBatch);
-        _spriteBatch.End();
-        base.Draw(gameTime);
-    }
-
-    public static void Print(object obj) => Console.WriteLine(obj);
+	public static void Print(object obj) => Console.WriteLine(obj);
 }

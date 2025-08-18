@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,9 +17,10 @@ public static class TextureManager
 	public static Texture2D KingBlackDeathSheet{ get; private set; }
 	private static Texture2D[] _chessSquareTextures;
 	private static Texture2D[,] _chessPieceTextures= new Texture2D[2,6];
-	
+	private static Texture2D _healthIcon;
+	private static Texture2D _damageIcon;
+	private static Texture2D _actionPointsIcon;
 	public static Texture2D ToolTipNineSliceTexture { get; private set; }
-
 	public static void LoadTextures()
 	{
 		_defaultButtonTexture = game.Content.Load<Texture2D>("Images/RoundedFilledSquare");
@@ -26,6 +28,9 @@ public static class TextureManager
 		TestSpriteSheetTexture = game.Content.Load<Texture2D>("Images/SpriteSheets/TestSpriteSheet");
 		KingBlackDeathSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingDeathBlack2");
 		_chessSquareTextures = new Texture2D[2];
+		_healthIcon = game.Content.Load<Texture2D>("Images/Icons/healthIcon");
+		_damageIcon = game.Content.Load<Texture2D>("Images/Icons/damageIcon");
+		_actionPointsIcon = game.Content.Load<Texture2D>("Images/Icons/actionPointsIcon");
 		_chessSquareTextures[0] = game.Content.Load<Texture2D>("Images/tile1BlackWithCorners");
 		_chessSquareTextures[1] = game.Content.Load<Texture2D>("Images/tile1WhiteWithCorners");
 		
@@ -63,5 +68,19 @@ public static class TextureManager
 	public static Texture2D GetChessPieceTexture(bool isWhite, PieceType type)
 	{
 		return _chessPieceTextures[isWhite ? 1 : 0, (int) type];
+	}
+	public static Texture2D GetHealthIcon()
+	{
+		return _healthIcon;
+	}
+	
+	public static Texture2D GetDamageIcon()
+	{
+		return _damageIcon;
+	}
+	
+	public static Texture2D GetActionPointsIcon()
+	{
+		return _actionPointsIcon;
 	}
 }

@@ -266,4 +266,14 @@ public class Player : GameObject
         if (board != null)
             board.OnSquareClicked -= HandleSquareClicked;
     }
+    public static event Action <int, bool> OnManaChanged; 
+    public void AddMana(int amount)
+    {
+        mana += amount;
+        OnManaChanged?.Invoke(mana, isWhite);
+        
+        // Update HUD or any other UI element that displays mana
+
+        Console.WriteLine($"{name} gained {amount} mana, now has {mana}");
+    }
 }

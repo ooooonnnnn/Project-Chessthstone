@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
+using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Scenes;
 
@@ -8,49 +10,54 @@ public class TestGameScene : Scene
 {
 	public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
 	{
-		TriggerManager.Instantiate("TriggerManager");
-		GamePhaseManager.Instantiate("GamePhaseManager");
-		TurnManager.Instantiate("TurnManager");
-		
 		ChessBoard board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.2f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 
+		TriggerManager.Instantiate("TriggerManager");
+		GamePhaseManager.Instantiate("GamePhaseManager");
 		
 		Player whitePlayer = new Player("White", true){board = board};
-		Player blackPlayer = new Player("Black", false){board = board};
-		
+		Player blackPlayer = new Player("Black", false){board = board}; 
+		PlayerStatsHUD whiteStatsHud = new PlayerStatsHUD(true, 0);
+		PlayerStatsHUD blackStatsHud = new PlayerStatsHUD(false, 0);
 		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
 		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 		/*whitePlayer.teamPieces = [
 			new BasicBishop(true)
-		];
+		];   v/.......................zMmmk
 		blackPlayer.teamPieces = [
 			new BasicBishop(false)
 		];*/
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
-			piece.SetActive(true);
 			piece.ownerPlayer = whitePlayer;
-			piece.board = board;
-			piece.transform.origin = Vector2.Zero;
-			piece.InitializeBehaviors();
-		}
-
-		foreach (ChessPiece piece in blackPlayer.teamPieces)
-		{
-			piece.SetActive(true);
-			piece.ownerPlayer = blackPlayer;
-			piece.board = board;
-			piece.transform.origin = Vector2.Zero;
-			piece.transform.parentSpacePos = Vector2.Zero;
-			piece.InitializeBehaviors();
 		}
 		
-		TurnManager.instance.Board = board;
-		TurnManager.instance.SetPlayers(blackPlayer, whitePlayer);
+		foreach (ChessPiece piece in blackPlayer.teamPieces)
+		{
+			piece.ownerPlayer = blackPlayer;
+		}
+		
+		foreach (ChessPiece piece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))
+		{
+			piece.SetActive(true);
+			piece.board = board;
+			piece.transform.origin = Vector2.Zero;
+			
+			//Add overlays to the pieces
+			PieceOverlay pieceOverlay = new PieceOverlay(
+				TextureManager.GetHealthIcon(),
+				TextureManager.GetDamageIcon(),
+				TextureManager.GetActionPointsIcon(),
+				FontManager.defaultFont);
+			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
+			pieceOverlay.SetChessPiece(piece); 
+		}
+		
+		TurnManager.Instantiate("TurnManager");
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
@@ -60,7 +67,13 @@ public class TestGameScene : Scene
 			if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
 				TurnManager.instance.ChangeTurn();
 		});
-		
+		Player.OnManaChanged += (mana, isWhite) =>
+		{
+			if (isWhite)
+				whiteStatsHud.UpdateMana(mana);
+			else
+				blackStatsHud.UpdateMana(mana);
+		};
 		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance, 
 		GamePhaseManager.instance]);
 	}

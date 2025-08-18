@@ -7,7 +7,7 @@ namespace MonoGameProject1;
 
 public class ToolTip : GameObject
 {
-    private TextRenderer _textRenderer;
+    protected TextRenderer _textRenderer;
     public string Text {
         get => _textRenderer.Text;
         set
