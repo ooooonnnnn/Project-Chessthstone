@@ -32,6 +32,7 @@ public static class SceneManager
 		}
 		
 		_currentOpenScenes.Add(scene);
+		scene.Initialize();
 		scene.isLoaded = true;
 	}
 

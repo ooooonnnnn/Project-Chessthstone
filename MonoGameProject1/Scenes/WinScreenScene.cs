@@ -35,4 +35,9 @@ public class WinScreenScene : Scene
 		
 		AddGameObjects([txtObj, restart, quit]);
 	}
+	
+	public override void Initialize()
+	{
+		Console.WriteLine($"{this} isn't initializing anything");
+	}
 }

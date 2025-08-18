@@ -7,6 +7,10 @@ namespace MonoGameProject1.Scenes;
 
 public class TestGameScene : Scene
 {
+	private Player whitePlayer;
+	private Player blackPlayer;
+
+
 	public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
 	{
 		ChessBoard board = new ChessBoard("");
@@ -19,19 +23,18 @@ public class TestGameScene : Scene
 		MatchManager.Instantiate("MatchManager");
 		MatchManager.instance.board = board;
 		
-		Player whitePlayer = new Player("White", true){board = board};
-		Player blackPlayer = new Player("Black", false){board = board};
-		
+		whitePlayer = new Player("White", true){board = board};
+		blackPlayer = new Player("Black", false){board = board};
+
 		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
 		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 
-		foreach (ChessPiece piece in whitePlayer.teamPieces)
+		foreach (ChessPiece piece in this.whitePlayer.teamPieces)
 		{
 			piece.SetActive(true);
-			piece.ownerPlayer = whitePlayer;
+			piece.ownerPlayer = this.whitePlayer;
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
-			piece.InitializeBehaviors();
 		}
 
 		foreach (ChessPiece piece in blackPlayer.teamPieces)
@@ -41,10 +44,9 @@ public class TestGameScene : Scene
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
 			piece.transform.parentSpacePos = Vector2.Zero;
-			piece.InitializeBehaviors();
 		}
 		
-		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
+		TurnManager.Instantiate("TurnManager", board, blackPlayer, this.whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
@@ -55,9 +57,17 @@ public class TestGameScene : Scene
 				TurnManager.instance.ChangeTurn();
 		});
 		
-		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
+		AddGameObjects([board, this.whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
 			TriggerManager.instance, 
 			GamePhaseManager.instance,
 			MatchManager.instance]);
+	}
+
+	public override void Initialize()
+	{
+		foreach (var chessPiece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))
+		{
+			chessPiece.InitializeBehaviors();
+		}
 	}
 }

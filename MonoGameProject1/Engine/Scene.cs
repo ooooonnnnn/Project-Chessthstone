@@ -63,6 +63,11 @@ public abstract class Scene : IDisposable
 			SceneManager.AddGameObject(gameObject);
 		}
 	}
+	
+	/// <summary>
+	/// Do your initialization here. NOT IN THE CONSTRUCTOR
+	/// </summary>
+	public abstract void Initialize();
 
 	/// <summary>
 	/// Removes and disposes a gameobject. 
@@ -89,6 +94,4 @@ public abstract class Scene : IDisposable
 		
 		gameObjects = null;
 	}
-
-	
 }

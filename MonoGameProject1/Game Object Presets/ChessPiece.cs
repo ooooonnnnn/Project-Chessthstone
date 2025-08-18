@@ -315,7 +315,8 @@ public abstract class ChessPiece : Sprite
 	protected override void ClassifyBehavior(Behavior behavior)
 	{
 		base.ClassifyBehavior(behavior);
-		if (behavior is Ability) ability = (Ability) behavior;
+		if (behavior is Ability) 
+			ability = (Ability) behavior;
 	}
 
 	private static string CreateName(bool isWhite, PieceType type)
