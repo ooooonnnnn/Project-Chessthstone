@@ -1,4 +1,6 @@
-﻿namespace MonoGameProject1.Behaviors;
+﻿using Microsoft.Xna.Framework;
+
+namespace MonoGameProject1.Behaviors;
 
 public class TeleportToTileAbility : ActivatedAbility
 {
@@ -14,6 +16,6 @@ public class TeleportToTileAbility : ActivatedAbility
     
     protected override void OneShotEffect()
     {
-        
+        //Doesn't work right now!!!
     }
 }
