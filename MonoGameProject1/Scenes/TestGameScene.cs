@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using MonoGameProject1.Behaviors;
-using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Scenes;
 
@@ -21,39 +19,32 @@ public class TestGameScene : Scene
 		Player whitePlayer = new Player("White", true){board = board};
 		Player blackPlayer = new Player("Black", false){board = board};
 		
-		//whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
-		//blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
-		whitePlayer.teamPieces = [
+		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		/*whitePlayer.teamPieces = [
 			new BasicBishop(true)
 		];
 		blackPlayer.teamPieces = [
 			new BasicBishop(false)
-		];
+		];*/
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
-			piece.ownerPlayer = whitePlayer;
-		}
-		
-		foreach (ChessPiece piece in blackPlayer.teamPieces)
-		{
-			piece.ownerPlayer = blackPlayer;
-		}
-		
-		foreach (ChessPiece piece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))
-		{
 			piece.SetActive(true);
+			piece.ownerPlayer = whitePlayer;
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
-			
-			//Add overlays to the pieces
-			PieceOverlay pieceOverlay = new PieceOverlay(
-				TextureManager.GetHealthIcon(),
-				TextureManager.GetDamageIcon(),
-				TextureManager.GetActionPointsIcon(),
-				FontManager.defaultFont);
-			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
-			pieceOverlay.SetChessPiece(piece);
+			piece.InitializeBehaviors();
+		}
+
+		foreach (ChessPiece piece in blackPlayer.teamPieces)
+		{
+			piece.SetActive(true);
+			piece.ownerPlayer = blackPlayer;
+			piece.board = board;
+			piece.transform.origin = Vector2.Zero;
+			piece.transform.parentSpacePos = Vector2.Zero;
+			piece.InitializeBehaviors();
 		}
 		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);

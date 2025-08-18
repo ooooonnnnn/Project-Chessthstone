@@ -10,6 +10,9 @@ public class TestToolTipScene : Scene
             "This is a test tooltip with a longer text to see how it behaves when the text is longer than the width of the tooltip.",
             400);
         toolTip.transform.parentSpacePos = new Vector2(100, 100);
-        AddGameObjects([toolTip]);
+
+        Button button = new Button("trololol", "trololololololololo lololol");
+        
+        AddGameObjects([toolTip, button]);
     }
 }
