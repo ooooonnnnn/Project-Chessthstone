@@ -1,3 +1,4 @@
+using System;
 using System.Buffers.Text;
 using System.Linq;
 using MonoGameProject1.Behaviors;
@@ -30,6 +31,12 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	/// </summary>
 	public void UpdateStateAndTryTrigger(bool isWhiteTurn)
 	{
+		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
+		{
+			Console.WriteLine("Not updating state because phase is not gameplay");
+			return;
+		}
+		
 		UpdateGameState(isWhiteTurn);
 		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
 			return;
@@ -49,6 +56,11 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 	/// </summary>
 	private void UpdateGameState(bool isWhiteTurn)
 	{
+		if (parentScene?.gameObjects is null)
+		{
+			Console.WriteLine("Can't check state because parent scene is empty");
+			return;
+		}
 		_prevState = _currentState;
 		_currentState = new GameState(isWhiteTurn, parentScene);
 	}
