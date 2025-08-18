@@ -25,12 +25,12 @@ public class PieceOverlay : Renderer
     
     // Layout properties
     public Vector2 iconSpacing = new Vector2(0, 32); // Vertical spacing between elements
-    public Vector2 textOffset = new Vector2(32, 0);  // Offset of text from icon
+    public Vector2 textOffset = new Vector2(0, 32);  // Offset of text from icon
     public Color textColor = Color.White;
     public Color underTextColor = Color.Black;
     public float iconScale = 0.5f;
-    public float textScale = 2.5f;
-    public float underTextScale = 2.6f;
+    public float textScale = 2.0f;
+    public float underTextScale = 2.2f;
 
     private ChessPiece parentPiece;
 
@@ -45,6 +45,7 @@ public class PieceOverlay : Renderer
 
     /// <summary>
     /// Sets the parent piece of this overlay and subscribes to the pieces' stat change events
+    /// </summary>
     /// </summary>
     /// <param name="piece"></param>
     public void SetChessPiece(ChessPiece piece)
@@ -83,15 +84,15 @@ public class PieceOverlay : Renderer
     {
         // The overlay's world position is at the center of the sprite
         Vector2 centerPosition = _transform.worldSpacePos;
-        
         // Define positioning offsets from center
+        float verticalOffset = -20f; // No horizontal offset for the center icon
         float horizontalSpacing = 120f; // Distance from center for left/right icons
         float verticalSpacing = -75f;   // Distance from center for top icon
         
         // Calculate positions relative to the sprite center
         Vector2 healthPos = centerPosition + new Vector2(0, -verticalSpacing) * _transform.worldSpaceScale; // Top
-        Vector2 damagePos = centerPosition + new Vector2(-horizontalSpacing, 0) * _transform.worldSpaceScale; // Left
-        Vector2 actionPos = centerPosition + new Vector2(horizontalSpacing, 0) * _transform.worldSpaceScale; // Right
+        Vector2 damagePos = centerPosition + new Vector2(-horizontalSpacing, verticalOffset) * _transform.worldSpaceScale; // Left
+        Vector2 actionPos = centerPosition + new Vector2(horizontalSpacing, verticalOffset) * _transform.worldSpaceScale; // Right
         
         // Draw the icons at their respective positions
         DrawStatWithIcon(spriteBatch, healthIcon, health.ToString(), healthPos);
