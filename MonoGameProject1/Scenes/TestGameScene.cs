@@ -21,6 +21,7 @@ public class TestGameScene : Scene
 		TriggerManager.Instantiate("TriggerManager");
 		GamePhaseManager.Instantiate("GamePhaseManager");
 		TurnManager.Instantiate("TurnManager");
+		MatchManager.Instantiate("MatchManager");
 		
 		board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.4f);
@@ -50,6 +51,11 @@ public class TestGameScene : Scene
 		// blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 		whitePlayer.teamPieces = [new Pawn(true, 1, 1)];
 		blackPlayer.teamPieces = [new Pawn(false, 1, 1)];
+		
+		TurnManager.instance.SetPlayers(whitePlayer, blackPlayer);
+		TurnManager.instance.board = board;
+		
+		MatchManager.instance.board =  board;
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
@@ -77,7 +83,15 @@ public class TestGameScene : Scene
 				TurnManager.instance.ChangeTurn();
 		});
 		
-
+		GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
+		{
+			if (phase is GamePhase.Gameplay or GamePhase.Setup &&
+			    prev is not (GamePhase.Gameplay or GamePhase.Setup))
+			{
+				TurnManager.instance.StartGame();
+			}
+		};
+		
 		GamePhaseManager.instance.phase = GamePhase.Setup;
 	}
 }

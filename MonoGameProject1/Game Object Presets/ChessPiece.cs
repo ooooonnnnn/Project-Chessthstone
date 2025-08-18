@@ -240,7 +240,6 @@ public abstract class ChessPiece : Sprite
 	private void Die()
 	{
 		//TODO: add death animation
-		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
 		OnDeath?.Invoke(this);
 		if (GamePhaseManager.instance.phase == GamePhase.Gameplay)

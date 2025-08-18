@@ -67,12 +67,6 @@ public class GamePhaseManager : SingletonGameObject<GamePhaseManager>
 		if (instance == null)
 			instance = new GamePhaseManager(name);
 	}
-	
-	public override void Start()
-	{
-		base.Start();
-		phase = GamePhase.Setup;
-	}
 
 	public override void Dispose()
 	{

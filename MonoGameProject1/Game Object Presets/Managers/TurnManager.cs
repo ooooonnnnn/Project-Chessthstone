@@ -14,7 +14,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// </summary>
 	public bool isWhiteTurn { get; private set; } = true;
 	private Player _blackPlayer, _whitePlayer;
-	private ChessBoard _board;
+	public ChessBoard board;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
 	public Player inactivePlayer => isWhiteTurn ? _blackPlayer : _whitePlayer;
 
@@ -31,14 +31,15 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	{
 		GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
 		{
-			if (phase is GamePhase.Gameplay or GamePhase.Setup && prev == GamePhase.None)
+			if (phase is GamePhase.Gameplay or GamePhase.Setup &&
+			    prev is not (GamePhase.Gameplay or GamePhase.Setup))
 			{
 				StartTurn();
 			}
 		};
 	}
 
-	public void SetPlayers(Player blackPlayer, Player whitePlayer)
+	public void SetPlayers(Player whitePlayer, Player blackPlayer)
 	{
 		this._blackPlayer = blackPlayer;
 		this._whitePlayer = whitePlayer;
@@ -52,17 +53,30 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// </summary>
 	public void ChangeTurn()
 	{
+		if (GamePhaseManager.instance.phase != GamePhase.Gameplay && 
+		    GamePhaseManager.instance.phase != GamePhase.Setup)
+			return;
+		
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
-		OnTurnChanged?.Invoke(isWhiteTurn);
 		StartTurn();
+		OnTurnChanged?.Invoke(isWhiteTurn);
 		TriggerManager.instance.UpdateStateAndTryTrigger(isWhiteTurn);
 	}
 
+	/// <summary>
+	/// Sets the turn to white and starts turn
+	/// </summary>
+	public void StartGame()
+	{
+		isWhiteTurn = true;
+		StartTurn();
+	}
+	
 	private void EndTurn()
 	{
 		Player player = activePlayer;
-		_board.OnSquareClicked -= player.HandleSquareClicked;
+		board.OnSquareClicked -= player.HandleSquareClicked;
 		MouseInput.OnRightClick -= player.TryActivateAbility;
 		Console.WriteLine($"{player.name}'s turn ended");
 		
@@ -76,7 +90,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		Player player = activePlayer;
 		Console.WriteLine($"{player.name}'s turn starting");
 		//Subscribe player to input actions
-		_board.OnSquareClicked += player.HandleSquareClicked;
+		board.OnSquareClicked += player.HandleSquareClicked;
 		MouseInput.OnRightClick += player.TryActivateAbility;
 		
 		//Reset mana and action points
@@ -100,5 +114,11 @@ public class TurnManager : SingletonGameObject<TurnManager>
 			Console.WriteLine(string.Join(", ",
 				inactivePlayer.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
 		}
+	}
+
+	public override void Dispose()
+	{
+		base.Dispose();
+		OnTurnChanged = null;
 	}
 }

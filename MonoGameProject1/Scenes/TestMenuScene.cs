@@ -71,6 +71,6 @@ public class TestMenuScene : Scene
 	
 	public override void Initialize()
 	{
-		Console.WriteLine($"{this} isn't initializing anything");
+		// Console.WriteLine($"{this} isn't initializing anything");
 	}
 }
