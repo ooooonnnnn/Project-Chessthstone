@@ -20,6 +20,11 @@ public class TeamSelectionScene : Scene
 	public TeamSelectionScene()
 	{
 		nextOrStartButton = new ("Next or start", "Ready");
+		nextOrStartButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
+		nextOrStartButton.transform.origin = nextOrStartButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+		nextOrStartButton.transform.parentSpacePos = new Vector2(
+			GameManager.Graphics.Viewport.Width / 2f + -800 + 300 * 6, 
+			GameManager.Graphics.Viewport.Height / 2f);
 		nextOrStartButton.AddListener(HandleNextButtonPress);
 
 		List<GameObject> objectsToAdd = [nextOrStartButton];
