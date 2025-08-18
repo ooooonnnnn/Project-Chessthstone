@@ -25,12 +25,12 @@ public class PieceOverlay : Renderer
     
     // Layout properties
     public Vector2 iconSpacing = new Vector2(0, 32); // Vertical spacing between elements
-    public Vector2 textOffset = new Vector2(0, 32);  // Offset of text from icon
+    public Vector2 textOffset = new Vector2(0, 36);  // Offset of text from icon
     public Color textColor = Color.White;
     public Color underTextColor = Color.Black;
-    public float iconScale = 0.5f;
-    public float textScale = 2.0f;
-    public float underTextScale = 2.2f;
+    public float iconScale = 0.35f;
+    public float textScale = 1.8f;
+    public float underTextScale = 2.0f;
 
     private ChessPiece parentPiece;
 
@@ -131,7 +131,7 @@ public class PieceOverlay : Renderer
             Vector2.Zero, 
             _transform.worldSpaceScale* underTextScale, 
             effects, 
-            layerDepth + 0.001f // Slightly higher layer to appear on top
+            layerDepth + 0.002f // Slightly higher layer to appear on top
         );
         
         spriteBatch.DrawString(
@@ -143,7 +143,7 @@ public class PieceOverlay : Renderer
             Vector2.Zero, 
             _transform.worldSpaceScale* textScale, 
             effects, 
-            layerDepth + 0.002f // Slightly higher layer to appear on top
+            layerDepth + 0.001f // Slightly higher layer to appear on top
             
         );
 
