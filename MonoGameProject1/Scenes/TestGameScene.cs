@@ -56,7 +56,7 @@ public class TestGameScene : Scene
 			pieceOverlay.SetChessPiece(piece); 
 		}
 		
-		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
+		TurnManager.Instantiate("TurnManager");
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;

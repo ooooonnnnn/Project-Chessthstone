@@ -101,4 +101,5 @@ public class TurnManager : SingletonGameObject<TurnManager>
 				inactivePlayer.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
 		}
 	}
+	
 }
