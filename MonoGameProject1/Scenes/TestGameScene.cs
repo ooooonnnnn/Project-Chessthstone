@@ -47,10 +47,10 @@ public class TestGameScene : Scene
 	{
 		Console.WriteLine("Initializing Game Scene");
 		
-		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
-		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
-		// whitePlayer.teamPieces = [new Pawn(true, 1, 1)];
-		// blackPlayer.teamPieces = [new Pawn(false, 1, 1)];
+		// whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		// blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		whitePlayer.teamPieces = [new Pawn(true, 1, 1)];
+		blackPlayer.teamPieces = [new Pawn(false, 1, 1)];
 		
 		TurnManager.instance.SetPlayers(whitePlayer, blackPlayer);
 		TurnManager.instance.board = board;
