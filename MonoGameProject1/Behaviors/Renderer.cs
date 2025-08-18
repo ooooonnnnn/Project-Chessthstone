@@ -14,7 +14,7 @@ public abstract class Renderer : Behavior, IDrawable
 {
 	public Color color = Color.White;
 	public SpriteEffects effects = SpriteEffects.None;
-	public float layerDepth = 0;
+	public float layerDepth = LayerDepthManager.UiDepth;
 	protected Transform _transform;
 	
 	public override void Initialize()

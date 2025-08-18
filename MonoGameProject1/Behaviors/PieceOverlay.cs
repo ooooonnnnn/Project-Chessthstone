@@ -131,7 +131,7 @@ public class PieceOverlay : Renderer
             Vector2.Zero, 
             _transform.worldSpaceScale* underTextScale, 
             effects, 
-            layerDepth + 0.002f // Slightly higher layer to appear on top
+            layerDepth - 0.01f // Slightly higher layer to appear on top
         );
         
         spriteBatch.DrawString(
@@ -143,7 +143,7 @@ public class PieceOverlay : Renderer
             Vector2.Zero, 
             _transform.worldSpaceScale* textScale, 
             effects, 
-            layerDepth + 0.001f // Slightly higher layer to appear on top
+            layerDepth - 0.02f // Slightly higher layer to appear on top
             
         );
 
