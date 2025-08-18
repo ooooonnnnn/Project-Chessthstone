@@ -3,9 +3,9 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// 2 Mana, this gains 1 action point
 /// </summary>
-public class BasicKnightAbility : ActivatedAbility
+public class RegainApAbility : ActivatedAbility
 {
-	public BasicKnightAbility() => manaCost = 2;
+	public RegainApAbility() => manaCost = 2;
 	
 	protected override void OneShotEffect()
 	{

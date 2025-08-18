@@ -153,6 +153,7 @@ public abstract class ChessPiece : Sprite
 		OnMove?.Invoke();
 	}
 
+	public event Action OnAttack;
 	/// <summary>
 	/// Tries attacking the piece that's on the square. Moves if the attacked piece died.
 	/// </summary>
@@ -170,7 +171,24 @@ public abstract class ChessPiece : Sprite
 			DoMoveToSquare(square);
 		}
 		
+		OnAttack?.Invoke();
 		return true;
+	}
+	
+	/// <summary>
+	/// Deals damage to the piece if it is in range without spending action point. <br/>
+	/// </summary>
+	public void DealDamageToPiece(ChessPiece piece, int damage = 0)
+	{
+		if (damage <= 0) damage = baseDamage;
+		if (piece == null)
+		{
+			Console.WriteLine($"{name} tried to attack a null piece");
+			return;
+		}
+
+		Console.WriteLine($"{name} damaged {piece.name} for {damage} damage");
+		piece.TakeDamage(damage);
 	}
 
 	/// <summary>
