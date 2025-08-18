@@ -44,7 +44,7 @@ public class Player : GameObject
     private ChessPiece _pieceToPlace;
 
     /// <summary>
-    /// The pieckes that are currently on the board
+    /// The pieces that are currently on the board
     /// </summary>
     private List<ChessPiece> _alivePieces { get; } = new();
 
@@ -181,6 +181,17 @@ public class Player : GameObject
             Console.WriteLine($"Removing {pieceToRemove.name}");
             _alivePieces.Remove(pieceToRemove);
         };
+        foreach (var child in _pieceToPlace.transform.children)
+        {
+            try
+            {
+                child.TryGetBehavior<PieceOverlay>();
+                child.SetActive(true);
+            }
+            catch
+            {
+            }
+        }
 
         _pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
         parentScene.AddGameObjects([_pieceToPlace]);
