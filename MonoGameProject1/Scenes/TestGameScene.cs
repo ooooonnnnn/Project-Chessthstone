@@ -76,15 +76,21 @@ public class TestGameScene : Scene
 			piece.InitializeBehaviors();
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
-			piece.transform.parentSpacePos = Vector2.Zero;
 			PieceOverlay pieceOverlay = new PieceOverlay(
 				TextureManager.GetHealthIcon(),
 				TextureManager.GetDamageIcon(),
 				TextureManager.GetActionPointsIcon(),
 				FontManager.defaultFont);
-			new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
+			GameObject overlayObj = new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
 			pieceOverlay.SetChessPiece(piece);
+			
+			overlayObj.SetActive(false);
 		}
+
+		ArrangeTeamPieces();
+
+		AddGameObjects(whitePlayer.teamPieces.Concat(blackPlayer.teamPieces).Cast<
+		GameObject>().ToList());
 		
 		endTurnButton.AddListener(() =>
 		{
@@ -102,5 +108,32 @@ public class TestGameScene : Scene
 		};
 		
 		GamePhaseManager.instance.phase = GamePhase.Setup;
+	}
+
+	private void ArrangeTeamPieces()
+	{
+		Vector2 center = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
+		float groupDist = 700;
+		float upOffset = -200;
+		float rightOffset = -125;
+		float elementDist = 150;
+
+		Vector2 groupTopLeft = center + Vector2.UnitX * (rightOffset + groupDist) + Vector2.UnitY * upOffset;
+		for (int i = 0; i < whitePlayer.teamPieces.Count; i ++)
+		{
+			ChessPiece piece = whitePlayer.teamPieces[i];
+			piece.transform.parentSpacePos = groupTopLeft 
+			                                 + Vector2.UnitX * elementDist * (i % 2)
+			                                 +  Vector2.UnitY * elementDist * (i / 2);
+		}
+
+		groupTopLeft = center + Vector2.UnitX * (rightOffset - groupDist) + Vector2.UnitY * upOffset;
+		for (int i = 0; i < blackPlayer.teamPieces.Count; i ++)
+		{
+			ChessPiece piece = blackPlayer.teamPieces[i];
+			piece.transform.parentSpacePos = groupTopLeft 
+			                                 + Vector2.UnitX * elementDist * (i % 2)
+			                                 +  Vector2.UnitY * elementDist * (i / 2);
+		}
 	}
 }
