@@ -183,6 +183,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/passTurnBlack.png
 
+#begin Images/passTurnBlackClear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/passTurnBlackClear.png
+
 #begin Images/passTurnWhite.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -194,6 +206,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/passTurnWhite.png
+
+#begin Images/passTurnWhiteClear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/passTurnWhiteClear.png
 
 #begin Images/pawnBlack.png
 /importer:TextureImporter
