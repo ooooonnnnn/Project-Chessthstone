@@ -36,8 +36,13 @@ public class TestGameScene : Scene
 		this.whiteTeam = whiteTeam.ToList();
 		this.blackTeam = blackTeam.ToList();
 
-		endTurnButton = new Button("End Turn Button", "End Turn");
-		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;
+		endTurnButton = new Button("End Turn Button", "", TextureManager.WhiteTurnButtonTexture);
+		endTurnButton.ChangeBackgroundScale(new Vector2(0.2f, 0.2f));
+		//endTurnButton.transform.origin = endTurnButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+		endTurnButton.transform.parentSpacePos = new Vector2(
+			GameManager.Graphics.Viewport.Width / 2f - 128, 
+			GameManager.Graphics.Viewport.Height / 2f - 650);
+		
 		
 		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
 			TriggerManager.instance, 
@@ -117,6 +122,14 @@ public class TestGameScene : Scene
 			{
 				TurnManager.instance.StartGame();
 			}
+		};
+		
+		TurnManager.instance.OnTurnChanged += isWhiteTurn =>
+		{
+			Console.WriteLine("I TRIED SO HARD TO CHANGE THE BUTTON TEXTURE" + isWhiteTurn);
+			endTurnButton.spriteRenderer.texture = isWhiteTurn
+				? TextureManager.WhiteTurnButtonTexture
+				: TextureManager.BlackTurnButtonTexture;
 		};
 		
 		GamePhaseManager.instance.phase = GamePhase.Setup;
