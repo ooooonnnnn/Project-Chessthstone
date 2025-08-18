@@ -14,26 +14,29 @@ public static class ChessPieceFactory
 		{
 			case PieceType.Pawn:
 			{
-				yield return new Pawn(isWhite, 1, 1); 
+				yield return new PawnBasic(isWhite);
+				yield return new PawnAttackNearby(isWhite);
 				yield break;
 			}
 			case PieceType.Knight:
+				yield return new KnightBasic(isWhite);
 				yield return new KnightRegainAp(isWhite);
-				yield return new Knight(isWhite, 1 ,1);
 				yield break;
 			case PieceType.Bishop:
+				yield return new BishopBasic(isWhite);
 				yield return new BishopRegainAp(isWhite);
-				yield return new Bishop(isWhite, 1 ,1);
 				yield break;
 			case PieceType.Rook:
-				yield return new Rook(isWhite, 1 ,1);
+				yield return new RookBasic(isWhite);
+				yield return new RookAttackInPlusRange(isWhite);
 				yield break;
 			case PieceType.Queen:
-				yield return new Queen(isWhite, 1 ,1);
+				yield return new QueenBasic(isWhite);
+				yield return new QueenGainManaOnAttack(isWhite);
 				yield break;
 			case PieceType.King:
+				yield return new KingBasic(isWhite);
 				yield return new KingGainManaFromAdj(isWhite);
-				yield return new King(isWhite, 1 ,1);
 				yield break;
 		}
 	}

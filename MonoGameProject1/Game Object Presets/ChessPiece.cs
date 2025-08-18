@@ -153,6 +153,7 @@ public abstract class ChessPiece : Sprite
 		OnMove?.Invoke();
 	}
 
+	public event Action OnAttack;
 	/// <summary>
 	/// Tries attacking the piece that's on the square. Moves if the attacked piece died.
 	/// </summary>
@@ -170,6 +171,7 @@ public abstract class ChessPiece : Sprite
 			DoMoveToSquare(square);
 		}
 		
+		OnAttack?.Invoke();
 		return true;
 	}
 	
