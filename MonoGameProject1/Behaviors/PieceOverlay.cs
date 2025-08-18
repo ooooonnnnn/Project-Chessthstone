@@ -71,14 +71,14 @@ public class PieceOverlay : Renderer
         }
         
         //Get stats and subscribe to events
-        health = piece.health;
-        damage = piece.baseDamage;
-        actionPoints = piece.actionPoints;
+        health = piece.Health;
+        damage = piece.BaseDamage;
+        actionPoints = piece.ActionPoints;
         
         //TODO: Events Disappeared!
-        //piece.OnBaseDamageChanged += d => damage = d;
-        //piece.OnHealthChanged += h => health = h;
-        //piece.OnActionPointsChanged += ap => actionPoints = ap;
+        piece.OnBaseDamageChanged += d => damage = d;
+        piece.OnHealthChanged += h => health = h;
+        piece.OnActionPointsChanged += ap => actionPoints = ap;
     }
 
     public override void Draw(SpriteBatch spriteBatch)

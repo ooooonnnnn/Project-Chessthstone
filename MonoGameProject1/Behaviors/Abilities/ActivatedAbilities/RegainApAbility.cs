@@ -9,7 +9,7 @@ public class RegainApAbility : ActivatedAbility
 	
 	protected override void OneShotEffect()
 	{
-		ownerPiece.actionPoints++;
+		ownerPiece.ActionPoints++;
 	}
 
 	public override string ToString()
