@@ -71,6 +71,7 @@ public class Player : GameObject
     /// </summary>
     public void HandleSquareClicked(ChessSquare square)
     {
+        Console.WriteLine("Player.handleSquareClicked");
         if (GamePhaseManager.instance.phase == GamePhase.Setup)
         {
             //try placing a piece

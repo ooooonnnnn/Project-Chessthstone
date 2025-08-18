@@ -47,7 +47,7 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		AudioClips.LoadAudio();
 		// End loading here
-		//SceneManager.ChangeScene(new TestHUDScene());
+		
 		SceneManager.ChangeScene(new TeamSelectionScene());
 		//SceneManager.ChangeScene(new TestGameScene());
 	}

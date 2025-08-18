@@ -29,14 +29,6 @@ public class TurnManager : SingletonGameObject<TurnManager>
 
 	protected TurnManager(string name) : base(name)
 	{
-		GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
-		{
-			if (phase is GamePhase.Gameplay or GamePhase.Setup &&
-			    prev is not (GamePhase.Gameplay or GamePhase.Setup))
-			{
-				StartTurn();
-			}
-		};
 	}
 
 	public void SetPlayers(Player whitePlayer, Player blackPlayer)
