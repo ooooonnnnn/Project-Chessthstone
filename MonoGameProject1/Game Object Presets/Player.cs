@@ -9,7 +9,7 @@ namespace MonoGameProject1;
 /// <summary>
 /// A player in the game.
 /// </summary>
-public class Player(string name, bool isWhite) : GameObject(name)
+public class Player : GameObject
 {
 	/// <summary>
 	/// Mana to pay for activated abilities
@@ -28,7 +28,7 @@ public class Player(string name, bool isWhite) : GameObject(name)
 	/// <summary>
 	/// Color. White goes first
 	/// </summary>
-	public bool isWhite { get; } = isWhite;
+	public bool isWhite { get; }
 	/// <summary>
 	/// Is this player taking its turn rn?
 	/// </summary>
@@ -162,6 +162,16 @@ public class Player(string name, bool isWhite) : GameObject(name)
 
 	//TODO: this is a placeholder. change to mouse control
 	private readonly Keys[] numberKeys = [ Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9 ];
+
+	/// <summary>
+	/// A player in the game.
+	/// </summary>
+	public Player(string name, bool isWhite) : base(name)
+	{
+		this.isWhite = isWhite;
+		TurnManager.instance.OnTurnChanged += isItMyTurn => DeselectAll();
+	}
+
 	public override void Update(GameTime gameTime)
 	{
 		base.Update(gameTime);
