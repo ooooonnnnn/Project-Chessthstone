@@ -48,33 +48,9 @@ public class Button : GameObject, ICallback
 	/// <param name="text">Text on the button</param>
 	public Button(string name, string text = ""): base(name)
 	{
-		texture = TextureManager.GetDefaultButtonTexture();
-		spriteRenderer = new NineSliced(texture, 40, 58, 40, 58);
-		AddButtonBehaviors();
-		
-		CreateTextChild();
-		this.text = text;
-	}
-
-	/// <summary>
-	/// Button with custom texture and normal scaling
-	/// </summary>
-	public Button(string name, Texture2D texture, string text = "") : base(name)
-	{
-		this.texture = texture;
-		spriteRenderer = new SpriteRenderer(texture);
-		AddButtonBehaviors();
-		
-		CreateTextChild();
-		this.text = text;
-	}
-
-	/// <summary>
-	/// Button with custom 9-sliced texture
-	/// </summary>
-	public Button(string name, NineSliced nineSliced, string text = "") : base(name)
-	{
-		spriteRenderer = nineSliced;
+		texture = TextureManager.ToolTipNineSliceTexture;
+		spriteRenderer = new NineSliced(texture, 50, 99, 50, 99);
+		spriteRenderer.layerDepth = LayerDepthManager.UiDepth;
 		AddButtonBehaviors();
 		
 		CreateTextChild();
@@ -95,6 +71,7 @@ public class Button : GameObject, ICallback
 		
 		_childTextRenderer = textRenderer;
 		_childTransform = textTransform;
+		_childTextRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
 
 		CenterText();
 	}

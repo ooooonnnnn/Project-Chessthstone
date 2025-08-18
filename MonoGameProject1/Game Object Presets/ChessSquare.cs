@@ -16,5 +16,7 @@ public class ChessSquare : ClickableSprite
 		this.row = row;
 		this.column = column;
 		AddListener(() => board.SquareClicked(this));
+		
+		spriteRenderer.layerDepth = LayerDepthManager.BackgroundObjectDepth;
 	}
 }

@@ -19,14 +19,14 @@ public class TestGameScene : Scene
 		Player whitePlayer = new Player("White", true){board = board};
 		Player blackPlayer = new Player("Black", false){board = board};
 		
-		//whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
-		//blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
-		whitePlayer.teamPieces = [
-			new BishopRegainAp(true)
+		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
+		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
+		/*whitePlayer.teamPieces = [
+			new BasicBishop(true)
 		];
 		blackPlayer.teamPieces = [
-			new BishopRegainAp(false)
-		];
+			new BasicBishop(false)
+		];*/
 
 		foreach (ChessPiece piece in whitePlayer.teamPieces)
 		{
@@ -34,6 +34,7 @@ public class TestGameScene : Scene
 			piece.ownerPlayer = whitePlayer;
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
+			piece.InitializeBehaviors();
 		}
 
 		foreach (ChessPiece piece in blackPlayer.teamPieces)
@@ -43,6 +44,7 @@ public class TestGameScene : Scene
 			piece.board = board;
 			piece.transform.origin = Vector2.Zero;
 			piece.transform.parentSpacePos = Vector2.Zero;
+			piece.InitializeBehaviors();
 		}
 		
 		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
