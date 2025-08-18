@@ -69,7 +69,7 @@ public class Game1 : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
-		GraphicsDevice.Clear(new(98, 73, 60));
+		GraphicsDevice.Clear(new(34, 29, 27));
 
 		// TODO: Add your drawing code here
 		_spriteBatch.Begin(SpriteSortMode.BackToFront);

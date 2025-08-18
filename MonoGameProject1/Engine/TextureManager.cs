@@ -25,6 +25,10 @@ public static class TextureManager
 	public static Texture2D WhiteTurnButtonTexture { get; private set; }
 	public static Texture2D BlackTurnButtonTexture { get; private set; }
 	
+	public static Texture2D WhiteTurnButtonTextureClear { get; private set; }
+	
+	public static Texture2D BlackTurnButtonTextureClear { get; private set; }
+	
 	public static void LoadTextures()
 	{
 		_defaultButtonTexture = game.Content.Load<Texture2D>("Images/RoundedFilledSquare");
@@ -55,6 +59,8 @@ public static class TextureManager
 		
 		WhiteTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnWhite");
 		BlackTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnBlack");
+		WhiteTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnWhiteClear");
+		BlackTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnBlackClear");
 	}
 
 	public static Texture2D GetDefaultButtonTexture()
