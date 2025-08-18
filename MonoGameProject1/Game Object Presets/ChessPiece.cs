@@ -225,7 +225,8 @@ public abstract class ChessPiece : Sprite
 		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
 		OnDeath?.Invoke(this);
-		parentScene.RemoveGameObject(this);
+		if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
+			parentScene.RemoveGameObject(this);
 	}
 	public event Action<ChessPiece> OnDeath;
 
