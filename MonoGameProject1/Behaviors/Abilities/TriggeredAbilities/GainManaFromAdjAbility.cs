@@ -7,7 +7,7 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// When your turn starts, you gain 1 mana for each adjacent friendly piece
 /// </summary>
-public class BasicKingAbility : TriggeredAbility
+public class GainManaFromAdjAbility : TriggeredAbility
 {
 	public override string ToString()
 	{
