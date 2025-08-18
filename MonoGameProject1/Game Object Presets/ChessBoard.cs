@@ -29,7 +29,7 @@ public class ChessBoard : GameObject
 			{
 				//Construct ChessSquare
 				bool isWhite = ChessProperties.IsWhiteSquare(i, j);
-				ChessSquare newSquare = new ChessSquare($"Row: {i}, Col: {j}", this, i, j, isWhite);
+				ChessSquare newSquare = new ChessSquare($"Row: {j}, Col: {i}", this, i, j, isWhite);
 				newSquare.board = this;
 				squares[i, j] = newSquare;
 				
@@ -45,8 +45,12 @@ public class ChessBoard : GameObject
 		}
 	}
 
-	public void SquareClicked(ChessSquare square)
+	/// <summary>
+	/// Child squares should call this when clicked
+	/// </summary>
+	public void HandleSquareClicked(ChessSquare square)
 	{
+		Console.WriteLine("Board.HandleSquareCliked");
 		OnSquareClicked?.Invoke(square);
 	}
 }

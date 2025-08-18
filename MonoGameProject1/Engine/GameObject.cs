@@ -108,7 +108,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
         }
 
         _isActive = active;
-        Console.WriteLine($"{name} active: {active}");
+        // Console.WriteLine($"{name} active: {active}");
 
         foreach (var hierarchy in _hierarchicalBehaviors)
         {

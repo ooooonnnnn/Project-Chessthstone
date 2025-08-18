@@ -14,7 +14,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// </summary>
 	public bool isWhiteTurn { get; private set; } = true;
 	private Player _blackPlayer, _whitePlayer;
-	public ChessBoard Board;
+	private ChessBoard _board;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
 	public Player inactivePlayer => isWhiteTurn ? _blackPlayer : _whitePlayer;
 
@@ -50,7 +50,6 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// <summary>
 	/// Passes the turn from one player to the other.
 	/// </summary>
-	/// <param name="sendTrigger">Default true. set false to prevent turn change triggers (in setup phase)</param>
 	public void ChangeTurn()
 	{
 		EndTurn();
@@ -63,7 +62,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	private void EndTurn()
 	{
 		Player player = activePlayer;
-		Board.OnSquareClicked -= player.HandleSquareClicked;
+		_board.OnSquareClicked -= player.HandleSquareClicked;
 		MouseInput.OnRightClick -= player.TryActivateAbility;
 		Console.WriteLine($"{player.name}'s turn ended");
 		
@@ -75,8 +74,9 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	private void StartTurn()
 	{
 		Player player = activePlayer;
+		Console.WriteLine($"{player.name}'s turn starting");
 		//Subscribe player to input actions
-		Board.OnSquareClicked += player.HandleSquareClicked;
+		_board.OnSquareClicked += player.HandleSquareClicked;
 		MouseInput.OnRightClick += player.TryActivateAbility;
 		
 		//Reset mana and action points

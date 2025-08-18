@@ -26,13 +26,15 @@ public static class SceneManager
 			throw new Exception($"{scene.GetType()} didn't define gameObjects.");
 		}
 		
+		Console.WriteLine("Adding scene");
+		scene.Initialize();
+		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
 			AddGameObjectNoDuplicates(gameObject);
 		}
 		
 		_currentOpenScenes.Add(scene);
-		scene.Initialize();
 		scene.isLoaded = true;
 	}
 
@@ -79,6 +81,8 @@ public static class SceneManager
 	/// <param name="scene">the scene to remove</param>
 	public static void RemoveScene(Scene scene)
 	{
+		Console.WriteLine("Removing scene");
+		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
 			_gameObjects.Remove(gameObject);
@@ -96,8 +100,6 @@ public static class SceneManager
 	/// <param name="scene">the scene to add</param>
 	public static void ChangeScene(Scene scene)
 	{
-		Console.WriteLine("Changing scene");
-		
 		foreach (Scene sceneToRemove in _currentOpenScenes.ToList())
 		{
 			RemoveScene(sceneToRemove);

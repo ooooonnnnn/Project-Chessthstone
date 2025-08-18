@@ -41,6 +41,7 @@ public class GamePhaseManager : SingletonGameObject<GamePhaseManager>
 		get => _phase;
 		set
 		{
+			Console.WriteLine($"Setting phase to {value}");
 			if (_phase == value) return;
 			GamePhase prevPhase = _phase;
 			_phase = value;
