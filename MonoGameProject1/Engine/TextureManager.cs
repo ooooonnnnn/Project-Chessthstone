@@ -59,8 +59,8 @@ public static class TextureManager
 		
 		WhiteTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnWhite");
 		BlackTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnBlack");
-		WhiteTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnWhiteClear");
-		BlackTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnBlackClear");
+		WhiteTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnBlackClear");
+		BlackTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnWhiteClear");
 	}
 
 	public static Texture2D GetDefaultButtonTexture()
