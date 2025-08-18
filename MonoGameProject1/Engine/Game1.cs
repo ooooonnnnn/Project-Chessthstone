@@ -47,8 +47,8 @@ public class Game1 : Game
 		FontManager.LoadFonts();
 		AudioClips.LoadAudio();
 		// End loading here
-		SceneManager.ChangeScene(new TestHUDScene());
-		//SceneManager.ChangeScene(new TeamSelectionScene());
+		//SceneManager.ChangeScene(new TestHUDScene());
+		SceneManager.ChangeScene(new TeamSelectionScene());
 		//SceneManager.ChangeScene(new TestGameScene());
 	}
 	
@@ -67,7 +67,7 @@ public class Game1 : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
-		GraphicsDevice.Clear(Color.CornflowerBlue);
+		GraphicsDevice.Clear(new(98, 73, 60));
 
 		// TODO: Add your drawing code here
 		_spriteBatch.Begin(SpriteSortMode.BackToFront);

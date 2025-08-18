@@ -29,6 +29,7 @@ public class Button : GameObject, ICallback
 	public Texture2D texture;
 	public Transform transform;
 	
+	
 	/// <summary>
 	/// Can be either a SpriteRenderer or a NineSliced, depending on the constructor used
 	/// </summary>
@@ -49,7 +50,7 @@ public class Button : GameObject, ICallback
 	public Button(string name, string text = ""): base(name)
 	{
 		texture = TextureManager.ToolTipNineSliceTexture;
-		spriteRenderer = new NineSliced(texture, 50, 99, 50, 99);
+		spriteRenderer = new NineSliced(texture, 50, 99, 50, 99, 0.5f);
 		spriteRenderer.layerDepth = LayerDepthManager.UiDepth;
 		AddButtonBehaviors();
 		
@@ -64,6 +65,7 @@ public class Button : GameObject, ICallback
 	private void CreateTextChild()
 	{
 		Transform textTransform = new Transform();
+		textTransform.parentSpaceScale *= 1.4f;
 		TextRenderer textRenderer = new TextRenderer(text) { color = Color.Black };
 		GameObject textChild = new GameObject( name + " Text", [textTransform, textRenderer]);
 
@@ -81,6 +83,12 @@ public class Button : GameObject, ICallback
 		_childTransform.origin = _childTextRenderer.Font.MeasureString(text) * 0.5f;
 		_childTransform.parentSpacePos = new Vector2(
 			spriteRenderer.sourceWidth*0.5f, spriteRenderer.sourceHeight*0.5f);
+	}
+	
+	public void ChangeBackgroundScale(Vector2 newScale)
+	{
+		transform.parentSpaceScale *= newScale;
+		_childTransform.parentSpaceScale *= new Vector2(1f/newScale.X, 1f/newScale.Y);
 	}
 
 	private void AddButtonBehaviors()

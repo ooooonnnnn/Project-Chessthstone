@@ -14,4 +14,9 @@ public class TestHUDScene : Scene
         
         AddGameObjects([hud]);
     }
+
+    public override void Initialize()
+    {
+        
+    }
 }
