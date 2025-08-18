@@ -20,7 +20,15 @@ public enum GamePhase
 	/// <summary>
 	/// Normal gameplay
 	/// </summary>
-	Gameplay = 1
+	Gameplay = 1,
+	/// <summary>
+	/// Game ended, white won
+	/// </summary>
+	WhiteWon = 2,
+	/// <summary>
+	/// Game ended, black won
+	/// </summary>
+	BlackWon = 3
 }
 
 /// <summary>
@@ -33,13 +41,13 @@ public class GamePhaseManager : SingletonGameObject<GamePhaseManager>
 		get => _phase;
 		set
 		{
+			Console.WriteLine($"Setting phase to {value}");
 			if (_phase == value) return;
 			GamePhase prevPhase = _phase;
 			_phase = value;
 			OnPhaseChanged?.Invoke(prevPhase, _phase);
 		}
 	}
-
 	private GamePhase _phase = GamePhase.None;
 
 	/// <summary>
@@ -58,12 +66,6 @@ public class GamePhaseManager : SingletonGameObject<GamePhaseManager>
 	{
 		if (instance == null)
 			instance = new GamePhaseManager(name);
-	}
-	
-	public override void Start()
-	{
-		base.Start();
-		phase = GamePhase.Setup;
 	}
 
 	public override void Dispose()

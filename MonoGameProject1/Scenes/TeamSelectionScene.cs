@@ -76,4 +76,9 @@ public class TeamSelectionScene : Scene
 			SceneManager.ChangeScene(new TestGameScene(whiteTeam, blackTeam));
 		}
 	}
+
+	public override void Initialize()
+	{
+		// Console.WriteLine($"{this} isn't initializing anything");
+	}
 }

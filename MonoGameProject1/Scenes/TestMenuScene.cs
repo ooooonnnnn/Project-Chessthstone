@@ -67,4 +67,10 @@ public class TestMenuScene : Scene
 		
 		return textChild;
 	}
+	
+	
+	public override void Initialize()
+	{
+		// Console.WriteLine($"{this} isn't initializing anything");
+	}
 }

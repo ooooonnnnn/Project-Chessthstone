@@ -191,18 +191,6 @@ public abstract class ChessPiece : Sprite
 		piece.TakeDamage(damage);
 	}
 
-	// /// <summary>
-	// /// Activates this pieces' ActivatedAbility if it exists
-	// /// </summary>
-	// /// <returns>True if successful</returns>
-	// public bool ActivateAbility(GameObjectReferences objects)
-	// {
-	// 	if(ability is null or not ActivatedAbility) 
-	// 		return false;
-	// 	((ActivatedAbility)ability).Activate(objects);
-	// 	return true;
-	// }
-	
 	/// <summary>
 	/// Tries to pay one action point. 
 	/// </summary>
@@ -252,13 +240,19 @@ public abstract class ChessPiece : Sprite
 	private void Die()
 	{
 		//TODO: add death animation
-		Console.WriteLine($"{name} is dead!");
 		currentSquare.occupyingPiece = null;
 		OnDeath?.Invoke(this);
-		parentScene.RemoveGameObject(this);
+		if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
+			parentScene.RemoveGameObject(this);
 	}
 	public event Action<ChessPiece> OnDeath;
-	
+
+	public override void Start()
+	{
+		base.Start();
+		OnDeath += _ => MatchManager.instance.CheckWin();
+	}
+
 	/// <summary>
 	/// List of int coordinates of the squares this piece can move to. <br/>
 	/// Takes the board size and existing pieces into account
@@ -296,7 +290,7 @@ public abstract class ChessPiece : Sprite
 	}
 
 	/// <summary>
-	/// Returns true if: 1. directionValid is true 2. the target square is within the board 3. the target square is<br/>
+	/// Returns true if: 1. directionValid is true 2. the target square is within the board 3. the target square is
 	///  occupied by an opposing piece.
 	/// If (2) is false or the target square is occupied by an ally, returns false and updates directionValid <br/>
 	/// False otherwise
@@ -339,7 +333,8 @@ public abstract class ChessPiece : Sprite
 	protected override void ClassifyBehavior(Behavior behavior)
 	{
 		base.ClassifyBehavior(behavior);
-		if (behavior is Ability) ability = (Ability) behavior;
+		if (behavior is Ability) 
+			ability = (Ability) behavior;
 	}
 
 	private static string CreateName(bool isWhite, PieceType type)

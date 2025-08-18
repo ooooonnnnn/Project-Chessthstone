@@ -16,4 +16,10 @@ public class TestTransformParentScene : Scene
 
 		AddGameObjects([object1, object2]);
 	}
+	
+	
+	public override void Initialize()
+	{
+		// Console.WriteLine($"{this} isn't initializing anything");
+	}
 }

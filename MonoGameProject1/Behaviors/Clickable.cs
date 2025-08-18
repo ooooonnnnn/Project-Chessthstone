@@ -21,7 +21,11 @@ public class Clickable : Behavior, IDisposable, IActivatable
 
 	private void AttemptClick()
 	{
-		if (senseMouseHover.isHovering) OnClick?.Invoke();
+		if (senseMouseHover.isHovering)
+		{
+			OnClick?.Invoke();
+			// Console.WriteLine($"{gameObject.name} clicked");
+		}
 	}
 
 	public void Dispose()

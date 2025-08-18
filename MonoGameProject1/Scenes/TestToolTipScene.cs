@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Scenes;
 
@@ -14,5 +15,11 @@ public class TestToolTipScene : Scene
         Button button = new Button("trololol", "trololololololololo lololol");
         
         AddGameObjects([toolTip, button]);
+    }
+    
+    
+    public override void Initialize()
+    {
+        // Console.WriteLine($"{this} isn't initializing anything");
     }
 }

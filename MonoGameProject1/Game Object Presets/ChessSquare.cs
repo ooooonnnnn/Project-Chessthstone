@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -15,8 +16,8 @@ public class ChessSquare : ClickableSprite
 		this.board = board;
 		this.row = row;
 		this.column = column;
-		AddListener(() => board.SquareClicked(this));
-		
 		spriteRenderer.layerDepth = LayerDepthManager.BackgroundObjectDepth;
+		
+		AddBehaviors([new NotifyBoardOnSquareClicked()]);
 	}
 }

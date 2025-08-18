@@ -41,4 +41,10 @@ public class TestStartScene : Scene
 
         AddGameObjects([kingBlack]);
     }
+    
+    
+    public override void Initialize()
+    {
+        Console.WriteLine($"{this} isn't initializing anything");
+    }
 }

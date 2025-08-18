@@ -19,16 +19,15 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
     private bool _isActive = false;
     public bool isActive => _isActive;
 
-    /// <summary>
-    /// Some behaviors are hierarchical, which means they have children of the same type.
-    /// SceneManager needs to know about those children 
-    /// </summary>
-    private List<IHierarchy> _hierarchicalBehaviors = new();
-
-    public IReadOnlyList<IHierarchy> hierarchicalBehaviors => _hierarchicalBehaviors;
-
-    private List<IUpdatable> _updatables = new();
-    private List<IDrawable> _drawables = new();
+	/// <summary>
+	/// Some behaviors are hierarchical, which means they have children of the same type.
+	/// SceneManager needs to know about those children 
+	/// </summary>
+	private List<IHierarchy> _hierarchicalBehaviors = new();
+	public IReadOnlyList<IHierarchy> hierarchicalBehaviors => _hierarchicalBehaviors;
+	
+	private List<IUpdatable> _updatables = new();
+	private List<IDrawable> _drawables = new();
 
     public GameObject(string name, List<Behavior> behaviors = null)
     {
@@ -109,7 +108,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
         }
 
         _isActive = active;
-        Console.WriteLine($"{name} active: {active}");
+        // Console.WriteLine($"{name} active: {active}");
 
         foreach (var hierarchy in _hierarchicalBehaviors)
         {
@@ -184,16 +183,17 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
         }
     }
 
-    /// <summary>
-    /// Disposes disposable behaviors
-    /// </summary>
-    public virtual void Dispose()
-    {
-        foreach (var behavior in behaviors)
-        {
-            if (behavior is IDisposable disposable) disposable.Dispose();
-        }
-    }
+	/// <summary>
+	/// Disposes disposable behaviors and the parentScene reference
+	/// </summary>
+	public virtual void Dispose()
+	{
+		foreach (var behavior in behaviors)
+		{
+			if (behavior is IDisposable disposable) disposable.Dispose();
+		}
+		parentScene = null;
+	}
 
     /// <summary>
     /// Calls Start on IStart behaviors

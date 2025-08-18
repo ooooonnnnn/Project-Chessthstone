@@ -116,11 +116,6 @@ public class Player : GameObject
                         DeselectAll();
                         //Inform trigger manager
                         TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
-
-                        if (!DoIHaveMovesLeft())
-                        {
-                            TurnManager.instance.ChangeTurn();
-                        }
                     }
                 }
                 else if (_selectedActivePiece.GetAttackCoordList().Contains(squareCoords))
@@ -131,15 +126,16 @@ public class Player : GameObject
                         //Inform trigger manager
                         TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
                         
-                        if (!DoIHaveMovesLeft())
-                        {
-                            TurnManager.instance.ChangeTurn();
-                        }
                     }
                 }
                 else
                 {
                     Console.WriteLine("Square not in possible moves, try again");
+                }
+                
+                if (!DoIHaveMovesLeft())
+                {
+                    TurnManager.instance.ChangeTurn();
                 }
             }
         }

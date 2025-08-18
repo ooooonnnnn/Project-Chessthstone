@@ -23,6 +23,12 @@ public class TestSpeedScene : Scene
 		
 		AddGameObjects([tester]);
 	}
+	
+	
+	public override void Initialize()
+	{
+		// Console.WriteLine($"{this} isn't initializing anything");
+	}
 }
 
 public class SpeedTester : Behavior, IUpdatable
@@ -74,4 +80,6 @@ public class SpeedTester : Behavior, IUpdatable
 			test = true;
 		}
 	}
+	
+	
 }

@@ -15,6 +15,17 @@ public readonly struct GameState
 		_whitePieces = new List<Point>();
 		foreach (GameObject gameObject in gameScene.gameObjects)
 		{
+			// if (gameObject is ChessBoard board)
+			// {
+			// 	foreach (ChessSquare square in board.squares)
+			// 	{
+			// 		if (square.occupyingPiece?.isWhite is true)
+			// 			_whitePieces.Add(new Point(square.column, square.row));
+			// 		else if (square.occupyingPiece?.isWhite is false)
+			// 			_blackPieces.Add(new Point(square.column, square.row));
+			// 	}
+			// }
+			
 			if (gameObject is ChessPiece chessPiece)
 			{
 				Point coords = new Point(chessPiece.column, chessPiece.row);
