@@ -8,13 +8,15 @@ public class TestGameScene : Scene
 {
 	public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
 	{
+		TriggerManager.Instantiate("TriggerManager");
+		GamePhaseManager.Instantiate("GamePhaseManager");
+		TurnManager.Instantiate("TurnManager");
+		
 		ChessBoard board = new ChessBoard("");
 		board.transform.SetScaleFromFloat(0.2f);
 		board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
 		board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 
-		TriggerManager.Instantiate("TriggerManager");
-		GamePhaseManager.Instantiate("GamePhaseManager");
 		
 		Player whitePlayer = new Player("White", true){board = board};
 		Player blackPlayer = new Player("Black", false){board = board};
@@ -47,7 +49,8 @@ public class TestGameScene : Scene
 			piece.InitializeBehaviors();
 		}
 		
-		TurnManager.Instantiate("TurnManager", board, blackPlayer, whitePlayer);
+		TurnManager.instance.Board = board;
+		TurnManager.instance.SetPlayers(blackPlayer, whitePlayer);
 
 		Button endTurnButton = new Button("End Turn Button", "End Turn");
 		((NineSliced)endTurnButton.spriteRenderer).cornerScale = 0.2f;

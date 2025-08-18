@@ -75,9 +75,10 @@ public class PieceOverlay : Renderer
         damage = piece.baseDamage;
         actionPoints = piece.actionPoints;
         
-        piece.OnBaseDamageChanged += d => damage = d;
-        piece.OnHealthChanged += h => health = h;
-        piece.OnActionPointsChanged += ap => actionPoints = ap;
+        //TODO: Events Disappeared!
+        //piece.OnBaseDamageChanged += d => damage = d;
+        //piece.OnHealthChanged += h => health = h;
+        //piece.OnActionPointsChanged += ap => actionPoints = ap;
     }
 
     public override void Draw(SpriteBatch spriteBatch)

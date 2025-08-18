@@ -14,25 +14,21 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	/// </summary>
 	public bool isWhiteTurn { get; private set; } = true;
 	private Player _blackPlayer, _whitePlayer;
-	private ChessBoard _board;
+	public ChessBoard Board;
 	public Player activePlayer => isWhiteTurn ? _whitePlayer : _blackPlayer;
 	public Player inactivePlayer => isWhiteTurn ? _blackPlayer : _whitePlayer;
 
-	public static bool Instantiate(string name, ChessBoard board, Player blackPlayer, Player whitePlayer)
+	public static bool Instantiate(string name)
 	{
 		if (instance != null) 
 			return false;
 		
-		instance = new TurnManager(name, board, blackPlayer, whitePlayer);
+		instance = new TurnManager(name);
 		return true;
 	}
 
-	protected TurnManager(string name,ChessBoard board, Player blackPlayer, Player whitePlayer) : base(name)
+	protected TurnManager(string name) : base(name)
 	{
-		ValidatePlayerColors(blackPlayer, whitePlayer);
-		_blackPlayer = blackPlayer;
-		_whitePlayer = whitePlayer;
-		_board = board;
 		GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
 		{
 			if (phase is GamePhase.Gameplay or GamePhase.Setup && prev == GamePhase.None)
@@ -42,12 +38,15 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		};
 	}
 
-	private void ValidatePlayerColors(Player blackPlayer, Player whitePlayer)
+	public void SetPlayers(Player blackPlayer, Player whitePlayer)
 	{
+		this._blackPlayer = blackPlayer;
+		this._whitePlayer = whitePlayer;
 		if (blackPlayer.isWhite || !whitePlayer.isWhite)
 			throw new ArgumentException("The black player must be black and the white player must be white");
 	}
 
+	public event Action<bool> OnTurnChanged;
 	/// <summary>
 	/// Passes the turn from one player to the other.
 	/// </summary>
@@ -56,6 +55,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	{
 		EndTurn();
 		isWhiteTurn = !isWhiteTurn;
+		OnTurnChanged?.Invoke(isWhiteTurn);
 		StartTurn();
 		TriggerManager.instance.UpdateStateAndTryTrigger(isWhiteTurn);
 	}
@@ -63,7 +63,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	private void EndTurn()
 	{
 		Player player = activePlayer;
-		_board.OnSquareClicked -= player.HandleSquareClicked;
+		Board.OnSquareClicked -= player.HandleSquareClicked;
 		MouseInput.OnRightClick -= player.TryActivateAbility;
 		Console.WriteLine($"{player.name}'s turn ended");
 		
@@ -76,7 +76,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 	{
 		Player player = activePlayer;
 		//Subscribe player to input actions
-		_board.OnSquareClicked += player.HandleSquareClicked;
+		Board.OnSquareClicked += player.HandleSquareClicked;
 		MouseInput.OnRightClick += player.TryActivateAbility;
 		
 		//Reset mana and action points
