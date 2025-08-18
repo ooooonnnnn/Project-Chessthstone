@@ -19,13 +19,14 @@ public class TestGameScene : Scene
 		GamePhaseManager.Instantiate("GamePhaseManager");
 		
 		Player whitePlayer = new Player("White", true){board = board};
-		Player blackPlayer = new Player("Black", false){board = board};
-		
+		Player blackPlayer = new Player("Black", false){board = board}; 
+		PlayerStatsHUD whiteStatsHud = new PlayerStatsHUD(true, 0);
+		PlayerStatsHUD blackStatsHud = new PlayerStatsHUD(false, 0);
 		whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
 		blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
 		/*whitePlayer.teamPieces = [
 			new BasicBishop(true)
-		];
+		];   v/.......................zMmmk
 		blackPlayer.teamPieces = [
 			new BasicBishop(false)
 		];*/
@@ -66,7 +67,13 @@ public class TestGameScene : Scene
 			if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
 				TurnManager.instance.ChangeTurn();
 		});
-		
+		Player.OnManaChanged += (mana, isWhite) =>
+		{
+			if (isWhite)
+				whiteStatsHud.UpdateMana(mana);
+			else
+				blackStatsHud.UpdateMana(mana);
+		};
 		AddGameObjects([board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton, TriggerManager.instance, 
 		GamePhaseManager.instance]);
 	}
