@@ -25,12 +25,12 @@ public class PieceOverlay : Renderer
     
     // Layout properties
     public Vector2 iconSpacing = new Vector2(0, 32); // Vertical spacing between elements
-    public Vector2 textOffset = new Vector2(0, 36);  // Offset of text from icon
+    public Vector2 textOffset = new Vector2(0, 0);  // Offset of text from icon
     public Color textColor = Color.White;
     public Color underTextColor = Color.Black;
     public float iconScale = 0.35f;
-    public float textScale = 1.8f;
-    public float underTextScale = 2.0f;
+    public float textScale = 4f;
+    public float underTextScale = 4.3f;
 
     private ChessPiece parentPiece;
 
@@ -71,14 +71,14 @@ public class PieceOverlay : Renderer
         }
         
         //Get stats and subscribe to events
-        health = piece.health;
-        damage = piece.baseDamage;
-        actionPoints = piece.actionPoints;
+        health = piece.Health;
+        damage = piece.BaseDamage;
+        actionPoints = piece.ActionPoints;
         
         //TODO: Events Disappeared!
-        //piece.OnBaseDamageChanged += d => damage = d;
-        //piece.OnHealthChanged += h => health = h;
-        //piece.OnActionPointsChanged += ap => actionPoints = ap;
+        piece.OnBaseDamageChanged += d => damage = d;
+        piece.OnHealthChanged += h => health = h;
+        piece.OnActionPointsChanged += ap => actionPoints = ap;
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -128,10 +128,10 @@ public class PieceOverlay : Renderer
             textPosition, 
             underTextColor, 
             _transform.rotation, 
-            Vector2.Zero, 
+            _transform.worldSpaceScale* underTextScale / 2, 
             _transform.worldSpaceScale* underTextScale, 
             effects, 
-            layerDepth + 0.002f // Slightly higher layer to appear on top
+            layerDepth - 0.01f // Slightly higher layer to appear on top
         );
         
         spriteBatch.DrawString(
@@ -140,10 +140,10 @@ public class PieceOverlay : Renderer
             textPosition, 
             textColor, 
             _transform.rotation, 
-            Vector2.Zero, 
+            _transform.worldSpaceScale* textScale / 2, 
             _transform.worldSpaceScale* textScale, 
             effects, 
-            layerDepth + 0.001f // Slightly higher layer to appear on top
+            layerDepth - 0.02f // Slightly higher layer to appear on top
             
         );
 

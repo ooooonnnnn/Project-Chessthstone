@@ -91,7 +91,7 @@ public class TurnManager : SingletonGameObject<TurnManager>
 			player.mana = 0;
 			foreach (var playerPiece in player.pieces)
 			{
-				playerPiece.actionPoints = 1;
+				playerPiece.ActionPoints = 1;
 			}
 		}
 		
@@ -102,9 +102,9 @@ public class TurnManager : SingletonGameObject<TurnManager>
 		else if (currentPhase == GamePhase.Gameplay)
 		{
 			Console.WriteLine(string.Join(", ",
-				player.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
+				player.pieces.Select(p => string.Concat(p.name, ": ", p.Health, "HP"))));
 			Console.WriteLine(string.Join(", ",
-				inactivePlayer.pieces.Select(p => string.Concat(p.name, ": ", p.health, "HP"))));
+				inactivePlayer.pieces.Select(p => string.Concat(p.name, ": ", p.Health, "HP"))));
 		}
 	}
 

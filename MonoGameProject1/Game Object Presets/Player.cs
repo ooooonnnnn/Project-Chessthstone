@@ -146,7 +146,7 @@ public class Player : GameObject
     {
         foreach (var piece in _alivePieces)
         {
-            if (piece.actionPoints > 0)
+            if (piece.ActionPoints > 0)
                 return true;
             if (piece.ability is not ActivatedAbility ability) continue;
             if (ability.manaCost <= mana)
