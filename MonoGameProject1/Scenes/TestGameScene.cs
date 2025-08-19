@@ -45,6 +45,7 @@ public class TestGameScene : Scene
             GameManager.Graphics.Viewport.Width / 2f - 115,
             GameManager.Graphics.Viewport.Height / 2f - 128 - 400);
         endTurnButton.hoverTinting.tintWhenHover = Color.White;
+        endTurnButton.hoverTinting.tintWhenMouseDown = Color.White;
 
 
         AddGameObjects([
@@ -139,12 +140,15 @@ public class TestGameScene : Scene
             if (phase is GamePhase.Setup)
             {
                 endTurnButton.hoverTinting.tintWhenHover = Color.White;
+                endTurnButton.hoverTinting.tintWhenMouseDown = Color.White;
                 isEndTurnButtonAvailable = false;
             }
             else
             {
                 isEndTurnButtonAvailable = true;
                 endTurnButton.hoverTinting.tintWhenHover = Color.LightGray;
+                endTurnButton.hoverTinting.tintWhenMouseDown = Color.DarkGray;
+
             }
         };
 

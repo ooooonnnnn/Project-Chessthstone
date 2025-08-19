@@ -44,7 +44,7 @@ public class ToolTip : GameObject
         _nineSlicedBackground.layerDepth = LayerDepthManager.UiDepth;
         
         _nineSlicedBackgroundTransform.origin = Vector2.Zero;
-        _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-this.padding, -this.padding);
+        _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-this.padding / 2, -this.padding / 2);
         
         ModifyBackgroundSize(width + this.padding);
     }
@@ -54,6 +54,6 @@ public class ToolTip : GameObject
     {
         // Adjust the size of the background based on the text size
         var textSize = textRenderer.GetTextSize();
-        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + padding * 2);
+        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + padding);
     }
 }
