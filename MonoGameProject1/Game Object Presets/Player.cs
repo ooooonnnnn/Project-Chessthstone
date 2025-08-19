@@ -20,9 +20,11 @@ public class Player : GameObject
         set
         {
             _mana = value;
+            OnManaChanged?.Invoke(_mana);
             Console.WriteLine($"{name} has {_mana} mana");
         }
     }
+    public event Action <int> OnManaChanged; 
 
     private int _mana;
 
@@ -261,18 +263,6 @@ public class Player : GameObject
     public override void Dispose()
     {
         base.Dispose();
-        MouseInput.OnRightClick -= TryActivateAbility;
-        if (board != null)
-            board.OnSquareClicked -= HandleSquareClicked;
-    }
-    public static event Action <int, bool> OnManaChanged; 
-    public void AddMana(int amount)
-    {
-        mana += amount;
-        OnManaChanged?.Invoke(mana, isWhite);
-        
-        // Update HUD or any other UI element that displays mana
-
-        Console.WriteLine($"{name} gained {amount} mana, now has {mana}");
+        OnManaChanged = null;
     }
 }

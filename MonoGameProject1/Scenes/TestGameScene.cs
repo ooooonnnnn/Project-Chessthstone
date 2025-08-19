@@ -11,6 +11,8 @@ public class TestGameScene : Scene
 {
     private Player whitePlayer;
     private Player blackPlayer;
+    private PlayerStatsHUD whiteHud;
+    private PlayerStatsHUD blackHud;
     private List<ChessPiece> whiteTeam;
     private List<ChessPiece> blackTeam;
     private ChessBoard board;
@@ -29,14 +31,19 @@ public class TestGameScene : Scene
         board = new ChessBoard("");
         board.transform.SetScaleFromFloat(0.35f);
         board.transform.origin = Vector2.One * board.totalWidth * 0.5f;
-        board.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() + new Vector2(0, 64);
+        Vector2 center = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
+        board.transform.parentSpacePos = center + new Vector2(0, 64);
 
         whitePlayer = new Player("White", true) { board = board };
         blackPlayer = new Player("Black", false) { board = board };
 
         this.whiteTeam = whiteTeam.ToList();
         this.blackTeam = blackTeam.ToList();
-
+        
+        whiteHud = new PlayerStatsHUD(whitePlayer);
+        blackHud = new PlayerStatsHUD(blackPlayer);
+        whiteHud.transform.parentSpacePos = center + new Vector2(600, -300);
+        blackHud.transform.parentSpacePos = center + new Vector2(-770, -300);
 
         endTurnButton = new Button("End Turn Button", "", TextureManager.WhiteTurnButtonTextureClear);
         endTurnButton.ChangeBackgroundScale(new Vector2(0.18f, 0.18f));
@@ -49,7 +56,12 @@ public class TestGameScene : Scene
 
 
         AddGameObjects([
-            board, whitePlayer, blackPlayer, TurnManager.instance, endTurnButton,
+            board,
+            whitePlayer,
+            blackPlayer,
+            whiteHud,
+            blackHud,
+            TurnManager.instance, endTurnButton,
             TriggerManager.instance,
             GamePhaseManager.instance,
             MatchManager.instance
@@ -62,8 +74,8 @@ public class TestGameScene : Scene
 
         whitePlayer.teamPieces = whiteTeam?.ToList() ?? new List<ChessPiece>();
         blackPlayer.teamPieces = blackTeam?.ToList() ?? new List<ChessPiece>();
-        // whitePlayer.teamPieces = [new Pawn(true, 1, 1)];
-        // blackPlayer.teamPieces = [new Pawn(false, 1, 1)];
+        whitePlayer.OnManaChanged += _ => whiteHud.UpdateText();
+        blackPlayer.OnManaChanged += _ => blackHud.UpdateText();
 
         TurnManager.instance.SetPlayers(whitePlayer, blackPlayer);
         TurnManager.instance.board = board;
@@ -165,6 +177,9 @@ public class TestGameScene : Scene
         };
 
         GamePhaseManager.instance.phase = GamePhase.Setup;
+        
+        whiteHud.UpdateText();
+        blackHud.UpdateText();
     }
 
     private void ArrangeTeamPieces()

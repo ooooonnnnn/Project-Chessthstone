@@ -5,54 +5,30 @@ namespace MonoGameProject1.Behaviors;
 
     public class PlayerStatsHUD : ToolTip
     {
-        private int _mana;
-        private bool _isWhite;
+        private int _mana => _player.mana;
+        private Player _player;
+        private bool isWhite => _player.isWhite;
         
 
-        public PlayerStatsHUD(bool isWhite, int initialMana, int width = 200, int padding = 50) 
-            : base("24K gold Labubu" ,$"Mana: {initialMana}", width, padding)
+        public PlayerStatsHUD(Player player) 
+            : base("Player Stats HUD" ,"")
         {
-            _mana = initialMana;
-            _isWhite = isWhite;
+            _player = player;
             // Subscribe to turn changes
-            TurnManager.instance.OnTurnChanged += OnTurnChanged;
+            TurnManager.instance.OnTurnChanged +=_ => UpdateText();
         }
 
-        private void OnTurnChanged(bool isWhite)
+        public void UpdateText()
         {
-            if (isWhite == _isWhite)
+            if (isWhite != TurnManager.instance.isWhiteTurn)
             {
-                // If it's the player's turn, set text color to white
-                SetTextColor(Color.White);
+                Text = "";
+                return;
             }
-            else
-            {
-                // If it's not the player's turn, set text color to gray
-                SetTextColor(Color.Gray);
-            }
-        }
-
-
-        // Updates the mana text dynamically
-        public void UpdateMana(int mana)
-        {
-            _mana = mana;
-            Text = $"Mana: {_mana}";
-        }
-
-        // Respond to turn change events
-
-
-        // Cleanup event subscription when destroyed
-        ~PlayerStatsHUD()
-        {
-            TurnManager.instance.OnTurnChanged -= OnTurnChanged;
-        }
-
-        // Helper: expose text color from ToolTip
-        private void SetTextColor(Color color)
-        {
-            if (textRenderer != null)
-                textRenderer.color = color;
+            
+            if (GamePhaseManager.instance.phase == GamePhase.Setup)
+                Text = "Choose a piece to place";
+            else if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
+                Text = $"Mana: {_mana}";
         }
     }
