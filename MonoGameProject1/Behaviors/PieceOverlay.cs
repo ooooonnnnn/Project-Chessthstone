@@ -22,6 +22,7 @@ public class PieceOverlay : Renderer
     private int health;
     private int damage;
     private int actionPoints;
+    private float ScalingIcons = 0.5f;
     
     // Layout properties
     public Vector2 iconSpacing = new Vector2(0, 32); // Vertical spacing between elements
@@ -62,8 +63,8 @@ public class PieceOverlay : Renderer
         {
             // Set the overlay's position to the center of the sprite in parent space
             transform.parentSpacePos = new Vector2(
-                spriteRenderer.sourceWidth * 0.5f,
-                spriteRenderer.sourceHeight * 0.5f
+                spriteRenderer.sourceWidth *ScalingIcons,
+                spriteRenderer.sourceHeight *ScalingIcons
             );
         }
         else
@@ -105,7 +106,7 @@ public class PieceOverlay : Renderer
     private void DrawStatWithIcon(SpriteBatch spriteBatch, Texture2D icon, string text, Vector2 position)
     {
         // Calculate the center of the icon as its origin
-        Vector2 iconOrigin = new Vector2(icon.Width * 0.5f, icon.Height * 0.5f);
+        Vector2 iconOrigin = new Vector2(icon.Width * ScalingIcons, icon.Height * ScalingIcons);
         
         // Draw icon with its center as origin
         spriteBatch.Draw(
