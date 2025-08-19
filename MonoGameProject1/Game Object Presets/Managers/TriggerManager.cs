@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Text;
+using System.Collections.Generic;
 using System.Linq;
 using MonoGameProject1.Behaviors;
 
@@ -17,14 +18,16 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 
 	public static bool Instantiate(string name)
 	{
-		if (instance != null) 
+		if (instance != null)
 			return false;
-		
+
 		instance = new TriggerManager(name);
 		return true;
 	}
-	
-	protected TriggerManager(string name) : base(name) { }
+
+	protected TriggerManager(string name) : base(name)
+	{
+	}
 
 	/// <summary>
 	/// Updates the game state history. If the phase is gameplay: prompts all pieces to try activating
@@ -36,19 +39,24 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 			Console.WriteLine("Not updating state because phase is not gameplay");
 			return;
 		}
-		
+
 		UpdateGameState(isWhiteTurn);
 		if (GamePhaseManager.instance.phase != GamePhase.Gameplay)
 			return;
-		
-		parentScene.gameObjects.ForEach(obj =>
+
+		List<ChessPiece> chessPieces = parentScene.gameObjects
+			.Where(obj => obj is ChessPiece)
+			.Cast<ChessPiece>()
+			.ToList();
+		foreach (ChessPiece chessPiece in chessPieces)
 		{
-			if (obj is not ChessPiece chessPiece)
-				return;
-			Ability ability = chessPiece.ability;
-			(ability as TriggeredAbility)?.CheckTriggerAndActivate(_prevState, _currentState);
-			(ability as StaticAbility)?.TryApplyEffect(_currentState);
-		});
+			if (chessPiece is null)
+				continue;
+			if (chessPiece.ability is TriggeredAbility ability)
+				ability.CheckTriggerAndActivate(_prevState, _currentState);
+			if (chessPiece.ability is StaticAbility staticAbility)
+				staticAbility.TryApplyEffect(_currentState);
+		}
 	}
 
 	/// <summary>
@@ -61,6 +69,7 @@ public class TriggerManager : SingletonGameObject<TriggerManager>
 			Console.WriteLine("Can't check state because parent scene is empty");
 			return;
 		}
+
 		_prevState = _currentState;
 		_currentState = new GameState(isWhiteTurn, parentScene);
 	}
