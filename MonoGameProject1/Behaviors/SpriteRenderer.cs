@@ -19,11 +19,11 @@ public class SpriteRenderer : Renderer
     /// </summary>
     public Point sizePx
     {
-        get => new((int)(sourceWidth * _transform.worldSpaceScale.X), (int)(sourceHeight * _transform.worldSpaceScale.Y));
+        get => new((int)(sourceWidth * transform.worldSpaceScale.X), (int)(sourceHeight * transform.worldSpaceScale.Y));
         set
         {
-            Vector2 worldScaleOfParent = _transform.parent?.worldSpaceScale ?? Vector2.One;
-            _transform.parentSpaceScale = new(
+            Vector2 worldScaleOfParent = transform.parent?.worldSpaceScale ?? Vector2.One;
+            transform.parentSpaceScale = new(
                 value.X / (float)sourceWidth / worldScaleOfParent.X,
                 value.Y / (float)sourceHeight / worldScaleOfParent.Y);
         }
@@ -43,7 +43,7 @@ public class SpriteRenderer : Renderer
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture, _transform.worldSpacePos, sourceRectangle, color, _transform.rotation,
-            _transform.origin, _transform.worldSpaceScale, effects, layerDepth);
+        spriteBatch.Draw(texture, transform.worldSpacePos, sourceRectangle, color, transform.rotation,
+            transform.origin, transform.worldSpaceScale, effects, layerDepth);
     }
 }

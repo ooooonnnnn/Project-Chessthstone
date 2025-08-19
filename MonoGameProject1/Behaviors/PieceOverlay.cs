@@ -54,21 +54,21 @@ public class PieceOverlay : Renderer
         parentPiece = piece;
         
         //Set transform parent and relative position
-        _transform.parent = piece.transform;
+        transform.parent = piece.transform;
         
         // Get the piece's sprite renderer to calculate center offset in parent space
         var spriteRenderer = piece.TryGetBehavior<SpriteRenderer>();
         if (spriteRenderer != null)
         {
             // Set the overlay's position to the center of the sprite in parent space
-            _transform.parentSpacePos = new Vector2(
+            transform.parentSpacePos = new Vector2(
                 spriteRenderer.sourceWidth * 0.5f,
                 spriteRenderer.sourceHeight * 0.5f
             );
         }
         else
         {
-            _transform.parentSpacePos = Vector2.Zero;
+            transform.parentSpacePos = Vector2.Zero;
         }
         
         //Get stats and subscribe to events
@@ -85,16 +85,16 @@ public class PieceOverlay : Renderer
     public override void Draw(SpriteBatch spriteBatch)
     {
         // The overlay's world position is at the center of the sprite
-        Vector2 centerPosition = _transform.worldSpacePos;
+        Vector2 centerPosition = transform.worldSpacePos;
         // Define positioning offsets from center
         float verticalOffset = -20f; // No horizontal offset for the center icon
         float horizontalSpacing = 120f; // Distance from center for left/right icons
         float verticalSpacing = -75f;   // Distance from center for top icon
         
         // Calculate positions relative to the sprite center
-        Vector2 healthPos = centerPosition + new Vector2(0, -verticalSpacing) * _transform.worldSpaceScale; // Top
-        Vector2 damagePos = centerPosition + new Vector2(-horizontalSpacing, verticalOffset) * _transform.worldSpaceScale; // Left
-        Vector2 actionPos = centerPosition + new Vector2(horizontalSpacing, verticalOffset) * _transform.worldSpaceScale; // Right
+        Vector2 healthPos = centerPosition + new Vector2(0, -verticalSpacing) * transform.worldSpaceScale; // Top
+        Vector2 damagePos = centerPosition + new Vector2(-horizontalSpacing, verticalOffset) * transform.worldSpaceScale; // Left
+        Vector2 actionPos = centerPosition + new Vector2(horizontalSpacing, verticalOffset) * transform.worldSpaceScale; // Right
         
         // Draw the icons at their respective positions
         DrawStatWithIcon(spriteBatch, healthIcon, health.ToString(), healthPos);
@@ -113,24 +113,24 @@ public class PieceOverlay : Renderer
             position, 
             null, 
             color, 
-            _transform.rotation,
+            transform.rotation,
             iconOrigin, // Use icon's center as origin
-            _transform.worldSpaceScale * iconScale, 
+            transform.worldSpaceScale * iconScale, 
             effects, 
             layerDepth
         );
         
         // Draw text
-        Vector2 textPosition = position + textOffset * _transform.worldSpaceScale;
+        Vector2 textPosition = position + textOffset * transform.worldSpaceScale;
         
         spriteBatch.DrawString(
             font, 
             text, 
             textPosition, 
             underTextColor, 
-            _transform.rotation, 
-            _transform.worldSpaceScale* underTextScale / 2, 
-            _transform.worldSpaceScale* underTextScale, 
+            transform.rotation, 
+            transform.worldSpaceScale* underTextScale / 2, 
+            transform.worldSpaceScale* underTextScale, 
             effects, 
             layerDepth - 0.01f // Slightly higher layer to appear on top
         );
@@ -140,9 +140,9 @@ public class PieceOverlay : Renderer
             text, 
             textPosition, 
             textColor, 
-            _transform.rotation, 
-            _transform.worldSpaceScale* textScale / 2, 
-            _transform.worldSpaceScale* textScale, 
+            transform.rotation, 
+            transform.worldSpaceScale* textScale / 2, 
+            transform.worldSpaceScale* textScale, 
             effects, 
             layerDepth - 0.02f // Slightly higher layer to appear on top
             

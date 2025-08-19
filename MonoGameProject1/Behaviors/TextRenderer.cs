@@ -119,7 +119,7 @@ public class TextRenderer : Renderer
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.DrawString(Font, Text, _transform.worldSpacePos, color, _transform.rotation,
-            _transform.origin, _transform.worldSpaceScale, effects, layerDepth, rightToLeft);
+        spriteBatch.DrawString(Font, Text, transform.worldSpacePos, color, transform.rotation,
+            transform.origin, transform.worldSpaceScale, effects, layerDepth, rightToLeft);
     }
 }

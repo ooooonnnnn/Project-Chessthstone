@@ -15,11 +15,11 @@ public abstract class Renderer : Behavior, IDrawable
 	public Color color = Color.White;
 	public SpriteEffects effects = SpriteEffects.None;
 	public float layerDepth = LayerDepthManager.GameObjectDepth;
-	protected Transform _transform;
+	public Transform transform;
 	
 	public override void Initialize()
 	{
-		_transform = gameObject.TryGetBehavior<Transform>();
+		transform = gameObject.TryGetBehavior<Transform>();
 		//Can't have two renderers on one object
 		gameObject.DontAllowBehaviorBesidesThis<SpriteRenderer>(this);
 	}

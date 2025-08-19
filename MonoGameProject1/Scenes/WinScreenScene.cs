@@ -23,14 +23,17 @@ public class WinScreenScene : Scene
 		restart.transform.origin = restart.spriteRenderer.sizePx.ToVector2() * 0.5f;
 		quit.transform.origin = quit.spriteRenderer.sizePx.ToVector2() * 0.5f;
 
+		textTrans.SetScaleFromFloat(3f);
 		restart.transform.parentSpaceScale = new Vector2(3,1);
+		restart.textChildTransform.parentSpaceScale = new Vector2(0.33f,1) * 2;
 		quit.transform.parentSpaceScale = new Vector2(3,1);
+		quit.textChildTransform.parentSpaceScale = new Vector2(0.33f,1) * 2;
 		
 		textTrans.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() - 
-		                           Vector2.UnitY * 100;
+		                           Vector2.UnitY * 200;
 		restart.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 		quit.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() + 
-		                                Vector2.UnitY * 100;
+		                                Vector2.UnitY * 200;
 		
 		
 		AddGameObjects([txtObj, restart, quit]);

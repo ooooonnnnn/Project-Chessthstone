@@ -125,26 +125,26 @@ public class NineSliced : SpriteRenderer
 	{
 		UpdateScales();
 		//Draw corners
-		DrawRegion(spriteBatch, topLeft, tlScale, _transform.ToWorldSpace(Vector2.Zero));
-		DrawRegion(spriteBatch, btmLeft, blScale, _transform.ToWorldSpace(sourceHeight* Vector2.UnitY),
+		DrawRegion(spriteBatch, topLeft, tlScale, transform.ToWorldSpace(Vector2.Zero));
+		DrawRegion(spriteBatch, btmLeft, blScale, transform.ToWorldSpace(sourceHeight* Vector2.UnitY),
 			Vector2.UnitY * btmLeft.Height);
-		DrawRegion(spriteBatch, topRght, trScale, _transform.ToWorldSpace(sourceWidth * Vector2.UnitX),
+		DrawRegion(spriteBatch, topRght, trScale, transform.ToWorldSpace(sourceWidth * Vector2.UnitX),
 			Vector2.UnitX * topRght.Width);
-		DrawRegion(spriteBatch, btmRght, brScale, _transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight)),
+		DrawRegion(spriteBatch, btmRght, brScale, transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight)),
 			new Vector2(btmRght.Width, btmRght.Height));
 		
 		//Draw edges
-		DrawRegion(spriteBatch, topCtr, tcScale, _transform.ToWorldSpace((sourceWidth*0.5f)*Vector2.UnitX),
+		DrawRegion(spriteBatch, topCtr, tcScale, transform.ToWorldSpace((sourceWidth*0.5f)*Vector2.UnitX),
 			new Vector2(topCtr.Width*0.5f,0));
-		DrawRegion(spriteBatch, ctrLeft, clScale, _transform.ToWorldSpace(sourceHeight*0.5f*Vector2.UnitY),
+		DrawRegion(spriteBatch, ctrLeft, clScale, transform.ToWorldSpace(sourceHeight*0.5f*Vector2.UnitY),
 			new Vector2(0,ctrLeft.Height*0.5f));
-		DrawRegion(spriteBatch, btmCtr, bcScale, _transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight)), 
+		DrawRegion(spriteBatch, btmCtr, bcScale, transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight)), 
 			new Vector2(btmCtr.Width*0.5f, btmCtr.Height));
-		DrawRegion(spriteBatch, ctrRght, crScale, _transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight*0.5f)),
+		DrawRegion(spriteBatch, ctrRght, crScale, transform.ToWorldSpace(new Vector2(sourceWidth, sourceHeight*0.5f)),
 			new Vector2(ctrRght.Width, ctrRght.Height*0.5f));
 		
 		//Draw center
-		DrawRegion(spriteBatch, ctrCtr, ccScale, _transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight*0.5f)),
+		DrawRegion(spriteBatch, ctrCtr, ccScale, transform.ToWorldSpace(new Vector2(sourceWidth*0.5f, sourceHeight*0.5f)),
 			new Vector2(ctrCtr.Width*0.5f, ctrCtr.Height*0.5f));
 	}
 
@@ -155,13 +155,13 @@ public class NineSliced : SpriteRenderer
 	
 	private void DrawRegion(SpriteBatch spriteBatch, Rectangle region, Vector2 scale, Vector2 position, Vector2 origin)
 	{
-		spriteBatch.Draw(texture, position, region, color, _transform.rotation, origin, scale, effects, layerDepth);
+		spriteBatch.Draw(texture, position, region, color, transform.rotation, origin, scale, effects, layerDepth);
 	}
 
 	private void UpdateScales()
 	{
-		float centerColumnWidth = invCtrWidth * (sourceWidth * _transform.worldSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
-		float centerRowHeight = invCtrHeight * (sourceHeight * _transform.worldSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
+		float centerColumnWidth = invCtrWidth * (sourceWidth * transform.worldSpaceScale.X - (leftWidth + rghtWidth)*cornerScale); 
+		float centerRowHeight = invCtrHeight * (sourceHeight * transform.worldSpaceScale.Y - (topHeight + btmHeight)*cornerScale);
 		//edge scaling
 		clScale.Y = centerRowHeight;
 		clScale.X = cornerScale;

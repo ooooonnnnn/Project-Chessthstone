@@ -43,7 +43,7 @@ public class Button : GameObject, ICallback
     /// </summary>
     private TextRenderer _childTextRenderer;
 
-    private Transform _childTransform;
+    public Transform textChildTransform;
 
     private Clickable _clickable;
 
@@ -82,7 +82,7 @@ public class Button : GameObject, ICallback
         transform.AddChild(textChild);
 
         _childTextRenderer = textRenderer;
-        _childTransform = textTransform;
+        textChildTransform = textTransform;
         _childTextRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
 
         CenterText();
@@ -90,15 +90,15 @@ public class Button : GameObject, ICallback
 
     private void CenterText()
     {
-        _childTransform.origin = _childTextRenderer.Font.MeasureString(text) * 0.5f;
-        _childTransform.parentSpacePos = new Vector2(
+        textChildTransform.origin = _childTextRenderer.Font.MeasureString(text) * 0.5f;
+        textChildTransform.parentSpacePos = new Vector2(
             spriteRenderer.sourceWidth * 0.5f, spriteRenderer.sourceHeight * 0.5f);
     }
 
     public void ChangeBackgroundScale(Vector2 newScale)
     {
         transform.parentSpaceScale *= newScale;
-        _childTransform.parentSpaceScale *= new Vector2(1f / newScale.X, 1f / newScale.Y);
+        textChildTransform.parentSpaceScale *= new Vector2(1f / newScale.X, 1f / newScale.Y);
     }
 
     private void AddButtonBehaviors()
