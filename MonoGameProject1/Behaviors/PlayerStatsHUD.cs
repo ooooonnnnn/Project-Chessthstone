@@ -52,7 +52,7 @@ namespace MonoGameProject1.Behaviors;
         // Helper: expose text color from ToolTip
         private void SetTextColor(Color color)
         {
-            if (_textRenderer != null)
-                _textRenderer.color = color;
+            if (textRenderer != null)
+                textRenderer.color = color;
         }
     }

@@ -7,14 +7,14 @@ namespace MonoGameProject1;
 
 public class ToolTip : GameObject
 {
-    protected TextRenderer _textRenderer;
+    public TextRenderer textRenderer;
     public string Text {
-        get => _textRenderer.Text;
+        get => textRenderer.Text;
         set
         {
-            _textRenderer ??= new TextRenderer(value);
-            _textRenderer.Text = value;
-            ModifyBackgroundSize(_textRenderer.MaxWidth + _padding);
+            textRenderer ??= new TextRenderer(value);
+            textRenderer.Text = value;
+            ModifyBackgroundSize(textRenderer.MaxWidth + padding);
         }
     }
     private NineSliced _nineSlicedBackground;
@@ -22,16 +22,16 @@ public class ToolTip : GameObject
     
     public Transform transform;
     
-    private int _padding = 10;
+    public int padding = 10;
 
     public ToolTip(string name, string text, int width = 200, int padding = 50) : base(name)
     {
-        this._padding = padding;
-        this._textRenderer = new TextRenderer(text, width - padding);
-        this._textRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
+        this.padding = padding;
+        this.textRenderer = new TextRenderer(text, width - padding);
+        this.textRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
         
         transform = new Transform();
-        AddBehaviors([transform, _textRenderer]);
+        AddBehaviors([transform, textRenderer]);
         
         this._nineSlicedBackground = new NineSliced(
             TextureManager.ToolTipNineSliceTexture,
@@ -44,16 +44,16 @@ public class ToolTip : GameObject
         _nineSlicedBackground.layerDepth = LayerDepthManager.UiDepth;
         
         _nineSlicedBackgroundTransform.origin = Vector2.Zero;
-        _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-_padding, -_padding);
+        _nineSlicedBackgroundTransform.parentSpacePos = new Vector2(-this.padding, -this.padding);
         
-        ModifyBackgroundSize(width + _padding);
+        ModifyBackgroundSize(width + this.padding);
     }
     
     
     private void ModifyBackgroundSize(int width)
     {
         // Adjust the size of the background based on the text size
-        var textSize = _textRenderer.GetTextSize();
-        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + _padding * 2);
+        var textSize = textRenderer.GetTextSize();
+        _nineSlicedBackground.sizePx = new (width, (int)textSize.Y + padding * 2);
     }
 }

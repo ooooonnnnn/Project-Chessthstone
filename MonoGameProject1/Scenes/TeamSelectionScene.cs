@@ -16,17 +16,14 @@ public class TeamSelectionScene : Scene
 	
 	private Button nextOrStartButton;
 	private Selector[] selectors = new Selector[6];
+	private ToolTip[] descriptions = new ToolTip[6];
 
 	public TeamSelectionScene()
 	{
 		nextOrStartButton = new ("Next or start", "Ready");
 		nextOrStartButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
 		nextOrStartButton.transform.origin = nextOrStartButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
-		nextOrStartButton.transform.parentSpacePos = new Vector2(
-			GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * 6, 
-			GameManager.Graphics.Viewport.Height / 2f);
 		nextOrStartButton.AddListener(HandleNextButtonPress);
-
 		List<GameObject> objectsToAdd = [nextOrStartButton];
 
 		//Instantiate and load selectors
@@ -34,15 +31,35 @@ public class TeamSelectionScene : Scene
 		{
 			selectors[i] = new Selector($"Selector {i + 1}",
 				ChessPieceFactory.GetAllPieces(true, (PieceType)i));
-		}
-
-		for (int i = 0; i < selectors.Length; i++)
-		{
 			selectors[i].transform.parentSpacePos = new Vector2(
 				GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * i, 
-				GameManager.Graphics.Viewport.Height / 2f);
+				GameManager.Graphics.Viewport.Height / 2f - 100);
+			selectors[i].previousButton.transform.parentSpacePos += new Vector2(0, 200);
 			objectsToAdd.Add(selectors[i]);
+			
+			descriptions[i] = new ToolTip($"{selectors[i].name} description", "");
+			descriptions[i].transform.parentSpacePos = selectors[i].transform.parentSpacePos + new Vector2(-50, 130);
+			descriptions[i].textRenderer.MaxWidth = 200;
+			objectsToAdd.Add(descriptions[i]);
+
+			var i1 = i;
+			void UpdateDescription(Sprite sprite)
+			{
+				if (sprite is not ChessPiece chessPiece)
+					return;
+				descriptions[i1].Text = string.Concat(
+					chessPiece.ability?.ToString() ?? "No special ability",
+					"\n",
+					$"{chessPiece.baseHealth} HP | {chessPiece.BaseDamage} DMG");
+			};
+			selectors[i].OnSpriteChanged += UpdateDescription;
+			UpdateDescription(selectors[i].currentSprite);
 		}
+		
+		nextOrStartButton.transform.parentSpacePos = new Vector2(
+			GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * 6, 
+			selectors[0].nextButton.transform.worldSpacePos.Y);
+
 		AddGameObjects(objectsToAdd);
 	}
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
@@ -15,6 +16,12 @@ public class Selector : GameObject
     private LinkedListNode<Sprite> _currentSprite;
     private TextRenderer _textRenderer;
     private Transform _textTransform;
+    public Button nextButton;
+    public Button previousButton;
+    /// <summary>
+    /// Invoked when the current sprite changes (NextSprite and PreviousSprite)
+    /// </summary>
+    public event Action<Sprite> OnSpriteChanged;
 
     public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
     {
@@ -33,20 +40,20 @@ public class Selector : GameObject
         InitializeSprites(sprites);
 
         //Button children
-        Button next = new Button($"{name} next button", "Next");
-        Button previous = new Button($"{name} previous button", "Previous");
-        next.ChangeBackgroundScale(new Vector2(1, 0.7f));
-        previous.ChangeBackgroundScale(new Vector2(1, 0.7f));
-        next.AddListener(NextSprite);
-        previous.AddListener(PreviousSprite);
+        nextButton = new Button($"{name} next button", "Next");
+        previousButton = new Button($"{name} previous button", "Previous");
+        nextButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
+        previousButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
+        nextButton.AddListener(NextSprite);
+        previousButton.AddListener(PreviousSprite);
 
-        transform.AddChild(next.transform);
-        transform.AddChild(previous.transform);
+        transform.AddChild(nextButton.transform);
+        transform.AddChild(previousButton.transform);
 
-        next.transform.parentSpacePos = Vector2.UnitY * -150;
-        previous.transform.parentSpacePos = Vector2.UnitY * 150;
-        next.transform.origin = next.spriteRenderer.sizePx.ToVector2() * 0.5f;
-        previous.transform.origin = previous.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        nextButton.transform.parentSpacePos = Vector2.UnitY * -150;
+        previousButton.transform.parentSpacePos = Vector2.UnitY * 150;
+        nextButton.transform.origin = nextButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        previousButton.transform.origin = previousButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
 
         UpdateText();
     }
@@ -75,6 +82,8 @@ public class Selector : GameObject
 
             objects.Add(sprite);
         }
+        
+        OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         parentScene?.AddGameObjects(objects);
     }
@@ -109,6 +118,8 @@ public class Selector : GameObject
         _currentSprite.Value?.SetActive(false);
         _currentSprite = _currentSprite.Next ?? _sprites.First;
         _currentSprite.Value?.SetActive(true);
+        
+        OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         UpdateText();
     }
@@ -120,6 +131,8 @@ public class Selector : GameObject
         _currentSprite.Value?.SetActive(false);
         _currentSprite = _currentSprite.Previous ?? _sprites.Last;
         _currentSprite.Value?.SetActive(true);
+        
+        OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         UpdateText();
     }
@@ -171,5 +184,11 @@ public class Selector : GameObject
     private void CenterText()
     {
         _textTransform.origin = _textRenderer.Font.MeasureString(_textRenderer.Text) * 0.5f;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        OnSpriteChanged = null;
     }
 }

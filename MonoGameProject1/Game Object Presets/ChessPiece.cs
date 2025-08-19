@@ -150,9 +150,6 @@ public abstract class ChessPiece : Sprite
 		spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
 		
 		AddBehaviors([new ChessPieceFeedback()]);
-
-		toolTip = new ToolTip($"{name} tooltip", "");
-		transform.AddChild(toolTip.transform);
 	}
 
     /// <summary>
@@ -382,7 +379,6 @@ public abstract class ChessPiece : Sprite
 		if (behavior is Ability ab)
 		{
 			ability = ab;
-			toolTip.Text = ability.ToString();
 		}
 	}
 
