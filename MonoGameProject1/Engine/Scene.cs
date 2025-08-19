@@ -72,7 +72,16 @@ public abstract class Scene : IDisposable
 	/// <summary>
 	/// Removes and disposes a gameobject. 
 	/// </summary>
-	/// <param name="go">object to remove</param>
+	/// <param name="parent">object to remove</param>
+	public void RemoveGameObjectAndChildren(GameObject parent)
+	{
+		foreach (GameObject child in parent.GetAllChildren())
+		{
+			RemoveGameObject(child);
+		}
+		RemoveGameObject(parent);
+	}
+
 	public void RemoveGameObject(GameObject go)
 	{
 		if (_gameObjects == null) 
@@ -84,7 +93,7 @@ public abstract class Scene : IDisposable
 			SceneManager.RemoveGameObject(go);
 		}
 	}
-	
+
 	public void Dispose()
 	{
 		foreach (GameObject gameObject in gameObjects)

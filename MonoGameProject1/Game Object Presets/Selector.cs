@@ -98,7 +98,7 @@ public class Selector : GameObject
         {
             if (disposeOldSprites)
             {
-                parentScene.RemoveGameObject(sprite);
+                parentScene.RemoveGameObjectAndChildren(sprite);
             }
             else
             {

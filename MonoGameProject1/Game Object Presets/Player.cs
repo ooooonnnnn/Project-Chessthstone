@@ -100,6 +100,8 @@ public class Player : GameObject
             {
                 board.squares[move.X, move.Y].spriteRenderer.color = Color.Green;
             }
+            
+            square.spriteRenderer.color = Color.Yellow;
         }
         else //piece selected => move or attack or deselect
         {

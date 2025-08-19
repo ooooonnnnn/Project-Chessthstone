@@ -111,7 +111,7 @@ public class TestGameScene : Scene
             hover.OnStartHover += () => toolTip.SetActive(true);
             hover.OnEndHover += () => toolTip.SetActive(false);
             
-            piece.OnDeath += _ => RemoveGameObject(toolTip);
+            piece.OnDeath += _ => RemoveGameObjectAndChildren(toolTip);
             
             AddGameObjects([overlayObj, toolTip]);
             toolTip.SetActive(false);

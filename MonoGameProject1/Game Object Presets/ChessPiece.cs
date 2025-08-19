@@ -282,7 +282,7 @@ public abstract class ChessPiece : Sprite
         currentSquare.occupyingPiece = null;
         OnDeath?.Invoke(this);
         if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
-            parentScene.RemoveGameObject(this);
+            parentScene.RemoveGameObjectAndChildren(this);
     }
 
     public event Action<ChessPiece> OnDeath;
