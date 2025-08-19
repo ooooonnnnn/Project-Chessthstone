@@ -198,7 +198,6 @@ public class Player : GameObject
         }
 
         _pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
-        parentScene.AddGameObjects([_pieceToPlace]);
         _pieceToPlace.TeleportToSquare(square);
 
         _pieceToPlace = null;
