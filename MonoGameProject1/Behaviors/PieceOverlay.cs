@@ -41,6 +41,7 @@ public class PieceOverlay : Renderer
         this.damageIcon = damageIcon;
         this.actionPointsIcon = actionPointsIcon;
         this.font = font;
+        layerDepth = LayerDepthManager.OverlayDepth;
     }
 
     /// <summary>

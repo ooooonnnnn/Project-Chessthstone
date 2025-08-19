@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1.Behaviors;
@@ -18,7 +19,14 @@ public class FollowTransform(Transform followTarget, Vector2 offset) : Behavior,
 	
 	public void Update(GameTime gameTime)
 	{
-		_transform.parentSpacePos = followTarget.worldSpacePos + offset;
+		MoveNow();
 	}
 
+	/// <summary>
+	/// Moves the object immediately even if it's not active
+	/// </summary>
+	public void MoveNow()
+	{
+		_transform.parentSpacePos = followTarget.worldSpacePos + offset;
+	}
 }

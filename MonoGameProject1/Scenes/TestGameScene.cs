@@ -72,24 +72,11 @@ public class TestGameScene : Scene
         foreach (ChessPiece piece in whitePlayer.teamPieces)
         {
             piece.ownerPlayer = whitePlayer;
-            Clickable clickable = new();
-            SenseMouseHover hover = new();
-            SpriteRectCollider collider = new();
-            piece.AddBehaviors([clickable, hover, collider]);
-
-            clickable.OnClick += () => piece.ownerPlayer.TryChooseTeamPiece(piece);
         }
 
         foreach (ChessPiece piece in blackPlayer.teamPieces)
         {
             piece.ownerPlayer = blackPlayer;
-
-            Clickable clickable = new();
-            SenseMouseHover hover = new();
-            SpriteRectCollider collider = new();
-            piece.AddBehaviors([clickable, hover, collider]);
-
-            clickable.OnClick += () => piece.ownerPlayer.TryChooseTeamPiece(piece);
         }
 
         foreach (var piece in whitePlayer.teamPieces.Concat(blackPlayer.teamPieces))
@@ -98,6 +85,14 @@ public class TestGameScene : Scene
             piece.InitializeBehaviors();
             piece.board = board;
             piece.transform.origin = Vector2.Zero;
+            
+            Clickable clickable = new();
+            SenseMouseHover hover = new();
+            SpriteRectCollider collider = new();
+            piece.AddBehaviors([clickable, hover, collider]);
+
+            clickable.OnClick += () => piece.ownerPlayer.TryChooseTeamPiece(piece);
+            
             PieceOverlay pieceOverlay = new PieceOverlay(
                 TextureManager.GetHealthIcon(),
                 TextureManager.GetDamageIcon(),
@@ -105,8 +100,21 @@ public class TestGameScene : Scene
                 FontManager.defaultFont);
             GameObject overlayObj = new GameObject(piece.name + " Overlay", [pieceOverlay, new Transform()]);
             pieceOverlay.SetChessPiece(piece);
-
             overlayObj.SetActive(false);
+            
+            ToolTip toolTip = new ToolTip(piece.name + " tooltip", 
+                piece.ability?.ToString() ?? "No special ability");
+
+            FollowTransform followTransform = new FollowTransform(piece.transform, new Vector2(100, 100));
+            toolTip.AddBehaviors([followTransform]);
+
+            hover.OnStartHover += () => toolTip.SetActive(true);
+            hover.OnEndHover += () => toolTip.SetActive(false);
+            
+            piece.OnDeath += _ => RemoveGameObject(toolTip);
+            
+            AddGameObjects([overlayObj, toolTip]);
+            toolTip.SetActive(false);
         }
 
         ArrangeTeamPieces();
@@ -179,6 +187,15 @@ public class TestGameScene : Scene
             piece.transform.parentSpacePos = groupTopLeft
                                              + Vector2.UnitX * elementDist * (i % 2)
                                              + Vector2.UnitY * elementDist * (i / 2);
+            
+        }
+
+        foreach (var gameObject in gameObjects)
+        {
+            if (gameObject is ToolTip tooltip)
+            {
+                tooltip.TryGetBehavior<FollowTransform>()?.MoveNow();
+            }
         }
     }
 }
