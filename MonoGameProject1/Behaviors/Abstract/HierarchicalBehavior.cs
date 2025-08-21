@@ -11,7 +11,7 @@ public abstract class HierarchicalBehavior : Behavior
 public abstract class HierarchicalBehavior<T> : HierarchicalBehavior where T : HierarchicalBehavior<T>
 {
 	public override IReadOnlyList<GameObject> children => _children.Select(child => child.gameObject).ToList();
-	protected List<T> _children;
+	protected List<T> _children = new();
 	protected T _parent;
 
 	public T parent
