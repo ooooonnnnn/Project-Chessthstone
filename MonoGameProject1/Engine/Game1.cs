@@ -23,8 +23,8 @@ public class Game1 : Game
 		//Full screen
 		//_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 		//_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-		_graphics.PreferredBackBufferWidth = 1920;
-		_graphics.PreferredBackBufferHeight = 1080;
+		_graphics.PreferredBackBufferWidth = GraphicsSettings.windowSize.X;
+		_graphics.PreferredBackBufferHeight = GraphicsSettings.windowSize.Y;
 		_graphics.IsFullScreen = false;
 		Window.IsBorderless = false;
 		_graphics.ApplyChanges();
