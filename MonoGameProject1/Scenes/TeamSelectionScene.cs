@@ -47,7 +47,7 @@ public class TeamSelectionScene : Scene
 			{
 				if (sprite is not ChessPiece chessPiece)
 					return;
-				descriptions[i1].Text = string.Concat(
+				descriptions[i1].text = string.Concat(
 					chessPiece.ability?.ToString() ?? "No special ability",
 					"\n",
 					$"{chessPiece.baseHealth} HP | {chessPiece.BaseDamage} DMG");

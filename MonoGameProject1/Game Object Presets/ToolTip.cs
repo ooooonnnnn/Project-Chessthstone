@@ -8,7 +8,7 @@ namespace MonoGameProject1;
 public class ToolTip : GameObject
 {
     public TextRenderer textRenderer;
-    public string Text {
+    public string text {
         get => textRenderer.Text;
         set
         {

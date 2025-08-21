@@ -22,13 +22,13 @@ namespace MonoGameProject1.Behaviors;
         {
             if (isWhite != TurnManager.instance.isWhiteTurn)
             {
-                Text = "";
+                text = "";
                 return;
             }
             
             if (GamePhaseManager.instance.phase == GamePhase.Setup)
-                Text = "Choose a piece to place";
+                text = "Choose a piece to place";
             else if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
-                Text = $"Mana: {_mana}";
+                text = $"Mana: {_mana}";
         }
     }

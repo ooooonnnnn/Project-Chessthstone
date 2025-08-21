@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameProject1.Engine;
 using MonoGameProject1.Scenes;
+using MonoGameProject1.Settings;
 
 namespace MonoGameProject1;
 
@@ -68,7 +69,7 @@ public class Game1 : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
-		GraphicsDevice.Clear(new(34, 29, 27));
+		GraphicsDevice.Clear(GraphicsSettings.backGroundColor);
 
 		// TODO: Add your drawing code here
 		_spriteBatch.Begin(SpriteSortMode.BackToFront);

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Behaviors;
 using MonoGameProject1.Behaviors.Abstract;
+using MonoGameProject1.Settings;
 
 namespace MonoGameProject1;
 
@@ -34,7 +35,7 @@ public class Selector : GameObject
         _textTransform = new Transform();
         _textRenderer = new TextRenderer("", 200, true);
         new GameObject($"{name} text", [_textTransform, _textRenderer]);
-        _textRenderer.color = Color.Beige;
+        _textRenderer.color = GraphicsSettings.textColor;
         transform.AddChild(_textTransform);
         _textTransform.parentSpacePos = Vector2.UnitY * 70;
 
