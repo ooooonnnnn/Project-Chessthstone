@@ -25,6 +25,7 @@ public class Selector : GameObject
     /// Invoked when the current sprite changes (NextSprite and PreviousSprite)
     /// </summary>
     public event Action<Sprite> OnSpriteChanged;
+    private const float _nextAndPrevDist = 50;
 
     public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
     {
@@ -151,10 +152,12 @@ public class Selector : GameObject
     {
         if (_currentSprite == null)
             return;
-        _currentSprite.Value?.SetActive(false);
+        SetActiveVisibleSprites(false);
         _currentSprite = _currentSprite.Next ?? _sprites.First;
-        _currentSprite.Value?.SetActive(true);
-        
+        SetNextAndPrevSprites();
+        SetActiveVisibleSprites(true);
+        PositionVisibleSprites();
+
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         UpdateText();
@@ -164,13 +167,29 @@ public class Selector : GameObject
     {
         if (_currentSprite == null)
             return;
-        _currentSprite.Value?.SetActive(false);
+        SetActiveVisibleSprites(false);
         _currentSprite = _currentSprite.Previous ?? _sprites.Last;
-        _currentSprite.Value?.SetActive(true);
+        SetNextAndPrevSprites();
+        SetActiveVisibleSprites(true);
+        PositionVisibleSprites();
         
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         UpdateText();
+    }
+
+    private void SetActiveVisibleSprites(bool active)
+    {
+        _currentSprite.Value?.SetActive(active);
+        _nextSprite.Value?.SetActive(active);
+        _previousSprite.Value?.SetActive(active);
+    }
+
+    private void PositionVisibleSprites()
+    {
+        _previousSprite.Value.transform.parentSpacePos = -_nextAndPrevDist * Vector2.UnitX;
+        _currentSprite.Value.transform.parentSpacePos = Vector2.Zero;
+        _nextSprite.Value.transform.parentSpacePos = _nextAndPrevDist * Vector2.UnitX;
     }
 
     /// <summary>
