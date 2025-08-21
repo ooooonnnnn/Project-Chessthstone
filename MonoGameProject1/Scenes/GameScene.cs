@@ -7,7 +7,7 @@ using MonoGameProject1.Engine;
 
 namespace MonoGameProject1.Scenes;
 
-public class TestGameScene : Scene
+public class GameScene : Scene
 {
     private Player whitePlayer;
     private Player blackPlayer;
@@ -19,7 +19,7 @@ public class TestGameScene : Scene
     private Button endTurnButton;
     private bool isEndTurnButtonAvailable = false;
 
-    public TestGameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
+    public GameScene(IEnumerable<ChessPiece> whiteTeam = null, IEnumerable<ChessPiece> blackTeam = null)
     {
         Console.WriteLine($"Constructing game scene with {whiteTeam.Count()} white pieces.");
 

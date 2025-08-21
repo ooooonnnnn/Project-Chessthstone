@@ -95,7 +95,7 @@ public class TeamSelectionScene : Scene
 				blackPiece.transform.parent = null;
 				blackTeam[i] = blackPiece;
 			}
-			SceneManager.ChangeScene(new TestGameScene(whiteTeam, blackTeam));
+			SceneManager.ChangeScene(new GameScene(whiteTeam, blackTeam));
 		}
 	}
 
