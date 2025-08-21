@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameProject1.Behaviors.Abstract;
 using MonoGameProject1.Engine;
 using IDrawable = MonoGameProject1.IDrawable;
 
@@ -23,8 +24,8 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
 	/// Some behaviors are hierarchical, which means they have children of the same type.
 	/// SceneManager needs to know about those children 
 	/// </summary>
-	private List<IHierarchy> _hierarchicalBehaviors = new();
-	public IReadOnlyList<IHierarchy> hierarchicalBehaviors => _hierarchicalBehaviors;
+	private List<HierarchicalBehavior> _hierarchicalBehaviors = new();
+	public IReadOnlyList<HierarchicalBehavior> hierarchicalBehaviors => _hierarchicalBehaviors;
 	
 	private List<IUpdatable> _updatables = new();
 	private List<IDrawable> _drawables = new();
@@ -73,7 +74,7 @@ public class GameObject : IUpdatable, IDrawable, IDisposable, IStart, IActivatab
                 _drawables.Add(drawable);
         }
 
-        if (behavior is IHierarchy hierarchy)
+        if (behavior is HierarchicalBehavior hierarchy)
         {
             if (!_hierarchicalBehaviors.Contains(hierarchy))
                 _hierarchicalBehaviors.Add(hierarchy);

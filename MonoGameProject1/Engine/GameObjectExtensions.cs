@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MonoGameProject1.Behaviors.Abstract;
 
 namespace MonoGameProject1;
 
@@ -24,7 +25,7 @@ public static class GameObjectExtensions
 		}
 		
 		
-		IReadOnlyList<IHierarchy> hierarchicals = gameObject.hierarchicalBehaviors;
+		IReadOnlyList<HierarchicalBehavior> hierarchicals = gameObject.hierarchicalBehaviors;
 		foreach (var behavior in hierarchicals)
 		{
 			result.UnionWith(behavior.children.Aggregate(

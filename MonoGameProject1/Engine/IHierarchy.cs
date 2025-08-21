@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MonoGameProject1;
 
-/// <summary>
+/*/// <summary>
 /// For behaviors that are part of a hierarchy. Changing the value of a behavior will affect the values of its children 
 /// </summary>
 public interface IHierarchy<T> : IHierarchy where T : Behavior
@@ -36,4 +36,4 @@ public interface IHierarchy
 	/// Removes the relevant behavior of the GameObject from the hierarchy.
 	/// </summary>
 	public void RemoveChild(GameObject gameObject);
-}
+}*/

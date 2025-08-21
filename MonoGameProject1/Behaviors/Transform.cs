@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using MonoGameProject1.Engine;
+using MonoGameProject1.Behaviors.Abstract;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace MonoGameProject1.Behaviors;
@@ -8,12 +6,10 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// Includes data to transform from object space to screen space
 /// </summary>
-public class Transform : Behavior, IHierarchy<Transform>
+public class Transform : HierarchicalBehavior<Transform>
 {
 	//TODO: rotation should be split to world space and parent space
 	public float rotation = 0;
-	// Hierarchy
-	public IReadOnlyList<GameObject> children => _children.Select(c => c.gameObject).ToList();
 
 	public Vector2 origin
 	{
@@ -89,6 +85,8 @@ public class Transform : Behavior, IHierarchy<Transform>
 	private Vector2 _worldSpacePos = Vector2.Zero;
 	private Vector2 _parentSpacePos = Vector2.Zero;
 
+	protected override void RefreshAfterParentChange() => UpdateParentSpacePosition(worldSpacePos);
+	
 	private void UpdateParentSpacePosition(Vector2 worldSpacePosition)
 	{
 		//Update this parentSpacePos
@@ -111,23 +109,6 @@ public class Transform : Behavior, IHierarchy<Transform>
 	{
 		parentSpaceScale = new Vector2(scaleFloat, scaleFloat);
 	}
-
-	//--------------------------Hierarchy---------------------------------------
-	private Transform _parent;
-	public Transform parent
-	{
-		get => _parent;
-		set
-		{
-			if (_parent == value) return;
-			_parent?._children.Remove(this);
-			_parent = value;
-			_parent?._children.Add(this);
-			UpdateParentSpacePosition(worldSpacePos);
-		}
-	}
-	
-	private List<Transform> _children = new List<Transform>();
 	
 	public override void Initialize() { }
 
@@ -185,34 +166,5 @@ public class Transform : Behavior, IHierarchy<Transform>
 		
 		//now inverse trasnform the query point, putting into sprite space
 		return invTrans * worldPos;
-	}
-
-	public void AddChild(GameObject child)
-	{
-		Transform transform = child.TryGetBehavior<Transform>();
-		AddChild(transform);
-	}
-
-	public void AddChild(Transform childTransform)
-	{
-		_children.Add(childTransform);
-		childTransform._parent = this;
-	}
-	
-	public void RemoveChild(GameObject child)
-	{
-		Transform transform = child.TryGetBehavior<Transform>();
-		RemoveChild(transform);
-	}
-
-	public void RemoveChild(Transform transform)
-	{
-		_children.Remove(transform);
-		transform.parent = null;
-	}
-
-	public void UpdateWorldSpace()
-	{
-		throw new System.NotImplementedException();
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
+using MonoGameProject1.Behaviors.Abstract;
 
 namespace MonoGameProject1;
 
@@ -150,7 +151,7 @@ public class Selector : GameObject
         }
         else //active = true:
         {
-            foreach (IHierarchy hierarchy in hierarchicalBehaviors)
+            foreach (HierarchicalBehavior hierarchy in hierarchicalBehaviors)
             {
                 foreach (var child in hierarchy.children)
                 {
