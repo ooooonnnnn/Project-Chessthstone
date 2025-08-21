@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,6 +22,8 @@ public abstract class HierarchicalBehavior<T> : HierarchicalBehavior where T : H
 		{
 			if (_parent == value) 
 				return;
+			if (_parent == this)
+				throw new ArgumentException($"Can't set {gameObject.name} parent to itself");
 			_parent?._children.Remove((T)this);
 			_parent = value;
 			_parent?._children.Add((T)this);
@@ -40,6 +43,8 @@ public abstract class HierarchicalBehavior<T> : HierarchicalBehavior where T : H
 
 	public void AddChild(T behavior)
 	{
+		if (behavior == this)
+			throw new ArgumentException($"Can't set {gameObject.name} child to itself");
 		_children.Add(behavior);
 		behavior._parent = (T)this;
 	}

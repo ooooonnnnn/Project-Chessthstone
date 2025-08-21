@@ -9,11 +9,36 @@ namespace MonoGameProject1.Behaviors;
 /// </summary>
 public abstract class Renderer : HierarchicalBehavior<Renderer>, IDrawable
 {
-	public Color color = Color.White;
-	public SpriteEffects effects = SpriteEffects.None;
+	public Color color
+	{
+		get => _color;
+		set
+		{
+			_color = value;
+			foreach (var child in _children)
+			{
+				child.color = value;
+			}
+		}
+	}
+	private Color _color = Color.White;
+
+	public SpriteEffects effects
+	{
+		get => _effects;
+		set
+		{
+			_effects = value;
+			foreach (var child in _children)
+			{
+				child.effects = value;
+			}
+		}
+	} 
+	private SpriteEffects _effects = SpriteEffects.None;
 	public float layerDepth = LayerDepthManager.GameObjectDepth;
 	public Transform transform;
-	
+
 	public override void Initialize()
 	{
 		transform = gameObject.TryGetBehavior<Transform>();

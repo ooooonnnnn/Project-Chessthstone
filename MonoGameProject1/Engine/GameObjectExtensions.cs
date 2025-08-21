@@ -24,10 +24,12 @@ public static class GameObjectExtensions
 			result = [gameObject];
 		}
 		
-		
+		//TODO: add protection against loops in the tree. This probably requires a breadth first search
 		IReadOnlyList<HierarchicalBehavior> hierarchicals = gameObject.hierarchicalBehaviors;
 		foreach (var behavior in hierarchicals)
 		{
+			if (behavior.children.Count == 0 ) 
+				continue;
 			result.UnionWith(behavior.children.Aggregate(
 				new HashSet<GameObject>(), (current, child) =>
 				{

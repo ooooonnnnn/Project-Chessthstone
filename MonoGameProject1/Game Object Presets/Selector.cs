@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Behaviors;
 using MonoGameProject1.Behaviors.Abstract;
 
@@ -41,20 +42,36 @@ public class Selector : GameObject
         InitializeSprites(sprites);
 
         //Button children
-        nextButton = new Button($"{name} next button", "Next");
-        previousButton = new Button($"{name} previous button", "Previous");
+        nextButton = new Button($"{name} next button");
+        previousButton = new Button($"{name} previous button");
         nextButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
         previousButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
         nextButton.AddListener(NextSprite);
         previousButton.AddListener(PreviousSprite);
-
         transform.AddChild(nextButton.transform);
         transform.AddChild(previousButton.transform);
-
+        
         nextButton.transform.parentSpacePos = Vector2.UnitY * -150;
         previousButton.transform.parentSpacePos = Vector2.UnitY * 150;
         nextButton.transform.origin = nextButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
         previousButton.transform.origin = previousButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+
+        //Arrows on buttons
+        Sprite nextArrow = new Sprite($"{name} next arrow", TextureManager.RightArrowTexture);
+        Sprite prevArrow = new Sprite($"{name} previous arrow", TextureManager.RightArrowTexture);
+        prevArrow.spriteRenderer.effects |= SpriteEffects.FlipHorizontally;
+        nextButton.transform.AddChild(nextArrow.transform);
+        previousButton.transform.AddChild(prevArrow.transform);
+        nextButton.spriteRenderer.AddChild(nextArrow.spriteRenderer);
+        previousButton.spriteRenderer.AddChild(prevArrow.spriteRenderer);
+        
+        nextArrow.spriteRenderer.layerDepth = nextButton.spriteRenderer.layerDepth - 0.01f;
+        prevArrow.spriteRenderer.layerDepth = previousButton.spriteRenderer.layerDepth - 0.01f;
+        
+        nextArrow.transform.origin = nextArrow.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        prevArrow.transform.origin = prevArrow.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        nextArrow.transform.parentSpacePos = Vector2.Zero;
+        prevArrow.transform.parentSpacePos = Vector2.Zero;
 
         UpdateText();
     }
