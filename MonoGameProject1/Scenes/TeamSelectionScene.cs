@@ -17,29 +17,30 @@ public class TeamSelectionScene : Scene
 	private Button nextOrStartButton;
 	private Selector[] selectors = new Selector[6];
 	private ToolTip[] descriptions = new ToolTip[6];
+	private Button[] pickButtons = new Button[6];
+	
+	private const int selectorSpacing = 280;
+	private const float selectorsHeight = 200;
 
 	public TeamSelectionScene()
 	{
-		nextOrStartButton = new ("Next or start", "Ready");
-		nextOrStartButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
-		nextOrStartButton.transform.origin = nextOrStartButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
-		nextOrStartButton.AddListener(HandleNextButtonPress);
-		List<GameObject> objectsToAdd = [nextOrStartButton];
-
+		List<GameObject> objectsToAdd = [];
 		//Instantiate and load selectors
 		for (int i = 0; i < selectors.Length; i++)
 		{
 			selectors[i] = new Selector($"Selector {i + 1}",
 				ChessPieceFactory.GetAllPieces(true, (PieceType)i));
-			selectors[i].transform.parentSpacePos = new Vector2(
-				GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * i, 
-				GameManager.Graphics.Viewport.Height / 2f - 100);
-			// selectors[i].previousButton.transform.parentSpacePos += new Vector2(0, 200);
 			objectsToAdd.Add(selectors[i]);
+			selectors[i].transform.parentSpacePos = new Vector2(
+				GameManager.Graphics.Viewport.Width / 2f + -selectorSpacing * 2.5f + selectorSpacing * i, 
+				GameManager.Graphics.Viewport.Height / 2f - selectorsHeight);
 			
 			descriptions[i] = new ToolTip($"{selectors[i].name} description", "");
-			descriptions[i].transform.parentSpacePos = selectors[i].transform.parentSpacePos + new Vector2(-50, 130);
-			descriptions[i].textRenderer.MaxWidth = 200;
+			descriptions[i].transform.parent = selectors[i].transform;
+			int maxWidth = 200;
+			descriptions[i].textRenderer.MaxWidth = maxWidth;
+			descriptions[i].transform.origin = Vector2.UnitX * maxWidth * 0.5f; 
+			descriptions[i].transform.parentSpacePos = new Vector2(0, 130);
 			objectsToAdd.Add(descriptions[i]);
 
 			var i1 = i;
@@ -54,11 +55,24 @@ public class TeamSelectionScene : Scene
 			};
 			selectors[i].OnSpriteChanged += UpdateDescription;
 			UpdateDescription(selectors[i].currentSprite);
+			
+			pickButtons[i] = new Button($"{selectors[i].name} pick", "Pick");
+			objectsToAdd.Add(pickButtons[i]);
+			pickButtons[i].transform.parent = selectors[i].transform;
+			pickButtons[i].transform.origin = pickButtons[i].spriteRenderer.sizePx.ToVector2() * 0.5f;
+			pickButtons[i].transform.parentSpacePos = new Vector2(0, -100);
+			pickButtons[i].ChangeBackgroundScale(new Vector2(0.8f, 0.4f));
 		}
 		
+		nextOrStartButton = new ("Next or start", "Ready");
+		objectsToAdd.Add(nextOrStartButton);
+		nextOrStartButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
+		nextOrStartButton.transform.origin = nextOrStartButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+		nextOrStartButton.AddListener(HandleNextButtonPress);
+
 		nextOrStartButton.transform.parentSpacePos = new Vector2(
-			GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * 6, 
-			selectors[0].nextButton.transform.worldSpacePos.Y);
+			GameManager.Graphics.Viewport.Width / 2f + selectorSpacing * 2.5f, 
+			selectors[0].nextButton.transform.worldSpacePos.Y + 500);
 
 		AddGameObjects(objectsToAdd);
 	}

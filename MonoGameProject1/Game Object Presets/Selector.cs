@@ -16,7 +16,7 @@ public class Selector : GameObject
     public Sprite currentSprite => _currentSprite.Value;
     public Transform transform;
     private LinkedList<Sprite> _sprites;
-    private LinkedListNode<Sprite> _currentSprite;
+    private LinkedListNode<Sprite> _currentSprite, _nextSprite, _previousSprite;
     private TextRenderer _textRenderer;
     private Transform _textTransform;
     public Button nextButton;
@@ -45,8 +45,6 @@ public class Selector : GameObject
         //Button children
         nextButton = new Button($"{name} next button");
         previousButton = new Button($"{name} previous button");
-        // nextButton.ChangeBackgroundScale(new Vector2(0.7f, 0.7f));
-        // previousButton.ChangeBackgroundScale(new Vector2(0.7f, 0.7f));
         nextButton.AddListener(NextSprite);
         previousButton.AddListener(PreviousSprite);
         transform.AddChild(nextButton.transform);
@@ -54,12 +52,16 @@ public class Selector : GameObject
 
         nextButton.transform.origin = nextButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
         previousButton.transform.origin = previousButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
-        Vector2 buttonDistance = Vector2.UnitX * 75;
+        Vector2 buttonDistance = Vector2.UnitX * 90;
         nextButton.transform.parentSpacePos = buttonDistance;
         previousButton.transform.parentSpacePos = -buttonDistance;
-        Vector2 buttonScale = new Vector2(0.5f, 0.7f);
+        Vector2 buttonScale = new Vector2(0.3f, 0.4f);
         nextButton.transform.parentSpaceScale = buttonScale;
         previousButton.transform.parentSpaceScale = buttonScale;
+        
+        const float cornerScaling = 0.3f;
+        (nextButton.spriteRenderer as NineSliced).cornerScale = cornerScaling;
+        (previousButton.spriteRenderer as NineSliced).cornerScale = cornerScaling;
         
         //Arrows on buttons
         Sprite nextArrow = new Sprite($"{name} next arrow", TextureManager.RightArrowTexture);
@@ -92,17 +94,18 @@ public class Selector : GameObject
     {
         _sprites = new LinkedList<Sprite>(sprites);
         _currentSprite = _sprites.First;
+        SetNextAndPrevSprites();
         UpdateText();
         List<GameObject> objects = new();
         foreach (var sprite in _sprites)
         {
             Transform childTransform = sprite.transform;
             transform.AddChild(childTransform);
-            // childTransform.parentSpacePos = new(-32, 0);
             childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
             sprite.spriteRenderer.sizePx = new Point(100, 100);
             childTransform.parentSpacePos = Vector2.Zero;
-            if (sprite == currentSprite)
+            if (sprite == currentSprite 
+                || sprite == _nextSprite.Value || sprite == _previousSprite.Value)
                 sprite.SetActive(true);
             else
                 sprite.SetActive(false);
@@ -113,6 +116,12 @@ public class Selector : GameObject
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         parentScene?.AddGameObjects(objects);
+    }
+
+    private void SetNextAndPrevSprites()
+    {
+        _nextSprite = _currentSprite?.Next ?? _sprites.First;
+        _previousSprite = _currentSprite?.Previous ?? _sprites.Last;
     }
 
     /// <summary>
