@@ -34,7 +34,7 @@ public class TeamSelectionScene : Scene
 			selectors[i].transform.parentSpacePos = new Vector2(
 				GameManager.Graphics.Viewport.Width / 2f + -800 + 256 * i, 
 				GameManager.Graphics.Viewport.Height / 2f - 100);
-			selectors[i].previousButton.transform.parentSpacePos += new Vector2(0, 200);
+			// selectors[i].previousButton.transform.parentSpacePos += new Vector2(0, 200);
 			objectsToAdd.Add(selectors[i]);
 			
 			descriptions[i] = new ToolTip($"{selectors[i].name} description", "");

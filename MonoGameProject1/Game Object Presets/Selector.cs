@@ -36,7 +36,7 @@ public class Selector : GameObject
         new GameObject($"{name} text", [_textTransform, _textRenderer]);
         _textRenderer.color = Color.Beige;
         transform.AddChild(_textTransform);
-        _textTransform.parentSpacePos = Vector2.UnitY * -50;
+        _textTransform.parentSpacePos = Vector2.UnitY * 70;
 
         //Sprite children
         InitializeSprites(sprites);
@@ -44,18 +44,22 @@ public class Selector : GameObject
         //Button children
         nextButton = new Button($"{name} next button");
         previousButton = new Button($"{name} previous button");
-        nextButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
-        previousButton.ChangeBackgroundScale(new Vector2(1, 0.7f));
+        // nextButton.ChangeBackgroundScale(new Vector2(0.7f, 0.7f));
+        // previousButton.ChangeBackgroundScale(new Vector2(0.7f, 0.7f));
         nextButton.AddListener(NextSprite);
         previousButton.AddListener(PreviousSprite);
         transform.AddChild(nextButton.transform);
         transform.AddChild(previousButton.transform);
-        
-        nextButton.transform.parentSpacePos = Vector2.UnitY * -150;
-        previousButton.transform.parentSpacePos = Vector2.UnitY * 150;
+
         nextButton.transform.origin = nextButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
         previousButton.transform.origin = previousButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
-
+        Vector2 buttonDistance = Vector2.UnitX * 75;
+        nextButton.transform.parentSpacePos = buttonDistance;
+        previousButton.transform.parentSpacePos = -buttonDistance;
+        Vector2 buttonScale = new Vector2(0.5f, 0.7f);
+        nextButton.transform.parentSpaceScale = buttonScale;
+        previousButton.transform.parentSpaceScale = buttonScale;
+        
         //Arrows on buttons
         Sprite nextArrow = new Sprite($"{name} next arrow", TextureManager.RightArrowTexture);
         Sprite prevArrow = new Sprite($"{name} previous arrow", TextureManager.RightArrowTexture);
@@ -70,8 +74,11 @@ public class Selector : GameObject
         
         nextArrow.transform.origin = nextArrow.spriteRenderer.sizePx.ToVector2() * 0.5f;
         prevArrow.transform.origin = prevArrow.spriteRenderer.sizePx.ToVector2() * 0.5f;
-        nextArrow.transform.parentSpacePos = Vector2.Zero;
-        prevArrow.transform.parentSpacePos = Vector2.Zero;
+        float arrowScale = 0.75f;
+        nextArrow.transform.SetScaleFromFloat(arrowScale);
+        prevArrow.transform.SetScaleFromFloat(arrowScale);
+        nextArrow.transform.parentSpacePos = nextButton.transform.origin;
+        prevArrow.transform.parentSpacePos = previousButton.transform.origin;
 
         UpdateText();
     }
@@ -90,9 +97,10 @@ public class Selector : GameObject
         {
             Transform childTransform = sprite.transform;
             transform.AddChild(childTransform);
-            childTransform.parentSpacePos = new(-32, 0);
-            sprite.spriteRenderer.sizePx = new Point(100, 100);
+            // childTransform.parentSpacePos = new(-32, 0);
             childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
+            sprite.spriteRenderer.sizePx = new Point(100, 100);
+            childTransform.parentSpacePos = Vector2.Zero;
             if (sprite == currentSprite)
                 sprite.SetActive(true);
             else
