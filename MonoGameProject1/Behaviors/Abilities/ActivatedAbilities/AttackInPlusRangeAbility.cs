@@ -13,13 +13,13 @@ public class AttackInPlusRangeAbility : ActivatedAbility
         return $"{manaCost} mana: Deal 15 damage to all pieces horizontal and vertical to this piece";
     }
 
-    private GameState currentState;
     private ChessPiece ownerPiece => gameObject as ChessPiece;
     
     protected override void OneShotEffect()
     {
         
         //Take positions of ally pieces
+        GameState currentState = new GameState(TurnManager.instance.isWhiteTurn, gameObject.parentScene);
         IReadOnlyList<Point> enemyCoords = ownerPiece.isWhite 
             ? currentState.blackPieces : currentState.whitePieces;
         Point myPosition = ownerPiece.position;
