@@ -14,7 +14,8 @@ namespace MonoGameProject1;
 public class Selector : GameObject
 {
     public Sprite currentSprite => _currentSprite.Value;
-    public Transform transform;
+    public Transform transform = new();
+    private SelectorRenderer _selectorRenderer = new();
     private LinkedList<Sprite> _sprites;
     private LinkedListNode<Sprite> _currentSprite, _nextSprite, _previousSprite;
     private TextRenderer _textRenderer;
@@ -25,12 +26,12 @@ public class Selector : GameObject
     /// Invoked when the current sprite changes (NextSprite and PreviousSprite)
     /// </summary>
     public event Action<Sprite> OnSpriteChanged;
-    private const float _nextAndPrevDist = 50;
+    private const float _nextAndPrevBtnDist = 50;
 
     public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
     {
-        transform = new Transform();
         AddBehaviors([transform]);
+        // AddBehaviors([transform, _selectorRenderer]);
 
         //Text Child
         _textTransform = new Transform();
@@ -105,11 +106,7 @@ public class Selector : GameObject
             childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
             sprite.spriteRenderer.sizePx = new Point(100, 100);
             childTransform.parentSpacePos = Vector2.Zero;
-            if (sprite == currentSprite 
-                || sprite == _nextSprite.Value || sprite == _previousSprite.Value)
-                sprite.SetActive(true);
-            else
-                sprite.SetActive(false);
+            sprite.SetActive(sprite == currentSprite);
 
             objects.Add(sprite);
         }
@@ -181,15 +178,15 @@ public class Selector : GameObject
     private void SetActiveVisibleSprites(bool active)
     {
         _currentSprite.Value?.SetActive(active);
-        _nextSprite.Value?.SetActive(active);
-        _previousSprite.Value?.SetActive(active);
+        // _nextSprite.Value?.SetActive(active);
+        // _previousSprite.Value?.SetActive(active);
     }
 
     private void PositionVisibleSprites()
     {
-        _previousSprite.Value.transform.parentSpacePos = -_nextAndPrevDist * Vector2.UnitX;
         _currentSprite.Value.transform.parentSpacePos = Vector2.Zero;
-        _nextSprite.Value.transform.parentSpacePos = _nextAndPrevDist * Vector2.UnitX;
+        // _previousSprite.Value.transform.parentSpacePos = -_nextAndPrevBtnDist * Vector2.UnitX;
+        // _nextSprite.Value.transform.parentSpacePos = _nextAndPrevBtnDist * Vector2.UnitX;
     }
 
     /// <summary>

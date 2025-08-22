@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace MonoGameProject1;
+namespace MonoGameProject1.Extensions;
 
 public static class Extensions
 {

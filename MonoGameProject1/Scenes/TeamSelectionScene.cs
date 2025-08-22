@@ -18,13 +18,20 @@ public class TeamSelectionScene : Scene
 	private Selector[] selectors = new Selector[6];
 	private ToolTip[] descriptions = new ToolTip[6];
 	private Button[] pickButtons = new Button[6];
+	private Frame[] frames = new Frame[6];
+	private Dictionary<int, ChessPiece> _chosenPieces = new();
 	
 	private const int selectorSpacing = 280;
 	private const float selectorsHeight = 200;
 
-	public TeamSelectionScene()
+ public TeamSelectionScene()
 	{
 		List<GameObject> objectsToAdd = [];
+		// Initialize chosen pieces dictionary with 0..5 => null
+		for (int i = 0; i < 6; i++)
+		{
+			_chosenPieces[i] = null;
+		}
 		//Instantiate and load selectors
 		for (int i = 0; i < selectors.Length; i++)
 		{
@@ -62,6 +69,34 @@ public class TeamSelectionScene : Scene
 			pickButtons[i].transform.origin = pickButtons[i].spriteRenderer.sizePx.ToVector2() * 0.5f;
 			pickButtons[i].transform.parentSpacePos = new Vector2(0, -100);
 			pickButtons[i].ChangeBackgroundScale(new Vector2(0.8f, 0.4f));
+			// Wire pick button to PickPiece for this slot
+			int capturedIndex = i;
+			pickButtons[i].AddListener(() =>
+			{
+				var piece = selectors[capturedIndex].currentSprite as ChessPiece;
+				PickPiece(capturedIndex, piece);
+			});
+		}
+
+		// Create six frames at the bottom, evenly spaced
+		const int frameSize = 160;
+		float screenWidth = GameManager.Graphics.Viewport.Width;
+		float screenHeight = GameManager.Graphics.Viewport.Height;
+		float spacing = screenWidth / (frames.Length + 1f);
+		float bottomMargin = 40f;
+		for (int i = 0; i < frames.Length; i++)
+		{
+			frames[i] = new Frame($"Team Slot {i + 1}");
+			objectsToAdd.Add(frames[i]);
+			frames[i].spriteRenderer.layerDepth = LayerDepthManager.UiDepth;
+			frames[i].spriteRenderer.sizePx = new Microsoft.Xna.Framework.Point(frameSize, frameSize);
+
+			float centerX = spacing * (i + 1);
+			// Position frames so they are evenly spaced and sit near the bottom
+			var sizePx = frames[i].spriteRenderer.sizePx;
+			frames[i].transform.parentSpacePos = new Vector2(
+				centerX - sizePx.X * 0.5f,
+				screenHeight - bottomMargin - sizePx.Y);
 		}
 		
 		nextOrStartButton = new ("Next or start", "Ready");
@@ -76,7 +111,33 @@ public class TeamSelectionScene : Scene
 
 		AddGameObjects(objectsToAdd);
 	}
-
+	
+	public void PickPiece(int i, ChessPiece piece)
+	{
+		if (i < 0 || i >= frames.Length)
+			return;
+		// Detach previous piece if any
+		if (_chosenPieces.TryGetValue(i, out var prev) && prev != null)
+		{
+			prev.transform.parent = null;
+		}
+		_chosenPieces[i] = piece;
+		if (piece == null)
+			return;
+		// Parent and center the piece within the frame
+		piece.transform.parent = frames[i].transform;
+		// Center using the same approach as Button: use source sizes, scale is applied by parent
+		var fw = frames[i].spriteRenderer.sourceWidth;
+		var fh = frames[i].spriteRenderer.sourceHeight;
+		// Ensure the piece origin is centered for nicer alignment
+		piece.transform.origin = new Vector2(
+			piece.spriteRenderer.sourceWidth * 0.5f,
+			piece.spriteRenderer.sourceHeight * 0.5f);
+		piece.transform.parentSpacePos = new Vector2(fw * 0.5f, fh * 0.5f);
+		// Optional: elevate piece slightly above the frame in render order if needed
+		piece.spriteRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
+	}
+	
 	/// <summary>
 	/// Loads the selectors with the apropriate pieces 
 	/// </summary>
