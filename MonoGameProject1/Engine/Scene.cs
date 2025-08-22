@@ -70,7 +70,7 @@ public abstract class Scene : IDisposable
 	public abstract void Initialize();
 
 	/// <summary>
-	/// Removes and disposes a gameobject. 
+	/// Removes and disposes a gameobject and it's children
 	/// </summary>
 	/// <param name="parent">object to remove</param>
 	public void RemoveGameObjectAndChildren(GameObject parent)
@@ -82,6 +82,11 @@ public abstract class Scene : IDisposable
 		RemoveGameObject(parent);
 	}
 
+	/// <summary>
+	/// Removes and disposes a gameobject.
+	/// </summary>
+	/// <param name="go"></param>
+	/// <exception cref="Exception">if the scene hasn't set the _gameObjects field</exception>
 	public void RemoveGameObject(GameObject go)
 	{
 		if (_gameObjects == null) 

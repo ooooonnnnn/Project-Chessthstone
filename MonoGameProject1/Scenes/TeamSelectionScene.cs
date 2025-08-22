@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1.Scenes;
 
@@ -75,14 +76,14 @@ public class TeamSelectionScene : Scene
 			{
 				var piece = selectors[capturedIndex].currentSprite as ChessPiece;
 				PickPiece(capturedIndex, piece);
+				UpdateReadyButton();
 			});
 		}
 
 		// Create six frames at the bottom, evenly spaced
 		const int frameSize = 160;
-		float screenWidth = GameManager.Graphics.Viewport.Width;
 		float screenHeight = GameManager.Graphics.Viewport.Height;
-		float spacing = screenWidth / (frames.Length + 1f);
+		float spacing = 220;
 		float bottomMargin = 40f;
 		for (int i = 0; i < frames.Length; i++)
 		{
@@ -96,7 +97,7 @@ public class TeamSelectionScene : Scene
 			var sizePx = frames[i].spriteRenderer.sizePx;
 			frames[i].transform.parentSpacePos = new Vector2(
 				centerX - sizePx.X * 0.5f,
-				screenHeight - bottomMargin - sizePx.Y);
+				screenHeight - 300 - sizePx.Y);
 		}
 		
 		nextOrStartButton = new ("Next or start", "Ready");
@@ -111,19 +112,23 @@ public class TeamSelectionScene : Scene
 
 		AddGameObjects(objectsToAdd);
 	}
+
+	public override void Initialize()
+	{
+		UpdateReadyButton();
+	}
 	
-	public void PickPiece(int i, ChessPiece piece)
+	private void PickPiece(int i, ChessPiece piece)
 	{
 		if (i < 0 || i >= frames.Length)
 			return;
-		// Detach previous piece if any
-		if (_chosenPieces.TryGetValue(i, out var prev) && prev != null)
+		// Destroy previous piece if any
+		if (_chosenPieces[i] != null)
 		{
-			prev.transform.parent = null;
+			RemoveGameObject(_chosenPieces[i]);
 		}
 		_chosenPieces[i] = piece;
-		if (piece == null)
-			return;
+		AddGameObjects([piece]);
 		// Parent and center the piece within the frame
 		piece.transform.parent = frames[i].transform;
 		// Center using the same approach as Button: use source sizes, scale is applied by parent
@@ -134,9 +139,27 @@ public class TeamSelectionScene : Scene
 			piece.spriteRenderer.sourceWidth * 0.5f,
 			piece.spriteRenderer.sourceHeight * 0.5f);
 		piece.transform.parentSpacePos = new Vector2(fw * 0.5f, fh * 0.5f);
+		piece.transform.SetScaleFromFloat(0.4f);
 		// Optional: elevate piece slightly above the frame in render order if needed
 		piece.spriteRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
 	}
+
+	private void UpdateReadyButton()
+	{
+		int numChosenPieces = _chosenPieces.Values.Count(piece => piece != null);
+		if (numChosenPieces < 6)
+		{
+			nextOrStartButton.TryGetBehavior<Clickable>().SetActive(false);
+			nextOrStartButton.TryGetBehavior<ChangeTintWhenHover>().SetActive(false);
+			nextOrStartButton.text = $"{numChosenPieces} / 6";
+		}
+		else
+		{
+			nextOrStartButton.TryGetBehavior<Clickable>().SetActive(true);
+			nextOrStartButton.TryGetBehavior<ChangeTintWhenHover>().SetActive(true);
+			nextOrStartButton.text = "Ready";
+		}
+	}	
 	
 	/// <summary>
 	/// Loads the selectors with the apropriate pieces 
@@ -157,10 +180,16 @@ public class TeamSelectionScene : Scene
 			{
 				ChessPiece whitePiece = selectors[i].currentSprite as ChessPiece;
 				whitePiece.transform.parent = null;
-				whiteTeam[i] = whitePiece;
 			}
+			whiteTeam = _chosenPieces.Values.ToArray();
 			LoadSelectors(false);
 			currentPlayerIsWhite = false;
+
+			foreach (KeyValuePair<int, ChessPiece> keyValuePair in _chosenPieces)
+			{
+				_chosenPieces[keyValuePair.Key] = null;
+				RemoveGameObject(keyValuePair.Value);
+			}
 		}
 		else
 		{
@@ -168,14 +197,9 @@ public class TeamSelectionScene : Scene
 			{
 				ChessPiece blackPiece = selectors[i].currentSprite as ChessPiece;
 				blackPiece.transform.parent = null;
-				blackTeam[i] = blackPiece;
 			}
+			blackTeam = _chosenPieces.Values.ToArray();
 			SceneManager.ChangeScene(new GameScene(whiteTeam, blackTeam));
 		}
-	}
-
-	public override void Initialize()
-	{
-		// Console.WriteLine($"{this} isn't initializing anything");
 	}
 }

@@ -9,5 +9,6 @@ public class PawnAttackNearby : Pawn
         string color = this.isWhite ? "White" : "Black";
         name = $"{color} Radiating Pawn";
         AddBehaviors([new AttackNearbyAbility()]);
+        // spriteRenderer.texture = TextureManager.GetChessPieceTexture(false, PieceType.Pawn);
     }
 }

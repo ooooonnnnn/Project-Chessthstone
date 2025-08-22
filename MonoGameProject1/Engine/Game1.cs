@@ -26,7 +26,7 @@ public class Game1 : Game
 		_graphics.PreferredBackBufferWidth = GraphicsSettings.windowSize.X;
 		_graphics.PreferredBackBufferHeight = GraphicsSettings.windowSize.Y;
 		_graphics.IsFullScreen = false;
-		Window.IsBorderless = false;
+		Window.IsBorderless = true;
 		_graphics.ApplyChanges();
 	}
 
