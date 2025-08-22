@@ -30,8 +30,8 @@ public class Selector : GameObject
 
     public Selector(string name, IEnumerable<Sprite> sprites) : base(name)
     {
-        AddBehaviors([transform]);
-        // AddBehaviors([transform, _selectorRenderer]);
+        // AddBehaviors([transform]);
+        AddBehaviors([transform, _selectorRenderer]);
 
         //Text Child
         _textTransform = new Transform();
@@ -99,17 +99,18 @@ public class Selector : GameObject
         SetNextAndPrevSprites();
         UpdateText();
         List<GameObject> objects = new();
-        foreach (var sprite in _sprites)
-        {
-            Transform childTransform = sprite.transform;
-            transform.AddChild(childTransform);
-            childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
-            sprite.spriteRenderer.sizePx = new Point(100, 100);
-            childTransform.parentSpacePos = Vector2.Zero;
-            sprite.SetActive(sprite == currentSprite);
-
-            objects.Add(sprite);
-        }
+        // foreach (var sprite in _sprites)
+        // {
+        //     Transform childTransform = sprite.transform;
+        //     transform.AddChild(childTransform);
+        //     childTransform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        //     sprite.spriteRenderer.sizePx = new Point(100, 100);
+        //     childTransform.parentSpacePos = Vector2.Zero;
+        //     sprite.SetActive(sprite == currentSprite);
+        //
+        //     objects.Add(sprite);
+        // }
+        _selectorRenderer.JumpToSprite(_currentSprite);
         
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
@@ -149,11 +150,12 @@ public class Selector : GameObject
     {
         if (_currentSprite == null)
             return;
-        SetActiveVisibleSprites(false);
+        // SetActiveVisibleSprites(false);
         _currentSprite = _currentSprite.Next ?? _sprites.First;
-        SetNextAndPrevSprites();
-        SetActiveVisibleSprites(true);
-        PositionVisibleSprites();
+        _selectorRenderer.JumpToSprite(_currentSprite);
+        // SetNextAndPrevSprites();
+        // SetActiveVisibleSprites(true);
+        // PositionVisibleSprites();
 
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
@@ -164,11 +166,12 @@ public class Selector : GameObject
     {
         if (_currentSprite == null)
             return;
-        SetActiveVisibleSprites(false);
+        // SetActiveVisibleSprites(false);
         _currentSprite = _currentSprite.Previous ?? _sprites.Last;
-        SetNextAndPrevSprites();
-        SetActiveVisibleSprites(true);
-        PositionVisibleSprites();
+        _selectorRenderer.JumpToSprite(_currentSprite);
+        // SetNextAndPrevSprites();
+        // SetActiveVisibleSprites(true);
+        // PositionVisibleSprites();
         
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
