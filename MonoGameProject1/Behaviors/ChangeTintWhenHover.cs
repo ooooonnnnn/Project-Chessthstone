@@ -42,6 +42,11 @@ public class ChangeTintWhenHover : Behavior, IUpdatable, IActivatable
 			Mouse.GetState().LeftButton == ButtonState.Pressed ? tintWhenMouseDown : tintWhenHover;
 	}
 
-	public void SetActive(bool active) => _isActive = active;
+	public void SetActive(bool active)
+	{
+		_isActive = active;
+		if (!_isActive)
+			_spriteRenderer.color = _originalTint;
+	}
 
 }

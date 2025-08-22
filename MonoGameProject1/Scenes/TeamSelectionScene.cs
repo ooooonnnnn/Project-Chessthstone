@@ -180,6 +180,7 @@ public class TeamSelectionScene : Scene
 			{
 				ChessPiece whitePiece = selectors[i].currentSprite as ChessPiece;
 				whitePiece.transform.parent = null;
+				whitePiece.spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
 			}
 			whiteTeam = _chosenPieces.Values.ToArray();
 			LoadSelectors(false);
@@ -190,6 +191,7 @@ public class TeamSelectionScene : Scene
 				_chosenPieces[keyValuePair.Key] = null;
 				RemoveGameObject(keyValuePair.Value);
 			}
+			UpdateReadyButton();
 		}
 		else
 		{
@@ -197,6 +199,7 @@ public class TeamSelectionScene : Scene
 			{
 				ChessPiece blackPiece = selectors[i].currentSprite as ChessPiece;
 				blackPiece.transform.parent = null;
+				blackPiece.spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
 			}
 			blackTeam = _chosenPieces.Values.ToArray();
 			SceneManager.ChangeScene(new GameScene(whiteTeam, blackTeam));
