@@ -26,7 +26,7 @@ public class Game1 : Game
 		_graphics.PreferredBackBufferWidth = GraphicsSettings.windowSize.X;
 		_graphics.PreferredBackBufferHeight = GraphicsSettings.windowSize.Y;
 		_graphics.IsFullScreen = false;
-		Window.IsBorderless = true;
+		Window.IsBorderless = false;
 		_graphics.ApplyChanges();
 	}
 
@@ -51,7 +51,7 @@ public class Game1 : Game
 		AudioClips.LoadAudio();
 		// End loading here
 		
-		SceneManager.ChangeScene(new MainMenuScene());
+		SceneManager.ChangeScene(new TestTweenScene());
 	}
 	
 	protected override void Update(GameTime gameTime)
