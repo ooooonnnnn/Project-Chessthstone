@@ -1,15 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
+public enum TweenType
+{
+    Linear,
+    Exponential,
+    CounterExponential,
+    Smooth
+}
+
+public class FloatController
+{
+    public delegate Action<float> HandleFloatChange(float t);
+}
+
 public static class Tween
 {
-    /// <summary>
-    /// Object moves at a constant speed from start to target.
-    /// </summary>
-    public static async Task MoveLinear(Transform obj, Vector2 targetPosition, float duration, int fps = 60)
+    public static async Task Move(Transform obj, Vector2 targetPosition, float duration,
+        TweenType tweenType = TweenType.Linear, int fps = 60)
     {
         Vector2 startPosition = obj.parentSpacePos;
         float elapsed = 0f;
@@ -18,6 +30,22 @@ public static class Tween
         {
             elapsed += 1f / fps;
             float weight = elapsed / duration;
+            switch (tweenType)
+            {
+                case TweenType.Exponential:
+                    weight *= weight;
+                    break;
+                case TweenType.CounterExponential:
+                    weight /= weight;
+                    break;
+                case TweenType.Smooth:
+                    weight = weight * weight * (3f - 2f * weight); // Smoothstep function
+                    break;
+                case TweenType.Linear:
+                default:
+                    break;
+            }
+
             obj.parentSpacePos = Vector2.Lerp(startPosition, targetPosition, weight);
             await Task.Delay(1 / fps * 1000);
         }
@@ -25,43 +53,37 @@ public static class Tween
         obj.parentSpacePos = targetPosition;
     }
     
-    /// <summary>
-    /// Object starts moving slowly and accelerates towards the target.
-    /// </summary>
-    public static async Task MoveExponential(Transform obj, Vector2 targetPosition, float duration, int fps = 60)
+    
+    public static async Task TweenFloat(TweenType tweenType = TweenType.Linear, float startingValue = 0f, float targetValue = 1f, float duration = 1f, int fps = 60)
     {
-        Vector2 startPosition = obj.parentSpacePos;
+        float startPosition = startingValue;
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
             elapsed += 1f / fps;
             float weight = elapsed / duration;
-            weight = weight * weight;
-            obj.parentSpacePos = Vector2.Lerp(startPosition, targetPosition, weight);
+            switch (tweenType)
+            {
+                case TweenType.Exponential:
+                    weight *= weight;
+                    break;
+                case TweenType.CounterExponential:
+                    weight /= weight;
+                    break;
+                case TweenType.Smooth:
+                    weight = weight * weight * (3f - 2f * weight); // Smoothstep function
+                    break;
+                case TweenType.Linear:
+                default:
+                    break;
+            }
+
+            startingValue = float.Lerp(startPosition, targetValue, weight);
             await Task.Delay(1 / fps * 1000);
         }
 
-        obj.parentSpacePos = targetPosition;
+        startingValue = targetValue;
     }
 
-    /// <summary>
-    /// Object accelerates and decelerates smoothly.
-    /// </summary>
-    public static async Task MoveSmooth(Transform obj, Vector2 targetPosition, float duration, int fps = 60)
-    {
-        Vector2 startPosition = obj.parentSpacePos;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += 1f / fps;
-            float weight = elapsed / duration;
-            weight = weight * weight * (3f - 2f * weight); // Smoothstep function
-            obj.parentSpacePos = Vector2.Lerp(startPosition, targetPosition, weight);
-            await Task.Delay(1 / fps * 1000);
-        }
-
-        obj.parentSpacePos = targetPosition;
-    }
 }
