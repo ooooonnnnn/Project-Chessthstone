@@ -15,7 +15,7 @@ public enum TweenType
 
 public class FloatController
 {
-    public delegate Action<float> HandleFloatChange(float t);
+    public Action<float> HandleFloatChange;
 }
 
 public static class Tween
@@ -54,9 +54,8 @@ public static class Tween
     }
     
     
-    public static async Task TweenFloat(TweenType tweenType = TweenType.Linear, float startingValue = 0f, float targetValue = 1f, float duration = 1f, int fps = 60)
+    public static async Task TweenFloat(FloatController controller, TweenType tweenType = TweenType.Linear, float startingValue = 0f, float targetValue = 1f, float duration = 1f, int fps = 60)
     {
-        float startPosition = startingValue;
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -79,11 +78,11 @@ public static class Tween
                     break;
             }
 
-            startingValue = float.Lerp(startPosition, targetValue, weight);
+            controller.HandleFloatChange(float.Lerp(startingValue, targetValue, weight));
             await Task.Delay(1 / fps * 1000);
         }
 
-        startingValue = targetValue;
+        controller.HandleFloatChange(targetValue);
     }
 
 }

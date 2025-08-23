@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +10,7 @@ namespace MonoGameProject1.Behaviors;
 /// <summary>
 /// Renders the currently visible sprites of the selector, and the gradient overlay
 /// </summary>
-public class SelectorRenderer : Renderer
+public class SelectorRenderer : Renderer, IDisposable
 {
 	/// <summary>
 	/// how wide to show the sprites
@@ -22,6 +23,8 @@ public class SelectorRenderer : Renderer
 	/// How far the reel has been moved.
 	/// </summary>
 	private float _currentDisplacement;
+
+	private FloatController _displacementController;
 	/// <summary>
 	/// true = forward = scrolling to the left, false = backward = scrolling to the right
 	/// </summary>
@@ -33,7 +36,13 @@ public class SelectorRenderer : Renderer
 	/// </summary>
 	private Texture2D _gradientTexture = TextureManager.GradientTexture;
 	private Texture2D _pixelTexture = TextureManager.PixelTexture;
-	
+
+	public override void Initialize()
+	{
+		base.Initialize();
+		_displacementController.HandleFloatChange = value => _currentDisplacement = value;
+	}
+
 	public override void Draw(SpriteBatch spriteBatch)
 	{
 		// Draw current sprite
@@ -95,7 +104,7 @@ public class SelectorRenderer : Renderer
 	/// <param name="isForward"></param>
 	public void AnimateToSprite(LinkedListNode<Sprite> spriteNode, bool isForward)
 	{
-		
+		Tween.TweenFloat(_displacementController);
 	}
 	
 	private class DrawArguments
@@ -112,6 +121,11 @@ public class SelectorRenderer : Renderer
 			origin = sourceRectangle.Size.ToVector2() * 0.5f;
 			scale = Vector2.One * targetWidth / sourceRectangle.Width;
 		}
+	}
+	
+	public void Dispose()
+	{
+		_displacementController.HandleFloatChange = null;
 	}
 }
 
