@@ -55,19 +55,17 @@ public class TutorialScene : Scene
         var contents = new List<GameObject>();
 
         // Base position near the left side of the screen, arranged in a column
-        Vector2 columnStart = new Vector2(60, center.Y - 200);
-        float toggleSpacingY = 90f; // vertical space between toggles
-
+        Vector2 columnStart = new Vector2(50, 50);;
+        float toggleSpacingY = 200f; // vertical space between toggles
+        
         for (int i = 0; i < 4; i++)
         {
             var toggle = new Toggle($"Tutorial Toggle {i + 1}",
                 $"Option {i + 1}", canBeSwitchedOff: false) ;
 
             // Size and position
-            toggle.transform.origin = toggle.spriteRenderer.sizePx.ToVector2() * 0.5f;
-            toggle.transform.parentSpaceScale = new Vector2(2.0f, 1.0f);
-            toggle.textChildTransform.parentSpaceScale = new Vector2(0.5f, 1.0f);
-            toggle.transform.parentSpacePos = rowStart + new Vector2(i * toggleSpacingX, 0);
+            toggle.ChangeBackgroundScale(new Vector2(2.0f, 1.0f));
+            toggle.transform.parentSpacePos = columnStart + new Vector2(0, i * toggleSpacingY);
 
             // Linked content with a sprite child and a text child
             var content = new GameObject($"Toggle {i + 1} Content", [new Transform()]);
@@ -81,20 +79,21 @@ public class TutorialScene : Scene
 
             var sprite = new Sprite($"Toggle {i + 1} Sprite", iconTexture);
             sprite.transform.origin = sprite.spriteRenderer.sizePx.ToVector2() * 0.5f;
-            sprite.transform.SetScaleFromFloat(0.75f);
             sprite.spriteRenderer.layerDepth = LayerDepthManager.UiDepth - 0.02f;
+            sprite.transform.SetScaleFromFloat(0.75f);
 
             // Create text child under the sprite
             var text = new TextBox($"Toggle {i + 1} Text", $"Content for Option {i + 1}", 300, true);
             text.textRenderer.layerDepth = LayerDepthManager.UiDepth - 0.02f;
-            text.transform.parentSpacePos = new Vector2(0, 70);
+
+            // Position content area 
+            contentTransform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
 
             // Parent children to content container
             contentTransform.AddChild(sprite.transform);
             contentTransform.AddChild(text.transform);
-
-            // Position content area a bit to the right of the toggles and vertically aligned
-            contentTransform.parentSpacePos = rowStart + new Vector2(4 * toggleSpacingX + 120, 0) + new Vector2(0, i * 0);
+            sprite.transform.parentSpacePos = new Vector2(0, 0);
+            text.transform.parentSpacePos = new Vector2(0, 70);
 
             // Visibility toggling per requirement
             int capturedIndex = i;
