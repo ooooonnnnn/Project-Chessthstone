@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using MonoGameProject1.Behaviors;
+using MonoGameProject1.Settings;
 
 namespace MonoGameProject1;
 
@@ -39,5 +40,6 @@ public class TextBox : GameObject
 	{
 		textRenderer = TryGetBehavior<TextRenderer>();
 		transform = TryGetBehavior<Transform>();
+		textRenderer.color = GraphicsSettings.textColor;
 	}
 }

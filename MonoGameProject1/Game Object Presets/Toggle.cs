@@ -38,6 +38,7 @@ public class Toggle : Button
 		_canBeSwitchedOff = canBeSwitchedOff;
 		_clickable.RemoveAllListeners();
 		_clickable.OnClick += HandleClick;
+		UpdateGraphicsAndClickable();
 	}
 
 	private void HandleClick()
