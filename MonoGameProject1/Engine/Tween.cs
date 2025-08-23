@@ -8,8 +8,8 @@ namespace MonoGameProject1;
 public enum TweenType
 {
     Linear,
-    Exponential,
-    CounterExponential,
+    Cubic,
+    ReverseCubic,
     Smooth
 }
 
@@ -33,11 +33,11 @@ public static class Tween
             float weight = elapsed / duration;
             switch (tweenType)
             {
-                case TweenType.Exponential:
-                    weight *= weight;
+                case TweenType.Cubic:
+                    weight = (float)Math.Pow(weight, 3);
                     break;
-                case TweenType.CounterExponential:
-                    weight /= weight;
+                case TweenType.ReverseCubic:
+                    weight = 1f - (float)Math.Pow(1 - weight, 3);
                     break;
                 case TweenType.Smooth:
                     weight = weight * weight * (3f - 2f * weight); // Smoothstep function
@@ -66,11 +66,11 @@ public static class Tween
             float weight = elapsed / duration;
             switch (tweenType)
             {
-                case TweenType.Exponential:
+                case TweenType.Cubic:
                     weight *= weight;
                     break;
-                case TweenType.CounterExponential:
-                    weight /= weight;
+                case TweenType.ReverseCubic:
+                    weight = 1f - (1f - weight) * (1f - weight);
                     break;
                 case TweenType.Smooth:
                     weight = weight * weight * (3f - 2f * weight); // Smoothstep function

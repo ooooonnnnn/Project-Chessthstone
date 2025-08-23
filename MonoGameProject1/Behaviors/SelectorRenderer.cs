@@ -24,7 +24,7 @@ public class SelectorRenderer : Renderer, IDisposable
 	/// </summary>
 	private float _currentDisplacement;
 
-	private FloatController _displacementController;
+	private FloatController _displacementController = new FloatController();
 	/// <summary>
 	/// true = forward = scrolling to the left, false = backward = scrolling to the right
 	/// </summary>

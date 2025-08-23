@@ -20,9 +20,10 @@ public class TestTweenScene : Scene
 	private async Task NewMethod()
 	{
 		Console.WriteLine(DateTime.Now.Millisecond);
-		await Tween.Move(button1.transform, new Vector2(500,700), 1f, TweenType.CounterExponential);
+		await Tween.Move(button1.transform, new Vector2(500,700), .25f, TweenType.Cubic);
+		await Tween.Move(button1.transform, Vector2.Zero, .25f, TweenType.ReverseCubic);
 		Console.WriteLine(DateTime.Now.Millisecond);
-		button1.transform.parentSpacePos = new Vector2(0,0);
+		button1.transform.parentSpacePos = Vector2.Zero;
 	}
 
 	public override void Initialize()

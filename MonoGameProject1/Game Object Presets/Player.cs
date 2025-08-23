@@ -116,22 +116,11 @@ public class Player : GameObject
                 Point squareCoords = new Point(square.column, square.row);
                 if (_selectedActivePiece.GetMoveCoordList().Contains(squareCoords))
                 {
-                    if (_selectedActivePiece.MoveToSquare(square))
-                    {
-                        DeselectAll();
-                        //Inform trigger manager
-                        TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
-                    }
+                    _selectedActivePiece.MoveToSquare(square);
                 }
                 else if (_selectedActivePiece.GetAttackCoordList().Contains(squareCoords))
                 {
-                    if (_selectedActivePiece.AttackPieceOnSquare(square)) //true if successful attack
-                    {
-                        DeselectAll();
-                        //Inform trigger manager
-                        TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
-                        
-                    }
+                    _selectedActivePiece.AttackPieceOnSquare(square);
                 }
                 else
                 {
@@ -250,7 +239,7 @@ public class Player : GameObject
         DeselectAll();
     }
 
-    private void DeselectAll()
+    public void DeselectAll()
     {
         _selectedActivePiece = null;
         foreach (ChessSquare square in board.squares)

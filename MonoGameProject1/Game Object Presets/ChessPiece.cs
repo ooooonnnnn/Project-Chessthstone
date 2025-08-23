@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
 
@@ -99,18 +100,19 @@ public abstract class ChessPiece : Sprite
     /// </summary>
     public Ability ability { get; private set; }
 
-	/// <summary>
-	/// The tooltip object which is a child of this
-	/// </summary>
-	private ToolTip toolTip;
+    /// <summary>
+    /// The tooltip object which is a child of this
+    /// </summary>
+    private ToolTip toolTip;
 
-	/// <summary>
-	/// Current position
-	/// </summary>
-	public int column => currentSquare.column;
-	public int row => currentSquare.row;
-	public Point position => new Point(column, row);
-	protected ChessSquare currentSquare;
+    /// <summary>
+    /// Current position
+    /// </summary>
+    public int column => currentSquare.column;
+
+    public int row => currentSquare.row;
+    public Point position => new Point(column, row);
+    protected ChessSquare currentSquare;
 
     public event Action OnTeleport;
 
@@ -136,21 +138,22 @@ public abstract class ChessPiece : Sprite
 
     protected bool canTeleport = true;
 
-	/// <summary>
-	/// Base class for chess pieces
-	/// </summary>
-	protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type), TextureManager.GetChessPieceTexture(isWhite, type))
-	{
-		this.type = type;
-		this.isWhite = isWhite;
-		this.baseHealth = baseHealth;
-		this.BaseDamage = baseDamage;
-		Health = baseHealth;
-		
-		spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
-		
-		AddBehaviors([new ChessPieceFeedback()]);
-	}
+    /// <summary>
+    /// Base class for chess pieces
+    /// </summary>
+    protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type),
+        TextureManager.GetChessPieceTexture(isWhite, type))
+    {
+        this.type = type;
+        this.isWhite = isWhite;
+        this.baseHealth = baseHealth;
+        this.BaseDamage = baseDamage;
+        Health = baseHealth;
+
+        spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
+
+        AddBehaviors([new ChessPieceFeedback()]);
+    }
 
     /// <summary>
     /// Use this if you want the piece to teleport after the initial spawning.
@@ -161,14 +164,18 @@ public abstract class ChessPiece : Sprite
     /// Tries to move. Checks valid movement before moving. Requires an action point 
     /// </summary>
     /// <returns>True if move was succesful</returns>
-    public bool MoveToSquare(ChessSquare square)
+    public async Task<bool> MoveToSquare(ChessSquare square)
     {
         if (!PayActionPoint()) return false;
 
         Point nextCoord = new Point(square.column, square.row);
         if (!GetMoveCoordList().Contains(nextCoord)) return false;
 
-        DoMoveToSquare(square);
+        await DoMoveToSquare(square);
+
+        _ownerPlayer.DeselectAll();
+        //Inform trigger manager
+        TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
 
         return true;
     }
@@ -178,14 +185,16 @@ public abstract class ChessPiece : Sprite
     /// <summary>
     /// Moves without requiring an action point
     /// </summary>
-    /// <param name="square"></param>
-    private void DoMoveToSquare(ChessSquare square)
+    /// <param name="targetSquare"></param>
+    private async Task DoMoveToSquare(ChessSquare targetSquare)
     {
         currentSquare.occupyingPiece = null;
-        currentSquare = square;
+        currentSquare = targetSquare;
         currentSquare.occupyingPiece = this;
-        transform.parentSpacePos = square.transform.worldSpacePos;
-
+        if (targetSquare != currentSquare)
+        {
+            await Tween.Move(transform, targetSquare.transform.worldSpacePos, .25f, TweenType.Cubic);
+        }
         OnMove?.Invoke();
     }
 
@@ -195,7 +204,7 @@ public abstract class ChessPiece : Sprite
     /// Tries attacking the piece that's on the square. Moves if the attacked piece died.
     /// </summary>
     /// <returns>True if successful</returns>
-    public bool AttackPieceOnSquare(ChessSquare square)
+    public async Task<bool> AttackPieceOnSquare(ChessSquare square)
     {
         if (!PayActionPoint()) return false;
 
@@ -203,13 +212,22 @@ public abstract class ChessPiece : Sprite
         if (!GetAttackCoordList().Contains(nextCoord)) return false;
 
         ChessPiece attackedPiece = square.occupyingPiece;
-        if (attackedPiece.TakeDamage(BaseDamage))
-        {
-            DoMoveToSquare(square);
-        }
+        await AttackAnimation(attackedPiece, square);
+        _ownerPlayer.DeselectAll();
+        //Inform trigger manager
+        TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
+        return true;
+    }
+
+    private async Task AttackAnimation(ChessPiece attackedPiece, ChessSquare targetSquare)
+    {
+        await Tween.Move(transform, targetSquare.transform.worldSpacePos, .25f, TweenType.Cubic);
 
         OnAttack?.Invoke();
-        return true;
+        if (attackedPiece.TakeDamage(BaseDamage))
+            DoMoveToSquare(targetSquare);
+        else
+            await Tween.Move(transform, currentSquare.transform.worldSpacePos, .25f, TweenType.ReverseCubic);
     }
 
     /// <summary>
@@ -370,17 +388,17 @@ public abstract class ChessPiece : Sprite
         return false;
     }
 
-	/// <summary>
-	/// Gets a reference to the Ability behavior
-	/// </summary>
-	protected override void ClassifyBehavior(Behavior behavior)
-	{
-		base.ClassifyBehavior(behavior);
-		if (behavior is Ability ab)
-		{
-			ability = ab;
-		}
-	}
+    /// <summary>
+    /// Gets a reference to the Ability behavior
+    /// </summary>
+    protected override void ClassifyBehavior(Behavior behavior)
+    {
+        base.ClassifyBehavior(behavior);
+        if (behavior is Ability ab)
+        {
+            ability = ab;
+        }
+    }
 
     private static string CreateName(bool isWhite, PieceType type)
     {
