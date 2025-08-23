@@ -18,8 +18,8 @@ public class TestSpeedScene : Scene
 {
 	public TestSpeedScene()
 	{
-		GameObject tester = new GameObject("",
-			[new Transform(), new TextRenderer(), new SpeedTester()]);
+		var tester = new TextBox("");
+		tester.AddBehaviors([new SpeedTester()]);
 		
 		AddGameObjects([tester]);
 	}

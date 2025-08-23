@@ -9,68 +9,56 @@ namespace MonoGameProject1.Scenes;
 /// </summary>
 public class TutorialScene : Scene
 {
-    private GameObject _header;
-    private GameObject _body;
-    private Button _backToMenuButton;
-    private Button _teamSelectionButton;
-
     public TutorialScene()
     {
         // Header text
-        var headerTransform = new Transform();
-        var headerText = new TextRenderer("Tutorial");
-        headerText.layerDepth = LayerDepthManager.UiDepth - 0.02f;
-        _header = new GameObject("Tutorial Header", new List<Behavior> { headerTransform, headerText });
+        var header = new TextBox("Tutorial Header", "Tutorial");
+        header.textRenderer.layerDepth = LayerDepthManager.UiDepth;
         // Center and scale header similar to WinScreenScene
-        headerTransform.origin = headerText.Font.MeasureString(headerText.Text) * 0.5f;
-        headerTransform.SetScaleFromFloat(3.0f);
+        header.transform.origin = header.textRenderer.Font.MeasureString(header.text) * 0.5f;
+        header.transform.SetScaleFromFloat(3.0f);
 
         // Body/placeholder text
-        var bodyTransform = new Transform();
-        var bodyText = new TextRenderer("Welcome to the tutorial!\n(Placeholder) Learn the basics, then start by selecting your team.", 900, false)
-        {
-            color = Color.Black,
-            layerDepth = LayerDepthManager.UiDepth - 0.02f
-        };
-        _body = new GameObject("Tutorial Body", new List<Behavior> { bodyTransform, bodyText });
+        var body = new TextBox("Tutorial Body", "Welcome to the tutorial!\n(Placeholder) Learn the basics, then start by selecting your team.", 900, false);
+        body.textRenderer.color = Color.Black;
+        body.textRenderer.layerDepth = LayerDepthManager.UiDepth;
         // Center body horizontally by setting origin X to half its width
-        bodyTransform.origin = new Vector2(bodyText.GetTextSize().X * 0.5f, 0f);
+        body.transform.origin = new Vector2(body.textRenderer.GetTextSize().X * 0.5f, 0f);
 
         // Buttons
-        _backToMenuButton = new Button("Back To Menu Button", "Back to Main Menu");
-        _teamSelectionButton = new Button("Go To Team Selection Button", "Start Game");
+        var backToMenuButton = new Button("Back To Menu Button", "Back to Main Menu");
+        var teamSelectionButton = new Button("Go To Team Selection Button", "Start Game");
 
         // Center origins like WinScreenScene
-        _backToMenuButton.transform.origin = _backToMenuButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
-        _teamSelectionButton.transform.origin = _teamSelectionButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        backToMenuButton.transform.origin = backToMenuButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
+        teamSelectionButton.transform.origin = teamSelectionButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
 
         // Match scaling to WinScreenScene
-        _backToMenuButton.transform.parentSpaceScale = new Vector2(3, 1);
-        _backToMenuButton.textChildTransform.parentSpaceScale = new Vector2(0.33f, 1) * 2;
-        _teamSelectionButton.transform.parentSpaceScale = new Vector2(3, 1);
-        _teamSelectionButton.textChildTransform.parentSpaceScale = new Vector2(0.33f, 1) * 2;
+        backToMenuButton.transform.parentSpaceScale = new Vector2(3, 1);
+        backToMenuButton.textChildTransform.parentSpaceScale = new Vector2(0.33f, 1) * 2;
+        teamSelectionButton.transform.parentSpaceScale = new Vector2(3, 1);
+        teamSelectionButton.textChildTransform.parentSpaceScale = new Vector2(0.33f, 1) * 2;
 
-        _backToMenuButton.AddListener(() => SceneManager.ChangeScene(new MainMenuScene()));
-        _teamSelectionButton.AddListener(() => SceneManager.ChangeScene(new TeamSelectionScene()));
+        backToMenuButton.AddListener(() => SceneManager.ChangeScene(new MainMenuScene()));
+        teamSelectionButton.AddListener(() => SceneManager.ChangeScene(new TeamSelectionScene()));
 
         // Layout
         var center = GameManager.Graphics.Viewport.Bounds.Center.ToVector2();
-        headerTransform.parentSpacePos = center + new Vector2(0, -260);
-        bodyTransform.parentSpacePos = center + new Vector2(0, -100);
-        bodyTransform.parentSpaceScale *= 1.0f;
+        header.transform.parentSpacePos = center + new Vector2(0, -260);
+        body.transform.parentSpacePos = center + new Vector2(0, -100);
+        body.transform.parentSpaceScale *= 1.0f;
 
         // Space buttons vertically like WinScreenScene (200px) and center horizontally
         float spacing = 200f;
-        _backToMenuButton.transform.parentSpacePos = center + new Vector2(0, 0);
-        _teamSelectionButton.transform.parentSpacePos = center + new Vector2(0, spacing);
+        backToMenuButton.transform.parentSpacePos = center + new Vector2(0, 0);
+        teamSelectionButton.transform.parentSpacePos = center + new Vector2(0, spacing);
 
-        AddGameObjects(new List<GameObject>
-        {
-            _header,
-            _body,
-            _backToMenuButton,
-            _teamSelectionButton
-        });
+        AddGameObjects([
+            header,
+            body,
+            backToMenuButton,
+            teamSelectionButton
+        ]);
     }
 
     public override void Initialize()

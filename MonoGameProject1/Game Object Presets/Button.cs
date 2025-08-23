@@ -74,14 +74,14 @@ public class Button : GameObject, ICallback
     /// <returns>The text renderer of the child</returns>
     private void CreateTextChild()
     {
-        Transform textTransform = new Transform();
+        var textChild = new TextBox(name + " Text", text);
+        var textTransform = textChild.transform;
         textTransform.parentSpaceScale *= 1.4f;
-        TextRenderer textRenderer = new TextRenderer(text) { color = Color.Black };
-        GameObject textChild = new GameObject(name + " Text", [textTransform, textRenderer]);
+        textChild.textRenderer.color = Color.Black;
 
         transform.AddChild(textChild);
 
-        _childTextRenderer = textRenderer;
+        _childTextRenderer = textChild.textRenderer;
         textChildTransform = textTransform;
         _childTextRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
 
