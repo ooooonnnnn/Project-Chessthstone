@@ -44,4 +44,11 @@ public class Clickable : Behavior, IDisposable, IActivatable
 		_isActive = active;
 	}
 
+	/// <summary>
+	/// Clears the OnClick event
+	/// </summary>
+	public void RemoveAllListeners()
+	{
+		OnClick = null;
+	}
 }

@@ -15,7 +15,7 @@ public class SpriteRenderer : Renderer
     public Rectangle sourceRectangle;
 
     /// <summary>
-    /// Size in pixels. Changes the transform scale accordingly
+    /// Size in pixels. Changes the transform scale accordingly. DONT USE FOR SETTING THE ORIGIN!!!
     /// </summary>
     public Point sizePx
     {

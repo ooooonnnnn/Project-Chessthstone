@@ -12,8 +12,8 @@ public class ChangeTintWhenHover : Behavior, IUpdatable, IActivatable
 {
 	public Color tintWhenHover;
 	public Color tintWhenMouseDown;
+	public Color originalTint;
 	
-	private Color _originalTint;
 	private SpriteRenderer _spriteRenderer;
 	private SenseMouseHover _senseMouseHover;
 	public bool isActive => _isActive;
@@ -31,14 +31,14 @@ public class ChangeTintWhenHover : Behavior, IUpdatable, IActivatable
 	{
 		_spriteRenderer = gameObject.TryGetBehavior<SpriteRenderer>();
 		_senseMouseHover = gameObject.TryGetBehavior<SenseMouseHover>();
-		_originalTint = _spriteRenderer.color;
+		originalTint = _spriteRenderer.color;
 	}
 
 	public void Update(GameTime gameTime)
 	{
 		if (!isActive)
 			return;
-		_spriteRenderer.color = !_senseMouseHover.isHovering ? _originalTint :
+		_spriteRenderer.color = !_senseMouseHover.isHovering ? originalTint :
 			Mouse.GetState().LeftButton == ButtonState.Pressed ? tintWhenMouseDown : tintWhenHover;
 	}
 
@@ -46,7 +46,7 @@ public class ChangeTintWhenHover : Behavior, IUpdatable, IActivatable
 	{
 		_isActive = active;
 		if (!_isActive)
-			_spriteRenderer.color = _originalTint;
+			_spriteRenderer.color = originalTint;
 	}
 
 }
