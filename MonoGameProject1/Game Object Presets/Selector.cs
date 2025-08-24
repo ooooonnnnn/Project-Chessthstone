@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Behaviors;
 using MonoGameProject1.Behaviors.Abstract;
+using MonoGameProject1.Extensions;
 using MonoGameProject1.Settings;
 
 namespace MonoGameProject1;
@@ -17,7 +19,7 @@ public class Selector : GameObject
     public Transform transform = new();
     private SelectorRenderer _selectorRenderer = new();
     private LinkedList<Sprite> _sprites;
-    private LinkedListNode<Sprite> _currentSprite, _nextSprite, _previousSprite;
+    private LinkedListNode<Sprite> _currentSprite;
     private TextRenderer _textRenderer;
     private Transform _textTransform;
     public Button nextButton;
@@ -47,8 +49,8 @@ public class Selector : GameObject
         //Button children
         nextButton = new Button($"{name} next button");
         previousButton = new Button($"{name} previous button");
-        nextButton.AddListener(NextSprite);
-        previousButton.AddListener(PreviousSprite);
+        nextButton.AddListener(() => NextOrPrevious(true));
+        previousButton.AddListener(() => NextOrPrevious(false));
         transform.AddChild(nextButton.transform);
         transform.AddChild(previousButton.transform);
 
@@ -96,7 +98,6 @@ public class Selector : GameObject
     {
         _sprites = new LinkedList<Sprite>(sprites);
         _currentSprite = _sprites.First;
-        SetNextAndPrevSprites();
         UpdateText();
         List<GameObject> objects = new();
         // foreach (var sprite in _sprites)
@@ -115,12 +116,6 @@ public class Selector : GameObject
         OnSpriteChanged?.Invoke(_currentSprite.Value);
 
         parentScene?.AddGameObjects(objects);
-    }
-
-    private void SetNextAndPrevSprites()
-    {
-        _nextSprite = _currentSprite?.Next ?? _sprites.First;
-        _previousSprite = _currentSprite?.Previous ?? _sprites.Last;
     }
 
     /// <summary>
@@ -146,36 +141,24 @@ public class Selector : GameObject
         InitializeSprites(sprites);
     }
 
-    private void NextSprite()
+    private async Task NextOrPrevious(bool forwards)
     {
         if (_currentSprite == null)
             return;
-        // SetActiveVisibleSprites(false);
-        _currentSprite = _currentSprite.Next ?? _sprites.First;
-        _selectorRenderer.JumpToSprite(_currentSprite);
-        // SetNextAndPrevSprites();
-        // SetActiveVisibleSprites(true);
-        // PositionVisibleSprites();
-
+        
+        _currentSprite = forwards ? _currentSprite.NextOrFirst() : _currentSprite.PreviousOrLast();
         OnSpriteChanged?.Invoke(_currentSprite.Value);
-
         UpdateText();
+        
+        SetButtonsClickable(false);
+        await _selectorRenderer.AnimateToSprite(_currentSprite, forwards);
+        SetButtonsClickable(true);
     }
 
-    private void PreviousSprite()
+    private void SetButtonsClickable(bool clickable)
     {
-        if (_currentSprite == null)
-            return;
-        // SetActiveVisibleSprites(false);
-        _currentSprite = _currentSprite.Previous ?? _sprites.Last;
-        _selectorRenderer.JumpToSprite(_currentSprite);
-        // SetNextAndPrevSprites();
-        // SetActiveVisibleSprites(true);
-        // PositionVisibleSprites();
-        
-        OnSpriteChanged?.Invoke(_currentSprite.Value);
-
-        UpdateText();
+        nextButton.SetClickable(clickable);
+        previousButton.SetClickable(clickable);
     }
 
     private void SetActiveVisibleSprites(bool active)

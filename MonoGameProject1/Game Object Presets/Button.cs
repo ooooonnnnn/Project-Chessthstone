@@ -69,6 +69,15 @@ public class Button : GameObject, ICallback
     }
 
     /// <summary>
+    /// Sets the Clickable and ChangeTintWhenHover behaviors activity state
+    /// </summary>
+    public void SetClickable(bool clickable)
+    {
+        _clickable.SetActive(clickable);
+        hoverTinting.SetActive(clickable);
+    }
+
+    /// <summary>
     /// Creates the text child
     /// </summary>
     /// <returns>The text renderer of the child</returns>

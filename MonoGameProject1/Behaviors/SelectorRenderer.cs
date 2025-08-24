@@ -24,8 +24,8 @@ public class SelectorRenderer : Renderer, IDisposable
 	/// How far the reel has been moved.
 	/// </summary>
 	private float _currentDisplacement;
-
 	private FloatController _displacementController = new FloatController();
+	
 	/// <summary>
 	/// true = forward = scrolling to the left, false = backward = scrolling to the right
 	/// </summary>
@@ -72,7 +72,7 @@ public class SelectorRenderer : Renderer, IDisposable
 		if (_nowAnimating && _newSprite != null)
 		{
 			float totalDisplacement = _currentDisplacement + 2 * _elementSeperation *
-				(_isMovingForward ? -1 : 1);
+				(_isMovingForward ? 1 : -1);
 			spriteBatch.Draw(
 				_newSprite.texture,
 				transform.worldSpacePos + Vector2.UnitX * totalDisplacement,
@@ -117,22 +117,33 @@ public class SelectorRenderer : Renderer, IDisposable
 	/// <summary>
 	/// Animates the transition to a new sprite. Goes in the provided direction.
 	/// </summary>
-	/// <param name="spriteNode">The target sprite to reach</param>
+	/// <param name="targetSpriteNode">The target sprite to reach</param>
 	/// <param name="isForward">true to scroll left (right button pressed)</param>
-	public async Task AnimateToSprite(LinkedListNode<Sprite> spriteNode, bool isForward)
+	public async Task AnimateToSprite(LinkedListNode<Sprite> targetSpriteNode, bool isForward)
 	{
-		//Define the four visible sprites
+		_nowAnimating = true;
+		_isMovingForward = isForward;
+		
+		// Define the four visible sprites
 		LinkedListNode<Sprite> currentNode = isForward ?
-			spriteNode.PreviousOrLast() : spriteNode.NextOrFirst(); 
+			targetSpriteNode.PreviousOrLast() : targetSpriteNode.NextOrFirst(); 
 		JumpToSprite(currentNode);
 		
 		_newSprite = new DrawArguments(
-			(isForward ? spriteNode.NextOrFirst() : spriteNode.PreviousOrLast())
+			(isForward ? targetSpriteNode.NextOrFirst() : targetSpriteNode.PreviousOrLast())
 			.Value.spriteRenderer,
 			spriteRenderWidth);
 		
-		//animate
-		Tween.TweenFloat(_displacementController);
+		// Animate
+		await Tween.TweenFloat(_displacementController, 
+			targetValue: isForward ? -_elementSeperation : _elementSeperation,
+			duration: 0.3f);
+		
+		// Set final state
+		JumpToSprite(targetSpriteNode);
+		_currentDisplacement = 0f;
+		_newSprite = null;
+		_nowAnimating = false;
 	}
 	
 	private class DrawArguments
