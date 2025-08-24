@@ -34,11 +34,11 @@ public class Selector : GameObject
         AddBehaviors([transform, _selectorRenderer]);
 
         //Text Child
-        _textTransform = new Transform();
-        _textRenderer = new TextRenderer("", 200, true);
-        new GameObject($"{name} text", [_textTransform, _textRenderer]);
+        var textBox = new TextBox($"{name} text", "", 200);
+        _textTransform = textBox.transform;
+        _textRenderer = textBox.textRenderer;
         _textRenderer.color = GraphicsSettings.textColor;
-        transform.AddChild(_textTransform);
+        transform.AddChild(textBox);
         _textTransform.parentSpacePos = Vector2.UnitY * 70;
 
         //Sprite children

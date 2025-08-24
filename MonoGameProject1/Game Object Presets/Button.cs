@@ -45,7 +45,7 @@ public class Button : GameObject, ICallback
 
     public Transform textChildTransform;
 
-    private Clickable _clickable;
+    protected Clickable _clickable;
 
     /// <summary>
     /// A button with the default texture of a rounded square. 9-sliced scaling.
@@ -74,14 +74,14 @@ public class Button : GameObject, ICallback
     /// <returns>The text renderer of the child</returns>
     private void CreateTextChild()
     {
-        Transform textTransform = new Transform();
+        var textChild = new TextBox(name + " Text", text);
+        var textTransform = textChild.transform;
         textTransform.parentSpaceScale *= 1.4f;
-        TextRenderer textRenderer = new TextRenderer(text) { color = Color.Black };
-        GameObject textChild = new GameObject(name + " Text", [textTransform, textRenderer]);
+        textChild.textRenderer.color = Color.Black;
 
         transform.AddChild(textChild);
 
-        _childTextRenderer = textRenderer;
+        _childTextRenderer = textChild.textRenderer;
         textChildTransform = textTransform;
         _childTextRenderer.layerDepth = LayerDepthManager.UiDepth - 0.01f;
 
