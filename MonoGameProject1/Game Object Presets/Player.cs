@@ -72,7 +72,7 @@ public class Player : GameObject
     /// Piece selected and square is valid move => move <br/>
     /// Piece selected and square is valid attack => attack
     /// </summary>
-    public void HandleSquareClicked(ChessSquare square)
+    public async void HandleSquareClicked(ChessSquare square)
     {
         Console.WriteLine("Player.handleSquareClicked");
         if (GamePhaseManager.instance.phase == GamePhase.Setup)
@@ -117,11 +117,11 @@ public class Player : GameObject
                 Point squareCoords = new Point(square.column, square.row);
                 if (_selectedActivePiece.GetMoveCoordList().Contains(squareCoords))
                 {
-                    _selectedActivePiece.MoveToSquare(square);
+                    await _selectedActivePiece.MoveToSquare(square);
                 }
                 else if (_selectedActivePiece.GetAttackCoordList().Contains(squareCoords))
                 {
-                    _selectedActivePiece.AttackPieceOnSquare(square);
+                    await _selectedActivePiece.AttackPieceOnSquare(square);
                 }
                 else
                 {

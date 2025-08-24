@@ -188,14 +188,15 @@ public abstract class ChessPiece : Sprite
     /// <param name="targetSquare"></param>
     private async Task DoMoveToSquare(ChessSquare targetSquare)
     {
-        currentSquare.occupyingPiece = null;
-        currentSquare = targetSquare;
-        currentSquare.occupyingPiece = this;
         if (targetSquare != currentSquare)
         {
             await Tween.Move(transform, targetSquare.transform.worldSpacePos, .25f, TweenType.Cubic);
+            OnMove?.Invoke();
         }
-        OnMove?.Invoke();
+
+        currentSquare.occupyingPiece = null;
+        currentSquare = targetSquare;
+        currentSquare.occupyingPiece = this;
     }
 
     public event Action OnAttack;
