@@ -67,10 +67,7 @@ public class Game1 : Game
 		
 		base.Update(gameTime);
 	}
-
 	
-	Stopwatch drawTimer = new();
-	int drawCount = 0;
 	protected override void Draw(GameTime gameTime)
 	{
 		GraphicsDevice.Clear(GraphicsSettings.backGroundColor);
@@ -79,17 +76,6 @@ public class Game1 : Game
 		_spriteBatch.Begin(SpriteSortMode.BackToFront);
 		SceneManager.Draw(_spriteBatch);
 		_spriteBatch.End();
-		if (!drawTimer.IsRunning)
-			drawTimer.Start();
-		if (drawTimer.ElapsedMilliseconds > 1000)
-		{
-			Console.WriteLine($"Draws per Second: {drawCount}");
-			drawCount = 0;
-			drawTimer.Restart();
-		}
-
-		drawCount++;
-		
 		
 		base.Draw(gameTime);
 	}
