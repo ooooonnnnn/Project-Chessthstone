@@ -27,8 +27,8 @@ public class WinScreenScene : Scene
         Dictionary<string, SpriteSheet> sceneSheets = new();
         sceneSheets["winner"] = winnerSheet;
         sceneSheets["loser"] = loserSheet;
-        Animation winnerAnim = new(sceneSheets, false, true, 5);
-        Animation loserAnim = new(sceneSheets, false, true, 5);
+        Animation winnerAnim = new(sceneSheets, false, false, 5);
+        Animation loserAnim = new(sceneSheets, false, false, 5);
         Sprite winnerSprite = new("winner sprite", TextureManager.GetChessPieceTexture(whiteWon, PieceType.King));
         Sprite loserSprite = new("loser sprite", TextureManager.GetChessPieceTexture(!whiteWon, PieceType.King));
         winnerSprite.transform.origin = winnerSprite.spriteRenderer.sourceRectangle.Size.ToVector2() / 2;
@@ -36,11 +36,13 @@ public class WinScreenScene : Scene
         winnerSprite.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() +
                                                 Vector2.UnitX * -500;
         loserSprite.transform.parentSpacePos = GameManager.Graphics.Viewport.Bounds.Center.ToVector2() +
-                                               Vector2.UnitX * 100 + Vector2.UnitY * 75;
+                                               Vector2.UnitX * 450 + Vector2.UnitY * 50;
         winnerSprite.AddBehaviors([winnerAnim]);
         loserSprite.AddBehaviors([loserAnim]);
         winnerAnim.ActiveAnimation = "winner";
         loserAnim.ActiveAnimation = "loser";
+        winnerAnim.StartAnimation();
+        loserAnim.StartAnimation();
 
         Button restart = new Button("restart", "Restart");
         Button quit = new Button("quit", "Quit");
