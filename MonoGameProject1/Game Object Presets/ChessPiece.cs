@@ -114,7 +114,23 @@ public abstract class ChessPiece : Sprite
     public Point position => new Point(column, row);
     protected ChessSquare currentSquare;
 
-    public event Action OnTeleport;
+    /// <summary>
+    /// Base class for chess pieces
+    /// </summary>
+    protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type),
+        TextureManager.GetChessPieceTexture(isWhite, type))
+    {
+        this.type = type;
+        this.isWhite = isWhite;
+        this.baseHealth = baseHealth;
+        this.BaseDamage = baseDamage;
+        Health = baseHealth;
+
+        spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
+
+        AddBehaviors([new ChessPieceFeedback()]);
+    }
+    
 
     /// <summary>
     /// Moves the piece to the target square. To move the piece, use MoveToSquare
@@ -135,25 +151,9 @@ public abstract class ChessPiece : Sprite
         canTeleport = false;
         OnTeleport?.Invoke();
     }
-
+    public event Action OnTeleport;
     protected bool canTeleport = true;
-
-    /// <summary>
-    /// Base class for chess pieces
-    /// </summary>
-    protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type),
-        TextureManager.GetChessPieceTexture(isWhite, type))
-    {
-        this.type = type;
-        this.isWhite = isWhite;
-        this.baseHealth = baseHealth;
-        this.BaseDamage = baseDamage;
-        Health = baseHealth;
-
-        spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
-
-        AddBehaviors([new ChessPieceFeedback()]);
-    }
+    
 
     /// <summary>
     /// Use this if you want the piece to teleport after the initial spawning.
@@ -190,7 +190,7 @@ public abstract class ChessPiece : Sprite
     {
         if (targetSquare != currentSquare)
         {
-            await Tween.Move(transform, targetSquare.transform.worldSpacePos, .25f, TweenType.Cubic);
+            await Tween.Move(transform, targetSquare.transform.worldSpacePos, .25f, TweenType.Smooth);
             OnMove?.Invoke();
         }
 

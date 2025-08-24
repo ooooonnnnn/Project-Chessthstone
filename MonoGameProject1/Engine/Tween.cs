@@ -21,7 +21,7 @@ public class FloatController
 public static class Tween
 {
     public static async Task Move(Transform obj, Vector2 targetPosition, float duration,
-        TweenType tweenType = TweenType.Linear, int fps = 60)
+        TweenType tweenType = TweenType.Linear, int fps = 120)
     {
         Vector2 startPosition = obj.parentSpacePos;
         float elapsed = 0f;
@@ -54,8 +54,9 @@ public static class Tween
         obj.parentSpacePos = targetPosition;
     }
     
-    
-    public static async Task TweenFloat(FloatController controller, TweenType tweenType = TweenType.Linear, float startingValue = 0f, float targetValue = 1f, float duration = 1f, int fps = 60)
+    public static async Task TweenFloat(FloatController controller,
+        TweenType tweenType = TweenType.Linear, float startingValue = 0f, float targetValue = 1f,
+        float duration = 1f, int fps = 120)
     {
         float elapsed = 0f;
         duration = 1000 * duration;

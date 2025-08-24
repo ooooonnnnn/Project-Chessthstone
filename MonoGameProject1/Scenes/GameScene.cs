@@ -176,6 +176,8 @@ public class GameScene : Scene
                 endTurnButton.spriteRenderer.texture = isWhiteTurn
                     ? TextureManager.WhiteTurnButtonTextureClear
                     : TextureManager.BlackTurnButtonTextureClear;
+
+            endButtonCooldown();
         };
 
         GamePhaseManager.instance.phase = GamePhase.Setup;
