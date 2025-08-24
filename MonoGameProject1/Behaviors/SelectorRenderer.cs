@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameProject1.Extensions;
@@ -17,7 +18,7 @@ public class SelectorRenderer : Renderer
 	public float spriteRenderWidth = 100;
 	private float _elementSeperation => spriteRenderWidth * 0.7f;
 	
-	private DrawArguments currentSprite, nextSprite, previousSprite;
+	private DrawArguments _currentSprite, _nextSprite, _previousSprite, _newSprite;
 	/// <summary>
 	/// How far the reel has been moved.
 	/// </summary>
@@ -27,6 +28,7 @@ public class SelectorRenderer : Renderer
 	/// </summary>
 	private bool _currentDirection = true;
 	private bool _nowAnimating = false;
+	private bool _isMovingForward;
 	
 	/// <summary>
 	/// for creating the gradient overlay
@@ -38,21 +40,36 @@ public class SelectorRenderer : Renderer
 	{
 		// Draw current sprite
 		spriteBatch.Draw(
-			currentSprite.texture, transform.worldSpacePos,
-			currentSprite.sourceRectangle, color, transform.rotation,
-			currentSprite.origin, currentSprite.scale , effects, LayerDepthManager.GameObjectDepth);
+			_currentSprite.texture,
+			transform.worldSpacePos + Vector2.UnitX * _currentDisplacement,
+			_currentSprite.sourceRectangle, color, transform.rotation,
+			_currentSprite.origin, _currentSprite.scale , effects, LayerDepthManager.GameObjectDepth);
 		
 		// Draw next sprite
 		spriteBatch.Draw(
-			nextSprite.texture, transform.worldSpacePos + Vector2.UnitX * _elementSeperation,
-			nextSprite.sourceRectangle, color, transform.rotation,
-			nextSprite.origin, nextSprite.scale , effects, LayerDepthManager.GameObjectDepth);
+			_nextSprite.texture,
+			transform.worldSpacePos + Vector2.UnitX * (_elementSeperation + _currentDisplacement),
+			_nextSprite.sourceRectangle, color, transform.rotation,
+			_nextSprite.origin, _nextSprite.scale , effects, LayerDepthManager.GameObjectDepth);
 		
 		// Draw previous sprite
 		spriteBatch.Draw(
-			previousSprite.texture, transform.worldSpacePos - Vector2.UnitX * _elementSeperation,
-			previousSprite.sourceRectangle, color, transform.rotation,
-			previousSprite.origin, previousSprite.scale , effects, LayerDepthManager.GameObjectDepth);
+			_previousSprite.texture,
+			transform.worldSpacePos + Vector2.UnitX * (-_elementSeperation + _currentDisplacement),
+			_previousSprite.sourceRectangle, color, transform.rotation,
+			_previousSprite.origin, _previousSprite.scale , effects, LayerDepthManager.GameObjectDepth);
+		
+		// Draw new sprite (the one that will become previous or next)
+		if (_nowAnimating && _newSprite != null)
+		{
+			float totalDisplacement = _currentDisplacement + 2 * _elementSeperation *
+				(_isMovingForward ? -1 : 1);
+			spriteBatch.Draw(
+				_newSprite.texture,
+				transform.worldSpacePos + Vector2.UnitX * totalDisplacement,
+				_newSprite.sourceRectangle, color, transform.rotation,
+				_newSprite.origin, _newSprite.scale , effects, LayerDepthManager.GameObjectDepth);
+		}
 		
 		// Draw gradient overlays
 		spriteBatch.Draw(
@@ -83,19 +100,29 @@ public class SelectorRenderer : Renderer
 
 	public void JumpToSprite(LinkedListNode<Sprite> spriteNode)
 	{
-		currentSprite = new DrawArguments(spriteNode.Value.spriteRenderer, spriteRenderWidth);
-		nextSprite = new DrawArguments(spriteNode.NextOrFirst().Value.spriteRenderer, spriteRenderWidth);
-		previousSprite = new DrawArguments(spriteNode.PreviousOrLast().Value.spriteRenderer, spriteRenderWidth);
+		_currentSprite = new DrawArguments(spriteNode.Value.spriteRenderer, spriteRenderWidth);
+		_nextSprite = new DrawArguments(spriteNode.NextOrFirst().Value.spriteRenderer, spriteRenderWidth);
+		_previousSprite = new DrawArguments(spriteNode.PreviousOrLast().Value.spriteRenderer, spriteRenderWidth);
 	}
 	
 	/// <summary>
 	/// Animates the transition to a new sprite. Goes in the provided direction.
 	/// </summary>
-	/// <param name="spriteNode">The </param>
-	/// <param name="isForward"></param>
-	public void AnimateToSprite(LinkedListNode<Sprite> spriteNode, bool isForward)
+	/// <param name="spriteNode">The target sprite to reach</param>
+	/// <param name="isForward">true to scroll left (right button pressed)</param>
+	public async Task AnimateToSprite(LinkedListNode<Sprite> spriteNode, bool isForward)
 	{
+		//Define the four visible sprites
+		LinkedListNode<Sprite> currentNode = isForward ?
+			spriteNode.PreviousOrLast() : spriteNode.NextOrFirst(); 
+		JumpToSprite(currentNode);
 		
+		_newSprite = new DrawArguments(
+			(isForward ? spriteNode.NextOrFirst() : spriteNode.PreviousOrLast())
+			.Value.spriteRenderer,
+			spriteRenderWidth);
+		
+		//animate
 	}
 	
 	private class DrawArguments
