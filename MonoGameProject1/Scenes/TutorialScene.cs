@@ -112,7 +112,7 @@ public class TutorialScene : Scene
             "You will play a 1v1 match against another player on the same computer, so grab your " +
             "most cerebral buddy and prepare for action!\n\n" +
             "Players assemble a team of 6 chess pieces and fight until one side is gone\n\n" +
-            "By choosing a synergetic team you will gain a tactical advantage, so choose wisely!\n" +
+            "By choosing a synergistic team you will gain a tactical advantage, so choose wisely!\n" +
             "Some pieces have special abilities, some are just beefier... It's up to you!");
 
         // Add content for Gameplay
@@ -126,7 +126,7 @@ public class TutorialScene : Scene
             "SETUP: Each player places one of their pieces on their side of the board " +
             "(left click to pick and to place), until none remain, then the BATTLE starts!\n\n" +
             "BATTLE: On each turn, the player can make as many moves as they like as long as they can.\n" +
-            "Left click a piece to select it, then left click a square to move there or attack the occupying " +
+            "Left click a piece to select it, then left click a square to move there or to attack the occupying " +
             "piece.\n" +
             "You can also pass the turn early by clicking the PASS button.\n\n" +
             "The game ends when one player runs out of pieces.");
@@ -134,10 +134,11 @@ public class TutorialScene : Scene
         // Add content for Pieces
         AddTextContent(2,
             "Each of the 6 piece types has their own unique movement pattern.\n\n" +
-            "PAWN: Moves one space orthogonally, attacks diagonally, 1 space away.\n" +
+            "PAWN: Moves one space orthogonally, and attacks 1 space diagonally.\n" +
             "KNIGHT: Moves and attacks towards any square that is 2 spaces out and 1 across from it.\n" +
             "BISHOP: Moves diagonally as long as it isn't blocked, attacks blocking pieces.\n" +
-            "ROOK: Like bishop but orthogonally. QUEEN: Like the ROOK and BISHOP combined.\n" +
+            "ROOK: Like bishop but orthogonally. \n" +
+            "QUEEN: Like the ROOK and BISHOP combined.\n" +
             "KING: Moves and attacks one space in all 8 directions.\n\n" +
             "Unlike regular chess, pieces have three stats to them: HP, DMG, and AP.\n" +
             "HP: Health points - the piece dies when its HP reaches 0.\n" +
@@ -151,8 +152,9 @@ public class TutorialScene : Scene
             "They come in 3 varieties: TRIGGERED, ACTIVATED, and STATIC.\n\n" +
             "TRIGGERED abilities have a one-shot effect that goes off whenever the specified event occurs." +
             " For example: An ability that says \"When your turn starts\" will trigger when your turn starts.\n\n" +
-            "ACTIVATED abilities also have a one-shot effect, but they can be activated at any time the player" +
-            " chooses, by paying a MANA COST. (right click on the piece after selecting it).\n" +
+            "ACTIVATED abilities also have a one-shot effect, but they can be activated by the player" +
+            " at any point during their turn, by paying a MANA COST. " +
+            "(right click on the piece after selecting it).\n" +
             "MANA is a resource each player has. It's gained from " +
             "some abilities, and it resets to 0 when your turn starts.\n" +
             "[TIP]: This is why you should pick some pieces that create MANA and some pieces that use MANA.\n\n" +
