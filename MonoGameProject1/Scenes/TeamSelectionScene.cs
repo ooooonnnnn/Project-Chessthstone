@@ -21,6 +21,7 @@ public class TeamSelectionScene : Scene
 	private Button[] pickButtons = new Button[6];
 	private Frame[] frames = new Frame[6];
 	private Dictionary<int, ChessPiece> _chosenPieces = new();
+	private TextBox instructions;
 	
 	private const int selectorSpacing = 280;
 	private const float selectorsHeight = 200;
@@ -28,11 +29,13 @@ public class TeamSelectionScene : Scene
  public TeamSelectionScene()
 	{
 		List<GameObject> objectsToAdd = [];
+		
 		// Initialize chosen pieces dictionary with 0..5 => null
 		for (int i = 0; i < 6; i++)
 		{
 			_chosenPieces[i] = null;
 		}
+		
 		//Instantiate and load selectors
 		for (int i = 0; i < selectors.Length; i++)
 		{
@@ -109,6 +112,17 @@ public class TeamSelectionScene : Scene
 		nextOrStartButton.transform.parentSpacePos = new Vector2(
 			GameManager.Graphics.Viewport.Width / 2f + selectorSpacing * 2.5f, 
 			selectors[0].nextButton.transform.worldSpacePos.Y + 500);
+
+		instructions = new TextBox("intructions text",
+			"White player: choose your team. Black player: LOOK AWAY!");
+		objectsToAdd.Add(instructions);
+		instructions.transform.origin = instructions.textRenderer.Font.MeasureString(
+			instructions.text) * new Vector2(0.5f, 0);
+		instructions.transform.parentSpacePos = 
+			Vector2.UnitX * GameManager.Graphics.Viewport.Width * 0.5f + 
+			Vector2.UnitY * 50;
+		instructions.transform.SetScaleFromFloat(2f);
+		
 
 		AddGameObjects(objectsToAdd);
 	}
@@ -192,6 +206,7 @@ public class TeamSelectionScene : Scene
 				RemoveGameObject(keyValuePair.Value);
 			}
 			UpdateReadyButton();
+			instructions.text = "Black player: choose your team. White player: LOOK AWAY!";
 		}
 		else
 		{
