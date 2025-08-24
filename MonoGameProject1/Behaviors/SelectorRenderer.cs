@@ -137,7 +137,8 @@ public class SelectorRenderer : Renderer, IDisposable
 		// Animate
 		await Tween.TweenFloat(_displacementController, 
 			targetValue: isForward ? -_elementSeperation : _elementSeperation,
-			duration: 0.3f);
+			duration: 0.2f,
+			tweenType: TweenType.Smooth);
 		
 		// Set final state
 		JumpToSprite(targetSpriteNode);
