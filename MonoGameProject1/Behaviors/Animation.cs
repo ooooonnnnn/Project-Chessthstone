@@ -37,7 +37,7 @@ public class Animation : Behavior, IUpdatable, IStart
         get => _activeAnimation;
         set
         {
-            if (value == _activeAnimation) return;
+            //if (value == _activeAnimation) return;
             if (Animations.ContainsKey(value))
             {
                 _activeAnimation = value;
