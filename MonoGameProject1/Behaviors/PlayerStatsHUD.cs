@@ -31,4 +31,10 @@ namespace MonoGameProject1.Behaviors;
             else if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
                 text = $"Mana: {_mana}";
         }
+
+        public override void Start()
+        {
+            base.Start();
+            _player.OnTeamPieceChosen += _ => text = "Choose spawn location";
+        }
     }
