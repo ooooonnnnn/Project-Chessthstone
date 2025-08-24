@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGameProject1.Behaviors;
 using MonoGameProject1.Engine;
@@ -139,6 +140,7 @@ public class GameScene : Scene
         {
             if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
                 TurnManager.instance.ChangeTurn();
+            endButtonCooldown();
         });
 
         GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
@@ -180,6 +182,13 @@ public class GameScene : Scene
         
         whiteHud.UpdateText();
         blackHud.UpdateText();
+    }
+
+    private async Task endButtonCooldown()
+    {
+        endTurnButton.SetClickable(false);
+        await Task.Delay(2000);
+        endTurnButton.SetClickable(true);
     }
 
     private void ArrangeTeamPieces()
