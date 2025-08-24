@@ -65,6 +65,15 @@ public class Player : GameObject
     }
 
     private ChessBoard _board;
+    
+    /// <summary>
+    /// A player in the game.
+    /// </summary>
+    public Player(string name, bool isWhite) : base(name, [new PlayerEventReaction()])
+    {
+        this.isWhite = isWhite;
+        TurnManager.instance.OnTurnChanged += isItMyTurn => DeselectAll();
+    }
 
     /// <summary>
     /// Handles what happens when a square is clicked: <br/>
@@ -190,19 +199,14 @@ public class Player : GameObject
         _pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
         _pieceToPlace.TeleportToSquare(square);
 
+        OnPiecePlaced?.Invoke(_pieceToPlace);
+        
         _pieceToPlace = null;
 
         return true;
     }
-
-    /// <summary>
-    /// A player in the game.
-    /// </summary>
-    public Player(string name, bool isWhite) : base(name)
-    {
-        this.isWhite = isWhite;
-        TurnManager.instance.OnTurnChanged += isItMyTurn => DeselectAll();
-    }
+    public event Action<ChessPiece> OnPiecePlaced;
+   
 
     /// <summary>
     /// Attempts to choose a piece from the team 
@@ -214,9 +218,11 @@ public class Player : GameObject
             if (teamPieces.Contains(piece))
             {
                 _pieceToPlace = piece;
+                OnTeamPieceChosen?.Invoke(piece);
             }
         }
     }
+    public event Action<ChessPiece> OnTeamPieceChosen;
 
     public void TryActivateAbility()
     {
@@ -240,6 +246,9 @@ public class Player : GameObject
         DeselectAll();
     }
 
+    /// <summary>
+    /// Deselects the active piece and resets the board tints
+    /// </summary>
     public void DeselectAll()
     {
         _selectedActivePiece = null;
@@ -253,5 +262,7 @@ public class Player : GameObject
     {
         base.Dispose();
         OnManaChanged = null;
+        OnTeamPieceChosen = null;
+        OnPiecePlaced = null;
     }
 }
