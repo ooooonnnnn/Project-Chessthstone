@@ -15,6 +15,10 @@ public static class TextureManager
 	private static Texture2D _logoTexture;
 	public static Texture2D TestSpriteSheetTexture{ get; private set; }
 	public static Texture2D KingBlackDeathSheet{ get; private set; }
+	public static Texture2D KingWhiteDeathSheet{ get; private set; }
+	public static Texture2D KingBlackWinSheet{ get; private set; }
+	public static Texture2D KingWhiteWinSheet{ get; private set; }
+	
 	private static Texture2D[] _chessSquareTextures;
 	private static Texture2D[,] _chessPieceTextures= new Texture2D[2,6];
 	private static Texture2D _healthIcon;
@@ -33,17 +37,21 @@ public static class TextureManager
 	
 	public static void LoadTextures()
 	{
+		//placeholder textures
 		_defaultButtonTexture = game.Content.Load<Texture2D>("Images/RoundedFilledSquare");
 		_logoTexture = game.Content.Load<Texture2D>("Images/Logo");
-		TestSpriteSheetTexture = game.Content.Load<Texture2D>("Images/SpriteSheets/TestSpriteSheet");
-		KingBlackDeathSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingDeathBlack2");
-		_chessSquareTextures = new Texture2D[2];
+		
+		//character icons
 		_healthIcon = game.Content.Load<Texture2D>("Images/Icons/healthIcon");
 		_damageIcon = game.Content.Load<Texture2D>("Images/Icons/damageIcon");
 		_actionPointsIcon = game.Content.Load<Texture2D>("Images/Icons/actionPointsIcon");
+		
+		//board squares
+		_chessSquareTextures = new Texture2D[2];
 		_chessSquareTextures[0] = game.Content.Load<Texture2D>("Images/tile1BlackWithCorners");
 		_chessSquareTextures[1] = game.Content.Load<Texture2D>("Images/tile1WhiteWithCorners");
 		
+		//chess pieces
 		_chessPieceTextures[0, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnBlack");
 		_chessPieceTextures[1, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnWhite");
 		_chessPieceTextures[0, (int)PieceType.Knight] = game.Content.Load<Texture2D>("Images/knightBlack");
@@ -57,13 +65,25 @@ public static class TextureManager
 		_chessPieceTextures[0, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingBlack");
 		_chessPieceTextures[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhite");
 		
+		//nine slice for tooltips
 		ToolTipNineSliceTexture = game.Content.Load<Texture2D>("Images/NineSlices/decoratedWood9Slice");
 		
+		//sprite sheets
+		TestSpriteSheetTexture = game.Content.Load<Texture2D>("Images/SpriteSheets/TestSpriteSheet");
+		
+		KingBlackDeathSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingDeathBlack3");
+		KingWhiteDeathSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingDeathWhite3");
+		
+		KingBlackWinSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingWinSheetBlack");
+		KingWhiteWinSheet = game.Content.Load<Texture2D>("Images/SpriteSheets/kingWinSheetWhite");
+		
+		//turn button textures
 		WhiteTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnWhite");
 		BlackTurnButtonTexture = game.Content.Load<Texture2D>("Images/passTurnBlack");
 		WhiteTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnBlackClear");
 		BlackTurnButtonTextureClear = game.Content.Load<Texture2D>("Images/passTurnWhiteClear");
 		
+		//misc
 		RightArrowTexture = game.Content.Load<Texture2D>("Images/RightArrow");
 		GradientTexture = game.Content.Load<Texture2D>("Images/Gradient");
 		PixelTexture = game.Content.Load<Texture2D>("Images/WhitePixel");

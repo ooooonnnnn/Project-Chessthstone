@@ -37,7 +37,7 @@ public class Animation : Behavior, IUpdatable, IStart
         get => _activeAnimation;
         set
         {
-            if (value == _activeAnimation) return;
+            //if (value == _activeAnimation) return;
             if (Animations.ContainsKey(value))
             {
                 _activeAnimation = value;
@@ -48,6 +48,9 @@ public class Animation : Behavior, IUpdatable, IStart
             }
             currentFrame = 0;
             ActiveAnimationSheet = Animations[ActiveAnimation];
+            _spriteRenderer.transform.origin = new Vector2(
+                ActiveAnimationSheet.Rectangles[0].Width / 2f,
+                ActiveAnimationSheet.Rectangles[0].Height / 2f);
         }
     }
 
