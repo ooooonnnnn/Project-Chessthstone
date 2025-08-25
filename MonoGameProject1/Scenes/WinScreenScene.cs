@@ -72,6 +72,6 @@ public class WinScreenScene : Scene
 
     public override void Initialize()
     {
-        // Console.WriteLine($"{this} isn't initializing anything");
+        AudioManager.PlaySong(AudioClips.MenuAndTeamBuildingMusic);
     }
 }
