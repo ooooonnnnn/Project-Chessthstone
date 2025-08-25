@@ -9,14 +9,14 @@ public static class AudioManager
 {
     public static Game game;
     
-    private static float _masterVolume = 0.1f;
+    private static float _masterVolume = 0.5f;
     public static float MasterVolume
     {
         get => _masterVolume;
         set => _masterVolume = Math.Clamp(value, 0f, 1f);
     }
     private static float _randomPitchShift = 0.1f;
-    private static float _musicVolume = 0.05f;
+    private static float _musicVolume = 0.25f;
     public static float MusicVolume
     {
         get => _musicVolume;
