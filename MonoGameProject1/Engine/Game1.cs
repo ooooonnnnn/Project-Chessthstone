@@ -52,7 +52,7 @@ public class Game1 : Game
 		AudioClips.LoadAudio();
 		// End loading here
 		
-		SceneManager.ChangeScene(new TeamSelectionScene());
+		SceneManager.ChangeScene(new MainMenuScene());
 	}
 	
 	protected override void Update(GameTime gameTime)

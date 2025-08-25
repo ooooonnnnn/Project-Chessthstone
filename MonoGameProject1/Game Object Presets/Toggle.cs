@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1;
 
@@ -39,6 +40,7 @@ public class Toggle : Button
 		_clickable.RemoveAllListeners();
 		_clickable.OnClick += HandleClick;
 		UpdateGraphicsAndClickable();
+		AddBehaviors([new ToggleSoundOnToggle()]);
 	}
 
 	private void HandleClick()

@@ -84,8 +84,8 @@ public class GameScene : Scene
         MatchManager.instance.board = board;
 
         #region Music
-        //TODO: change to setup music
-        AudioManager.PlaySong(AudioClips.BattlePhaseMusic);
+        
+        AudioManager.PlaySong(AudioClips.SetupPhaseMusic);
         
         GamePhaseManager.instance.OnPhaseChanged += (_, phase) =>
         {

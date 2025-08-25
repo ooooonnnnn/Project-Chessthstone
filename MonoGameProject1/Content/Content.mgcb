@@ -627,9 +627,21 @@
 /processorParam:Quality=Best
 /build:Sounds/hitHurt.wav
 
+#begin Sounds/medievalJourney_ds_2_q_7.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/medievalJourney_ds_2_q_7.mp3
+
 #begin Sounds/powerUp1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/powerUp1.wav
+
+#begin Sounds/ruins dungeon 8bit.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/ruins dungeon 8bit.mp3
 

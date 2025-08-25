@@ -16,6 +16,8 @@ public static class AudioClips
     public static SoundEffect ClickSound{ get; private set; }
     public static SoundEffect AbilitySound{ get; private set; }
     public static Song BattlePhaseMusic{ get; private set; }
+    public static Song MenuAndTeamBuildingMusic{ get; private set; }
+    public static Song SetupPhaseMusic{ get; private set; }
 
     public static void LoadAudio()
     {
@@ -26,5 +28,7 @@ public static class AudioClips
         ClickSound = game.Content.Load<SoundEffect>("Sounds/blipSelect");
         AbilitySound = game.Content.Load<SoundEffect>("Sounds/powerUp1");
         BattlePhaseMusic = game.Content.Load<Song>("Sounds/8bit_Fight Against Evil");
+        MenuAndTeamBuildingMusic = game.Content.Load<Song>("Sounds/ruins dungeon 8bit");
+        SetupPhaseMusic = game.Content.Load<Song>("Sounds/medievalJourney_ds_2_q_7");
     }
 }

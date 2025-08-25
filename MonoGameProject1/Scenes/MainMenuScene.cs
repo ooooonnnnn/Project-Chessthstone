@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
 using MonoGameProject1.Behaviors;
 
 namespace MonoGameProject1.Scenes;
@@ -65,6 +66,8 @@ public class MainMenuScene : Scene
 
     public override void Initialize()
     {
-        // No special initialization required
+        //Play music
+        if (AudioManager.CurrentSong != AudioClips.MenuAndTeamBuildingMusic)
+            AudioManager.PlaySong(AudioClips.MenuAndTeamBuildingMusic);
     }
 }

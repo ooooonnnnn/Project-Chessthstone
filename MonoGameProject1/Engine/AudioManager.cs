@@ -9,14 +9,14 @@ public static class AudioManager
 {
     public static Game game;
     
-    private static float _masterVolume = 1f;
+    private static float _masterVolume = 0.1f;
     public static float MasterVolume
     {
         get => _masterVolume;
         set => _masterVolume = Math.Clamp(value, 0f, 1f);
     }
     private static float _randomPitchShift = 0.1f;
-    private static float _musicVolume = 0.2f;
+    private static float _musicVolume = 0.05f;
     public static float MusicVolume
     {
         get => _musicVolume;
@@ -27,6 +27,8 @@ public static class AudioManager
         get => _randomPitchShift;
         set => _randomPitchShift = Math.Clamp(value, -1f, 1f);
     }
+
+    public static Song CurrentSong { get; private set; } = null;
 
 
     public static void PlaySound(SoundEffect sound)
@@ -54,5 +56,6 @@ public static class AudioManager
         MediaPlayer.Play(song);
         MediaPlayer.Volume = volume;
         MediaPlayer.IsRepeating = true;
+        CurrentSong = song;
     }
 }
