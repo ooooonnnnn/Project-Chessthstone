@@ -591,6 +591,12 @@
 /processorParam:TextureFormat=Color
 /build:Images/WhitePixel.png
 
+#begin Sounds/8bit_Fight Against Evil.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/8bit_Fight Against Evil.ogg
+
 #begin Sounds/blipSelect.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

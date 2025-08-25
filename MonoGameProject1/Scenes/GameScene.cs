@@ -83,6 +83,18 @@ public class GameScene : Scene
 
         MatchManager.instance.board = board;
 
+        #region Music
+        //TODO: change to setup music
+        AudioManager.PlaySong(AudioClips.BattlePhaseMusic);
+        
+        GamePhaseManager.instance.OnPhaseChanged += (_, phase) =>
+        {
+            if (phase is GamePhase.Gameplay)
+                AudioManager.PlaySong(AudioClips.BattlePhaseMusic);
+        };
+
+        #endregion
+
         foreach (ChessPiece piece in whitePlayer.teamPieces)
         {
             piece.ownerPlayer = whitePlayer;
@@ -126,7 +138,6 @@ public class GameScene : Scene
             hover.OnEndHover += () => toolTip.SetActive(false);
             
             piece.OnDeath += _ => RemoveGameObjectAndChildren(toolTip);
-            
             AddGameObjects([overlayObj, toolTip]);
             toolTip.SetActive(false);
         }
