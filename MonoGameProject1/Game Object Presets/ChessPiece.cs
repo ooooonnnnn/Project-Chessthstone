@@ -124,8 +124,6 @@ public abstract class ChessPiece : Sprite
         this.isWhite = isWhite;
         this.baseHealth = baseHealth;
         this.BaseDamage = baseDamage;
-        this.baseHealth=  1;
-        BaseDamage = 1;
         Health = this.baseHealth;
 
         spriteRenderer.layerDepth = LayerDepthManager.GameObjectDepth;
