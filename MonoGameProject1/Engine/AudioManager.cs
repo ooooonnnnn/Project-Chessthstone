@@ -14,6 +14,13 @@ public static class AudioManager
         get => _masterVolume;
         set => _masterVolume = Math.Clamp(value, 0f, 1f);
     }
+    private static float _randomPitchShift = 0.1f;
+
+    public static float randomPitchShift
+    {
+        get => _randomPitchShift;
+        set => _randomPitchShift = Math.Clamp(value, -1f, 1f);
+    }
 
     public static void PlaySound(SoundEffect sound, float volume = 1f)
     {
@@ -21,6 +28,7 @@ public static class AudioManager
         SoundEffectInstance soundInstance = sound.CreateInstance();
         if (soundInstance == null) return;
         soundInstance.Volume = MasterVolume * volume;
+        soundInstance.Pitch = QuickRandom.NextFloat(-_randomPitchShift, _randomPitchShift);
         soundInstance.Play();
     }
 }
