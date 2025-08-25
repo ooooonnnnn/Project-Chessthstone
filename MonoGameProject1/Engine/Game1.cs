@@ -22,8 +22,6 @@ public class Game1 : Game
 		Content.RootDirectory = "Content";
 		IsMouseVisible = true;
 		//Full screen
-		//_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-		//_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 		_graphics.PreferredBackBufferWidth = GraphicsSettings.windowSize.X;
 		_graphics.PreferredBackBufferHeight = GraphicsSettings.windowSize.Y;
 		_graphics.IsFullScreen = false;
