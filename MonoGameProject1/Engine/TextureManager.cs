@@ -21,6 +21,7 @@ public static class TextureManager
 	
 	private static Texture2D[] _chessSquareTextures;
 	private static Texture2D[,] _chessPieceTextures= new Texture2D[2,6];
+	private static Texture2D[,] _chessPieceTexturesSpecial = new Texture2D[2,6];
 	private static Texture2D _healthIcon;
 	private static Texture2D _damageIcon;
 	private static Texture2D _actionPointsIcon;
@@ -65,6 +66,20 @@ public static class TextureManager
 		_chessPieceTextures[0, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingBlack");
 		_chessPieceTextures[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhite");
 		
+		//special chess pieces
+		_chessPieceTexturesSpecial[0, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnBlackRadiating");
+		_chessPieceTexturesSpecial[1, (int)PieceType.Pawn] = game.Content.Load<Texture2D>("Images/pawnWhiteRadiating");
+		_chessPieceTexturesSpecial[0, (int)PieceType.Knight] = game.Content.Load<Texture2D>("Images/knightBlackAgile");
+		_chessPieceTexturesSpecial[1, (int)PieceType.Knight] = game.Content.Load<Texture2D>("Images/knightWhiteAgile");
+		_chessPieceTexturesSpecial[0, (int)PieceType.Bishop] = game.Content.Load<Texture2D>("Images/bishopBlackAgile");
+		_chessPieceTexturesSpecial[1, (int)PieceType.Bishop] = game.Content.Load<Texture2D>("Images/bishopWhiteAgile");
+		_chessPieceTexturesSpecial[0, (int)PieceType.Rook] = game.Content.Load<Texture2D>("Images/rookBlackPlus");
+		_chessPieceTexturesSpecial[1, (int)PieceType.Rook] = game.Content.Load<Texture2D>("Images/rookWhitePlus");
+		_chessPieceTexturesSpecial[0, (int)PieceType.Queen] = game.Content.Load<Texture2D>("Images/queenBlackManaDrain");
+		_chessPieceTexturesSpecial[1, (int)PieceType.Queen] = game.Content.Load<Texture2D>("Images/queenWhiteManaDrain");
+		_chessPieceTexturesSpecial[0, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingBlackManaHoarder");
+		_chessPieceTexturesSpecial[1, (int)PieceType.King] = game.Content.Load<Texture2D>("Images/kingWhiteManaHoarder");
+		
 		//nine slice for tooltips
 		ToolTipNineSliceTexture = game.Content.Load<Texture2D>("Images/NineSlices/decoratedWood9Slice");
 		
@@ -107,6 +122,10 @@ public static class TextureManager
 	public static Texture2D GetChessPieceTexture(bool isWhite, PieceType type)
 	{
 		return _chessPieceTextures[isWhite ? 1 : 0, (int) type];
+	}
+	public static Texture2D GetSpecialChessPieceTexture(bool isWhite, PieceType type)
+	{
+		return _chessPieceTexturesSpecial[isWhite ? 1 : 0, (int) type];
 	}
 	public static Texture2D GetHealthIcon()
 	{

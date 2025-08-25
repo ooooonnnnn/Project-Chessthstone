@@ -4,7 +4,7 @@ namespace MonoGameProject1;
 
 public class PawnAttackNearby : Pawn
 {
-    public PawnAttackNearby(bool isWhite) : base(isWhite, 35, 9)
+    public PawnAttackNearby(bool isWhite) : base(isWhite, 35, 9, true)
     {
         string color = this.isWhite ? "White" : "Black";
         name = $"{color} Radiating Pawn";

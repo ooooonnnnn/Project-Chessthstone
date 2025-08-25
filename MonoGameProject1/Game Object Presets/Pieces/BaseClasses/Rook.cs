@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGameProject1;
 
-public class Rook(bool isWhite, int baseHealth, int baseDamage) 
-	: ChessPiece(isWhite, PieceType.Rook, baseHealth, baseDamage)
+public class Rook(bool isWhite, int baseHealth, int baseDamage, bool isSpecial = false)
+	: ChessPiece(isWhite, PieceType.Rook, baseHealth, baseDamage, isSpecial)
 {
 	public override List<Point> GetMoveCoordList()
 	{

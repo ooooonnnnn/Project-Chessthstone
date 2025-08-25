@@ -4,7 +4,7 @@ namespace MonoGameProject1;
 
 public class BishopRegainAp : Bishop
 {
-	public BishopRegainAp(bool isWhite) : base(isWhite, 20, 6)
+	public BishopRegainAp(bool isWhite) : base(isWhite, 20, 6, true)
 	{
 		string color = this.isWhite ? "White" : "Black";
 		name = $"{color} Agile Bishop";

@@ -117,8 +117,8 @@ public abstract class ChessPiece : Sprite
     /// <summary>
     /// Base class for chess pieces
     /// </summary>
-    protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage) : base(CreateName(isWhite, type),
-        TextureManager.GetChessPieceTexture(isWhite, type))
+    protected ChessPiece(bool isWhite, PieceType type, int baseHealth, int baseDamage, bool isSpecial = false) : base(CreateName(isWhite, type),
+        isSpecial? TextureManager.GetSpecialChessPieceTexture(isWhite, type) : TextureManager.GetChessPieceTexture(isWhite, type))
     {
         this.type = type;
         this.isWhite = isWhite;
