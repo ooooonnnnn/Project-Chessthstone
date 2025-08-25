@@ -28,7 +28,7 @@ public class GameScene : Scene
         GamePhaseManager.Instantiate("GamePhaseManager");
         TurnManager.Instantiate("TurnManager");
         MatchManager.Instantiate("MatchManager");
-        PieceOverlay pieceOverlay;
+        
         board = new ChessBoard("");
         board.transform.SetScaleFromFloat(0.35f);
         board.transform.origin = Vector2.One * board.totalWidth * 0.5f;

@@ -12,8 +12,9 @@ namespace MonoGameProject1;
 public static class SceneManager
 {
 	private static List<Scene> _currentOpenScenes = new();
-
 	private static List<GameObject> _gameObjects = new();
+	private static Queue<GameObject> _gameObjectsToAdd = new();
+	private static Queue<GameObject> _gameObjectsToRemove = new();
 	
 	/// <summary>
 	/// Adds all objects in a scene without destroying the current one
@@ -31,7 +32,7 @@ public static class SceneManager
 		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
-			AddGameObjectNoDuplicates(gameObject);
+			AddGoToAddQueue(gameObject);
 		}
 		
 		_currentOpenScenes.Add(scene);
@@ -39,7 +40,7 @@ public static class SceneManager
 	}
 
 	/// <summary>
-	/// Adds a GameObject to be drawn and updated
+	/// Adds a GameObject to be drawn and updated. Waits until the end of Update/Draw to add it.
 	/// </summary>
 	/// <param name="gameObject"></param>
 	public static void AddGameObject(GameObject gameObject)
@@ -50,7 +51,7 @@ public static class SceneManager
 			                    $"(make sure to use Scene.AddGameObject to add a new GameObject");
 		}
 		
-		AddGameObjectNoDuplicates(gameObject);
+		_gameObjectsToAdd.Enqueue(gameObject);
 	}
 
 	/// <summary>
@@ -60,19 +61,15 @@ public static class SceneManager
 	/// <param name="gameObject">The object to remove</param>
 	public static void RemoveGameObject(GameObject gameObject)
 	{
-		_gameObjects.Remove(gameObject);
+		_gameObjectsToRemove.Enqueue(gameObject);
 	}
 
 	/// <summary>
-	/// Adds the gameObject if it's not in _gameObjects
+	/// Adds the gameObject to the add queue
 	/// </summary>
-	private static void AddGameObjectNoDuplicates(GameObject gameObject)
+	private static void AddGoToAddQueue(GameObject gameObject)
 	{
-		if (!_gameObjects.Contains(gameObject))
-		{
-			_gameObjects.Add(gameObject);
-			gameObject.Start();
-		}
+		_gameObjectsToAdd.Enqueue(gameObject);
 	}
 
 	/// <summary>
@@ -85,7 +82,7 @@ public static class SceneManager
 		
 		foreach (GameObject gameObject in scene.gameObjects)
 		{
-			_gameObjects.Remove(gameObject);
+			_gameObjectsToRemove.Enqueue(gameObject);
 		}
 
 		scene.Dispose();
@@ -114,6 +111,7 @@ public static class SceneManager
 	public static void Update(GameTime gameTime)
 	{
 		foreach (GameObject gameObject in _gameObjects) gameObject.Update(gameTime);
+		AddAndRemoveAllQueued();
 	}
 
 	/// <summary>
@@ -123,5 +121,28 @@ public static class SceneManager
 	public static void Draw(SpriteBatch spriteBatch)
 	{
 		foreach (GameObject gameObject in _gameObjects) gameObject.Draw(spriteBatch);
+		AddAndRemoveAllQueued();
+	}
+
+	/// <summary>
+	/// Removes all objects in _gameObjectsToRemove.
+	/// Then adds all objects in _gameObjectsToAdd that aren't in _gameObjects and Starts them.
+	/// </summary>
+	private static void AddAndRemoveAllQueued()
+	{
+		while (_gameObjectsToRemove.Count > 0)
+		{
+			GameObject gameObject = _gameObjectsToRemove.Dequeue();
+			_gameObjects.Remove(gameObject);
+		}
+		
+		while (_gameObjectsToAdd.Count > 0)
+		{
+			GameObject gameObject = _gameObjectsToAdd.Dequeue();
+			if (_gameObjects.Contains(gameObject)) 
+				continue;
+			_gameObjects.Add(gameObject);
+			gameObject.Start();
+		}
 	}
 }
