@@ -47,9 +47,10 @@ public class Toggle : Button
 	{
 		if (!_canBeSwitchedOff && _isOn)
 			return;
-		
+		OnClickAccepted?.Invoke();
 		isOn = !isOn;
 	}
+	public event Action OnClickAccepted;
 
 	private void HandleStateChanged(bool oldState)
 	{
@@ -91,5 +92,6 @@ public class Toggle : Button
 	{
 		base.Dispose();
 		OnToggled = null;
+		OnClickAccepted = null;
 	}
 }
