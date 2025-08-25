@@ -122,7 +122,8 @@ public class Button : GameObject, ICallback
             new SpriteRectCollider(),
             new SenseMouseHover(),
             hoverTinting,
-            _clickable
+            _clickable,
+            new ButtonSoundOnClick()
         });
     }
 

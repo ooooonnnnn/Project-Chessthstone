@@ -1,4 +1,3 @@
-
 namespace MonoGameProject1.Behaviors;
 
 /// <summary>
@@ -11,8 +10,9 @@ public abstract class ActivatedAbility : InstantaneousAbility
 	/// <summary>
 	/// Activates the ability
 	/// </summary>
-	public void Activate(GameObjectReferences objects)
+	public void Activate()
 	{
 		OneShotEffect();
+		AudioManager.PlaySound(AudioClips.AbilitySound);
 	} 
 }

@@ -22,6 +22,7 @@ public abstract class TriggeredAbility : InstantaneousAbility
 		if (Trigger(previousState, currentState))
 		{
 			OneShotEffect();
+			AudioManager.PlaySound(AudioClips.AbilitySound);
 		}
 	}
 }

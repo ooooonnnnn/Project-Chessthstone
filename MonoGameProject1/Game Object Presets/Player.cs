@@ -240,7 +240,7 @@ public class Player : GameObject
         }
 
         mana -= activatedAbility.manaCost;
-        activatedAbility.Activate(null);
+        activatedAbility.Activate();
         //Inform trigger manager
         TriggerManager.instance.UpdateStateAndTryTrigger(isWhite);
         DeselectAll();
