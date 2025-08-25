@@ -591,6 +591,12 @@
 /processorParam:TextureFormat=Color
 /build:Images/WhitePixel.png
 
+#begin Sounds/blipSelect.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/blipSelect.wav
+
 #begin Sounds/chessDeath.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -614,4 +620,10 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/hitHurt.wav
+
+#begin Sounds/powerUp1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/powerUp1.wav
 
