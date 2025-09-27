@@ -201,7 +201,7 @@ public class Player : GameObject
 
         OnPiecePlaced?.Invoke(pieceToPlace);
         
-        pieceToPlace = null;
+        _pieceToPlace = null;
 
         return true;
     }

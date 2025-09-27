@@ -60,8 +60,7 @@ public class TestPVEScene : Scene
             GameManager.Graphics.Viewport.Height / 2f - 128 - 400);
         endTurnButton.hoverTinting.tintWhenHover = Color.White;
         endTurnButton.hoverTinting.tintWhenMouseDown = Color.White;
-
-
+        
         AddGameObjects([
             board,
             realPlayer,
@@ -132,6 +131,8 @@ public class TestPVEScene : Scene
             
             ToolTip toolTip = new ToolTip(piece.name + " tooltip", 
                 piece.ability?.ToString() ?? "No special ability");
+            // Start hidden; will be shown on hover
+            toolTip.SetActive(false);
 
             FollowTransform followTransform = new FollowTransform(piece.transform, new Vector2(100, 100));
             toolTip.AddBehaviors([followTransform]);
@@ -145,7 +146,8 @@ public class TestPVEScene : Scene
 
         ArrangeTeamPieces();
 
-        AddGameObjects(realPlayer.teamPieces.Concat(aiPlayer.teamPieces).
+        // After arranging, pieces have moved from teamPieces to players' alive pieces list
+        AddGameObjects(realPlayer.pieces.Concat(aiPlayer.pieces).
             Cast<GameObject>().ToList());
 
         endTurnButton.AddListener(() =>
