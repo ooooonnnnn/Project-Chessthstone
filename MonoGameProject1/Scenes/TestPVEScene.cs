@@ -52,6 +52,7 @@ public class TestPVEScene : Scene
         blackHud.transform.parentSpacePos = center + new Vector2(-770, -300);
 
         endTurnButton = new Button("End Turn Button", "", TextureManager.WhiteTurnButtonTextureClear);
+        endTurnButton.AddBehaviors([new ButtonCooldownOnClick()]);
         endTurnButton.ChangeBackgroundScale(new Vector2(0.18f, 0.18f));
         //endTurnButton.transform.origin = endTurnButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
         endTurnButton.transform.parentSpacePos = new Vector2(
