@@ -47,6 +47,7 @@ public class GameScene : Scene
         blackHud.transform.parentSpacePos = center + new Vector2(-770, -300);
 
         endTurnButton = new Button("End Turn Button", "", TextureManager.WhiteTurnButtonTextureClear);
+        endTurnButton.AddBehaviors([new ButtonCooldownOnClick()]);
         endTurnButton.ChangeBackgroundScale(new Vector2(0.18f, 0.18f));
         //endTurnButton.transform.origin = endTurnButton.spriteRenderer.sizePx.ToVector2() * 0.5f;
         endTurnButton.transform.parentSpacePos = new Vector2(
@@ -151,7 +152,6 @@ public class GameScene : Scene
         {
             if (GamePhaseManager.instance.phase == GamePhase.Gameplay)
                 TurnManager.instance.ChangeTurn();
-            endButtonCooldown();
         });
 
         GamePhaseManager.instance.OnPhaseChanged += (prev, phase) =>
@@ -187,21 +187,12 @@ public class GameScene : Scene
                 endTurnButton.spriteRenderer.texture = isWhiteTurn
                     ? TextureManager.WhiteTurnButtonTextureClear
                     : TextureManager.BlackTurnButtonTextureClear;
-
-            endButtonCooldown();
         };
 
         GamePhaseManager.instance.phase = GamePhase.Setup;
         
         whiteHud.UpdateText();
         blackHud.UpdateText();
-    }
-
-    private async Task endButtonCooldown()
-    {
-        endTurnButton.SetClickable(false);
-        await Task.Delay(2000);
-        endTurnButton.SetClickable(true);
     }
 
     private void ArrangeTeamPieces()
