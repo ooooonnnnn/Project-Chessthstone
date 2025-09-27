@@ -8,6 +8,7 @@ public class ChessSquare : ClickableSprite
 {
 	public ChessBoard board;
 	public ChessPiece occupyingPiece;
+	public bool IsOccupied => occupyingPiece != null;
 	public int row { get; init; }
 	public int column { get; init; }
 	

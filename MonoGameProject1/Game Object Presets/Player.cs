@@ -88,7 +88,7 @@ public class Player : GameObject
         {
             //try placing a piece
             //pass the turn if successful
-            if (TryPlacePiece(square))
+            if (TryPlacePiece(square, _pieceToPlace))
                 TurnManager.instance.ChangeTurn();
             return;
         }
@@ -163,9 +163,9 @@ public class Player : GameObject
     private ChessPiece _selectedActivePiece;
 
     //TODO: this should probably be in another class like ChessBoard
-    private bool TryPlacePiece(ChessSquare square)
+    public bool TryPlacePiece(ChessSquare square, ChessPiece pieceToPlace)
     {
-        if (_pieceToPlace == null)
+        if (pieceToPlace == null)
             return false;
         //Can't place if the square is occupied
         if (square.occupyingPiece != null)
@@ -177,14 +177,14 @@ public class Player : GameObject
         if (!onMySide)
             return false;
 
-        _alivePieces.Add(_pieceToPlace);
-        teamPieces.Remove(_pieceToPlace);
-        _pieceToPlace.OnDeath += pieceToRemove =>
+        _alivePieces.Add(pieceToPlace);
+        teamPieces.Remove(pieceToPlace);
+        pieceToPlace.OnDeath += pieceToRemove =>
         {
             Console.WriteLine($"Removing {pieceToRemove.name}");
             _alivePieces.Remove(pieceToRemove);
         };
-        foreach (var child in _pieceToPlace.transform.children)
+        foreach (var child in pieceToPlace.transform.children)
         {
             try
             {
@@ -196,12 +196,12 @@ public class Player : GameObject
             }
         }
 
-        _pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
-        _pieceToPlace.TeleportToSquare(square);
+        pieceToPlace.transform.SetScaleFromFloat(square.transform.worldSpaceScale.X);
+        pieceToPlace.TeleportToSquare(square);
 
-        OnPiecePlaced?.Invoke(_pieceToPlace);
+        OnPiecePlaced?.Invoke(pieceToPlace);
         
-        _pieceToPlace = null;
+        pieceToPlace = null;
 
         return true;
     }
