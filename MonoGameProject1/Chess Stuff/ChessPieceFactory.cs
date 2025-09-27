@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using MonoGameProject1.Extensions;
 
 namespace MonoGameProject1;
 
@@ -38,6 +40,15 @@ public static class ChessPieceFactory
 				yield return new KingBasic(isWhite);
 				yield return new KingGainManaFromAdj(isWhite);
 				yield break;
+		}
+	}
+
+	public static IEnumerable<ChessPiece> GetRandomTeam(bool isWhite)
+	{
+		foreach (PieceType pieceType in Enum.GetValues<PieceType>())
+		{
+			IEnumerable<ChessPiece> pieces = GetAllPieces(isWhite, pieceType);
+			yield return pieces.Random();
 		}
 	}
 }
