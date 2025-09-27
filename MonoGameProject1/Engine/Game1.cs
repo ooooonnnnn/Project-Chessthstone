@@ -47,7 +47,7 @@ public class Game1 : Game
 		AudioClips.LoadAudio();
 		// End loading here
 		
-		SceneManager.ChangeScene(new MainMenuScene());
+		SceneManager.ChangeScene(new TestPVEScene(true));
 	}
 	
 	protected override void Update(GameTime gameTime)

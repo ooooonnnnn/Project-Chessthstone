@@ -7,7 +7,8 @@ using MonoGameProject1.Behaviors;
 namespace MonoGameProject1.Scenes;
 
 /// <summary>
-/// A game scene for testing the PVE system. One real player and one AI player. players start with random teams.
+/// A game scene for testing the PVE system. One real player and one AI player. players start with random teams and pieces
+/// placed randomly.
 /// </summary>
 /// <param name="playerIsWhite"></param>
 public class TestPVEScene : Scene
